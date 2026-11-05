@@ -1,7 +1,7 @@
 # Atlas Portfolio — Architecture technique cible
 
 > **Version :** 0.1 — 2026-11-05  
-> **Statut :** Architecture de référence **proposée**, non implémentée  
+> **Statut :** Architecture cible ; stack acceptée, socle C-01 en cours
 > **Source produit :** `PRD.md` v0.2 ; **décisions :** `ADR.md` ; **exécution :** `ROADMAP.md` v0.1 ; **UX :** `design.md`  
 > **Important :** les choix liés aux ADR `proposed` ne sont pas une autorisation implicite de développement.
 
@@ -18,11 +18,12 @@ Atlas Portfolio permet à plusieurs utilisateurs de suivre des portefeuilles log
 | Docker Compose sur Linux, auto-hébergement, coût récurrent obligatoire nul | Confirmé côté produit | ADR-0001 `accepted` |
 | Opérations sources de vérité, snapshots dérivés | Confirmé côté produit | ADR-0002 `accepted` |
 | Comptes individuels et isolation financière | Confirmé côté produit | ADR-0003 `accepted` |
-| Monolithe modulaire | Proposition | ADR-0004 `proposed` |
-| React + TypeScript + Vite / Go / PostgreSQL | Proposition | ADR-0005 `proposed` |
+| Monolithe modulaire | Accepté par délégation | ADR-0004 `accepted` |
+| React + TypeScript + Vite / Go / PostgreSQL | Accepté par délégation | ADR-0005 `accepted` |
 | Mouvements exacts + contrôles d'intégrité | Proposition | ADR-0006 `proposed` |
 | Fournisseurs de cours via adaptateurs | Proposition | ADR-0007 `proposed` |
-| Sessions sécurisées locales et pipeline CSV | Proposition | ADR-0008/0009 `proposed` |
+| Sessions locales | Accepté, API C-02 implémentée | ADR-0008 `accepted` |
+| Pipeline CSV | Proposition | ADR-0009 `proposed` |
 
 Le dépôt ne doit **pas** être décrit comme implémentant ce diagramme avant que du code réel n'existe. `CODEBASE_GRAPH.md` documentera l'implémentation vérifiée, non cette cible.
 
@@ -238,7 +239,7 @@ Les jeux de tests chiffrés T-01 à T-12 du `PRD.md` servent de référence. Cod
 
 ## 13. Questions en attente et condition de démarrage
 
-**Avant le scaffolding de l'application :** confirmer ADR-0004 et ADR-0005 ; ne pas présenter le dossier envisagé comme une arborescence existante.
+**Scaffolding :** ADR-0004 et ADR-0005 acceptés par délégation le 2026-11-05 ; le code réel reste décrit exclusivement dans CODEBASE_GRAPH.md.
 
 **Avant le ledger et la valorisation :** Q-02 et Q-03 + règles de précision et fixtures validées (ADR-0006).
 
@@ -251,3 +252,15 @@ Les jeux de tests chiffrés T-01 à T-12 du `PRD.md` servent de référence. Cod
 Le premier prompt Codex recommandé est un **audit C-00 sans implémentation métier** : vérifier l'état du dépôt, les documents et les décisions ouvertes, proposer une séquence de travaux et des scénarios de test, puis solliciter les approbations réellement bloquantes.
 
 **Cette architecture est une cible à valider, pas une description de services déjà développés.**
+
+## État C-01
+
+ADR-0004/0005 acceptés par délégation explicite le 2026-11-05. Le socle technique commence ; le diagramme métier reste une cible. Voir `CODEBASE_GRAPH.md` pour le code réel.
+
+### Compose implémenté pour le socle
+
+`docker-compose.yml` exécute uniquement le serveur Go actuel, avec healthcheck, utilisateur non root, lecture seule et publication sur toutes les interfaces IPv4. La configuration multi-service de §10 reste la cible future ; aucun stockage métier existant.
+
+### Identité C-02
+
+API REST de sessions et PostgreSQL disponibles via `docker-compose.auth.yml`. Contrat et limites : `docs/decisions/C-02.md`. Aucun frontend de connexion ni récupération de compte livré ; la séparation financière sera testée avec les ressources métier correspondantes.

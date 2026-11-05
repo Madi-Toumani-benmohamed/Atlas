@@ -289,3 +289,21 @@ Une tâche ne peut être marquée `DONE` que si :
 | Version | Date | Modification |
 | --- | --- | --- |
 | 0.1 | 2026-11-05 | Création de la roadmap alignée sur le PRD v0.2 ; phases, gates, lots Codex et dépendances métier |
+
+## Suivi C-01 — 2026-11-05
+
+Démarrage autorisé par délégation explicite du responsable produit après C-00. ADR-0004/0005 acceptés ; socle Go et chaîne frontend créés avec CI. Voir `docs/decisions/C-01.md` et `CODEBASE_GRAPH.md`. Les autres lots de Phase 0 restent ouverts ; aucun passage global en Phase 1 déclaré.
+
+Preuves C-01 : lint, build/types et test de fumée frontend réussis ; formatage, vet, tests avec race detector et build Go exécutés en conteneur. **READY_WITH_RESERVATIONS** pour ce socle : alertes npm modérées de développement documentées, CI distante non exécutée. L’interface produit, PostgreSQL et Compose de production ne sont pas implémentés.
+
+### Conteneurisation du socle — 2026-11-05
+
+F-022, NFR-10 ; préparation P5.2, sans déclarer la publication MVP. Ajout de `compose.yaml`, image Go multi-stage/scratch, contrôle de vitalité, utilisateur non root et publication locale. Vérifié : `docker compose config --quiet`, `ATLAS_PORT=18080 docker compose -p atlas-compose-check up --build -d --wait`, requête HTTP `/healthz`, inspection `healthy`, utilisateur `65532:65532`, racine en lecture seule ; arrêt du service de test réussi. Pas de DB ni frontend servi à ce stade, pas de preuve ARM64, TLS ou restauration. Conteneur de test arrêté, conservé ; aucune donnée supprimée.
+
+À la demande explicite du responsable produit, le fichier est renommé `docker-compose.yml` et le port publié sur `0.0.0.0` pour accès distant au socle. Validation : `docker compose config --quiet` ; pas de redémarrage des services effectué pour cette modification.
+
+### C-02 — API d’identité, 2026-11-05
+
+F-001/F-002, US-001/US-009, NFR-02/04/05/13 ; P1.1/P1.2/P1.9. ADR-0008 accepté par délégation. Implémenté : PostgreSQL, schéma v1, inscription opt-in, connexion, session persistante/expiration/rotation, déconnexion et identité privée. Tests d’intégration avec deux utilisateurs, refus d’accès, CSRF par origine, rate limit et migration rejouée réussis ; build/vet/race et smoke HTTP avec redémarrage réussis. Contrat : `docs/decisions/C-02.md`.
+
+Lot API vérifié ; C-02 global reste en cours : aucun écran ni récupération de compte. C-03 et les règles financières ne sont pas commencés. Phase 0 et publication MVP non déclarées terminées.
