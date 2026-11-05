@@ -1,63 +1,64 @@
-# Atlas — Design System
+# Atlas Portfolio — Design System
 
-> **Direction:** Midnight Observatory  
-> **Status:** Proposed visual specification v1.0  
-> **Audience:** Product designers, frontend developers, Codex and other coding agents.
+> **Direction :** Midnight Observatory  
+> **Version :** 2.0 — 2026-11-05  
+> **Statut :** spécification UX/UI de référence proposée, alignée avec `PRD.md` v0.2  
+> **Audience :** design, frontend, Codex, contributeurs
 
-## 1. Product vision
+## 1. Rôle et autorité
 
-Atlas should feel like a private observatory for ideas: an elegant, quiet, powerful workspace for navigating knowledge, connecting concepts and making progress. The interface should reward daily use through clarity, responsive interaction and thoughtful detail — not visual noise.
+Ce document est la **source de vérité visuelle et interactionnelle** d'Atlas Portfolio : tokens, composants, composition, graphiques, responsive, accessibilité et retours d'état. Il ne crée **aucune fonctionnalité métier**. `PRD.md` définit le périmètre et les règles produit ; `ROADMAP.md` définit l'ordre de livraison ; les ADR acceptés et `ARCHITECTURE.md` définissent les décisions techniques ; `AGENTS.md` encadre le travail des agents.
 
-**Three adjectives:** contemplative, precise, premium.
+**Vision :** un observatoire personnel des investissements. Atlas permet de voir immédiatement la valeur, les gains/pertes et les mouvements de ses portefeuilles, puis d'approfondir à la demande. L'application doit être **riche, mais hiérarchisée** : ni interface vide ni cockpit saturé d'indicateurs.
 
-**Reference qualities (not clones):** the calm of Linear, the editorial restraint of Raycast, the spatial depth of Arc, and the networked-thinking utility of Obsidian.
+**Signature émotionnelle :** calme, précision, maîtrise, plaisir d'utilisation. Références de qualité : finition de Linear, rapidité de Raycast, lisibilité des interfaces financières modernes ; **ne pas les copier**.
 
-**Scope assumption:** this system targets a desktop-first knowledge and productivity application, with notes, linked entities, search, contextual navigation and optional visual explorations. Screen-specific features must be adapted to the actual Atlas product specification; do not fabricate product functionality to match the design.
+**Principe non négociable :** une belle interface qui affiche une donnée financière fausse ou ambiguë est une mauvaise interface. Aucune donnée fictive ne doit paraître réelle hors d'un environnement de démonstration explicitement signalé.
 
-## 2. Experience principles
+## 2. Principes UX
 
-1. **Content is the hero.** Information and relationships matter more than visual decoration.
-2. **Dark by design, not dark by default.** Use layered charcoal surfaces with excellent text contrast; avoid pure black backgrounds for large content areas.
-3. **One luminous accent.** Teal is reserved for active navigation, primary actions, focus and meaningful highlights. Lavender is secondary and specialized, not a competing CTA color.
-4. **Composed density.** Spacious at page level; compact in metadata, lists and toolbars. Never force card grids on inherently textual information.
-5. **Progressive disclosure.** Show primary actions first; reveal advanced controls through contextual menus and command palette.
-6. **Motion has a purpose.** Animate changes of state and spatial continuity, never as decoration.
-7. **Beautiful even when empty.** Empty, loading and error states must receive the same attention as populated screens.
-8. **Keyboard-first, accessible to all.** Every essential action works without a mouse, with readable focus and reduced-motion support.
+1. **Compréhension immédiate :** valeur consolidée, gain/perte et évolution visibles sans exploration préalable.
+2. **Progressive disclosure :** détails, métriques et actions secondaires accessibles sans envahir l'accueil.
+3. **Une valeur, un contexte :** indiquer la période, la devise et la nature du chiffre (cours du jour, P&L latent, rendement total, etc.).
+4. **Séparer marché et portefeuille :** « variation du cours » ne signifie jamais « gain personnel ».
+5. **Lisibilité dense :** privilégier des listes comparables à des grilles de cartes répétitives ; aligner nombres et unités.
+6. **Traçabilité accessible :** dernier cours, fournisseur, horodatage et état de fraîcheur à portée d'un clic ou d'une interaction explicite.
+7. **Saisie sans friction :** formulaires guidés, champs pertinents seulement, validation honnête.
+8. **Fiabilité avant spectaculaire :** jamais de graphiques factices, projections déguisées en faits ou indicateurs sans données suffisantes.
+9. **Mobile réellement utilisable :** priorité à la lecture et à l'enregistrement d'une opération, pas à la reproduction miniature du desktop.
+10. **Accessibilité native :** keyboard, contrastes, focus, lecteurs d'écran et réduction des mouvements.
 
-## 3. Visual foundation
+## 3. Identité visuelle
 
-### 3.1 Color tokens — dark mode (canonical)
+### 3.1 Couleurs — dark (tokens canoniques)
 
-| Token | Value | Intended use |
+| Token | Valeur | Usage |
 | --- | --- | --- |
-| `--bg-canvas` | `#0B0F14` | Outer app canvas |
-| `--bg-sidebar` | `#0F141B` | Left rail, persistent navigation |
-| `--bg-surface` | `#141B23` | Panels, cards, editor shells |
-| `--bg-raised` | `#1B2530` | Hover, nested panels, dropdowns |
-| `--bg-overlay` | `#222E3B` | Popovers and floating UI |
-| `--text-primary` | `#EDF3F6` | Main headings and content |
-| `--text-secondary` | `#A3B1BE` | Descriptions and supporting UI |
-| `--text-tertiary` | `#778695` | Quiet metadata, timestamps |
-| `--border-subtle` | `#26313D` | Default separators |
-| `--border-strong` | `#394958` | Inputs and emphasized boundaries |
-| `--accent` | `#67E2CF` | Primary highlights and selected controls |
-| `--accent-hover` | `#8DEBDD` | Hover on accent elements |
-| `--accent-pressed` | `#46C7B3` | Pressed accent state |
-| `--accent-tint` | `rgba(103,226,207,.10)` | Selected backgrounds |
-| `--accent-border` | `rgba(103,226,207,.28)` | Selected borders |
-| `--accent-ink` | `#09231F` | Text on filled accent buttons |
-| `--secondary-accent` | `#B6A4F6` | Knowledge links, graph exploration, insights |
-| `--success` | `#6DD6A4` | Successful outcomes |
-| `--warning` | `#F1C27D` | Caution |
-| `--danger` | `#F28F93` | Destructive states |
-| `--focus-ring` | `#9DF5E7` | Visible keyboard focus |
+| `--bg-canvas` | `#0B0F14` | Fond de page |
+| `--bg-sidebar` | `#0F141B` | Navigation |
+| `--bg-surface` | `#141B23` | Panneaux et cartes |
+| `--bg-raised` | `#1B2530` | Surfaces interactives |
+| `--bg-overlay` | `#222E3B` | Popovers/dialogues |
+| `--text-primary` | `#EDF3F6` | Montants et titres |
+| `--text-secondary` | `#A3B1BE` | Libellés et descriptions |
+| `--text-tertiary` | `#778695` | Métadonnées |
+| `--border-subtle` | `#26313D` | Séparateurs |
+| `--border-strong` | `#394958` | Contrôles |
+| `--accent` | `#67E2CF` | Action primaire, sélection |
+| `--accent-hover` | `#8DEBDD` | Survol |
+| `--accent-pressed` | `#46C7B3` | Pression |
+| `--accent-tint` | `rgba(103,226,207,.10)` | Fond sélectionné |
+| `--accent-border` | `rgba(103,226,207,.28)` | Bordure sélectionnée |
+| `--accent-ink` | `#09231F` | Texte sur bouton accent |
+| `--secondary-accent` | `#B6A4F6` | Comparaison, séries secondaires |
+| `--success` | `#6DD6A4` | Variation positive selon contexte |
+| `--warning` | `#F1C27D` | Incertitude, ancienneté |
+| `--danger` | `#F28F93` | Variation négative ou erreur selon contexte |
+| `--focus-ring` | `#9DF5E7` | Focus clavier |
 
-Use semantic colors according to meaning. Do not communicate meaning through color alone. Keep accent-colored body text to links and deliberate emphasis, not paragraphs. Avoid full-screen gradients.
+### 3.2 Couleurs — light
 
-### 3.2 Light mode (required, not a simple inversion)
-
-| Token | Value |
+| Token | Valeur |
 | --- | --- |
 | `--bg-canvas` | `#F5F7F8` |
 | `--bg-sidebar` | `#EDF1F3` |
@@ -81,199 +82,225 @@ Use semantic colors according to meaning. Do not communicate meaning through col
 | `--danger` | `#AE3541` |
 | `--focus-ring` | `#087B70` |
 
-Persist the user's theme preference and respect the OS preference when no preference has been set.
+- Le turquoise est **l'accent de navigation/action**, pas la couleur universelle des gains ; le positif et le négatif utilisent leur sémantique propre.
+- Utiliser texte, signe `+`/`−`, flèches et libellés en complément des couleurs ; ne jamais communiquer uniquement par vert/rouge.
+- Un **résultat négatif** et une **erreur système** peuvent partager une famille chromatique, mais se distinguent par la formulation et l'iconographie.
+- Pas de gradients de pleine page, néons agressifs ou glassmorphism sur les données.
+- Thèmes `dark`, `light`, `system` ; mémoriser la préférence utilisateur. Le sombre est l'identité principale, le clair est entièrement supporté.
 
-### 3.3 Typography
+### 3.3 Typographie
 
-- **UI and body:** `Inter`, fallback `system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`.
-- **Editorial headings:** `Manrope`, fallback `Inter, system-ui, sans-serif`.
-- **Code and technical identifiers:** `JetBrains Mono`, fallback `ui-monospace, SFMono-Regular, Consolas, monospace`.
-- Load only necessary font weights; avoid blocking the app on font downloads.
+- UI : `Inter`, repli `system-ui, sans-serif`.
+- Titres : `Manrope`, repli `Inter, system-ui, sans-serif`.
+- Nombres financiers : `Inter` avec `font-variant-numeric: tabular-nums` ; `JetBrains Mono` uniquement pour identifiants techniques/code, pas pour toutes les sommes.
+- Hiérarchie : display `32/40`, H1 `26/34`, H2 `20/28`, H3 `16/24`, body `14/22`, secondaire `13/19`, métadonnées `12/18` (px).
+- Montant principal : 32–40 px desktop ; 28–34 px mobile ; ne jamais sacrifier la lisibilité d'un montant long.
+- Éviter tout texte crucial en 12 px ; à 200 % de zoom, l'information doit rester accessible.
+- Nombres alignés à droite dans tableaux et listes comparatives, avec chiffres tabulaires.
 
-| Role | Size / line height | Weight | Use |
-| --- | --- | --- | --- |
-| Display | `32px / 40px` | 650 | Landing headline, selected hero section |
-| H1 | `26px / 34px` | 650 | Page title |
-| H2 | `20px / 28px` | 600 | Section title |
-| H3 | `16px / 24px` | 600 | Panel / card title |
-| Body | `14px / 22px` | 400 | Standard app text |
-| Reading | `16px / 27px` | 400 | Long-form content and notes |
-| Small | `13px / 19px` | 400 | Secondary UI text |
-| Metadata | `12px / 18px` | 450 | Timestamps, labels |
-| Button | `13px / 20px` | 600 | Actions |
-| Code | `13px / 21px` | 400 | Snippets and inline code |
+### 3.4 Espacement et surfaces
 
-Use tighter letter spacing (`-0.02em`) on large headings only. Never force all-caps for long labels. Allow long note titles to wrap instead of truncating critical information. Body text contrast must meet WCAG AA (4.5:1); larger text and non-text controls must meet applicable WCAG AA requirements.
+- Grille 4 px ; espacements `4, 8, 12, 16, 20, 24, 32, 40, 48, 64` px.
+- Panneaux : rayon 14 px ; grandes surfaces : 18 px ; champs/menus : 10 px ; petites pastilles : 6 px.
+- Boutons/champs : hauteur standard 40 px ; cible tactile visée 44 × 44 px.
+- Sidebar desktop : 252 px déployée / 68 px compacte. Header : 60 px.
+- Padding page : 32 px desktop / 20 px tablette / 16 px mobile.
+- Les panneaux se séparent en priorité par surface et bordure subtile, pas par empilement de grandes ombres.
 
-### 3.4 Spacing and sizing
+### 3.5 Signature Atlas
 
-- Base grid: **4px**.
-- Spacing tokens: `4 / 8 / 12 / 16 / 20 / 24 / 32 / 40 / 48 / 64px`.
-- Left sidebar width: **252px** expanded, **68px** collapsed.
-- Top app bar: **60px** desktop.
-- Main page padding: **32px** desktop, **20px** tablet, **16px** mobile.
-- Reading column max width: **760px**. Dashboards and exploratory layouts may be wider.
-- Tap target: aim for **44×44px** on touch interfaces; compact desktop icon controls may use 36–40px with adequate hit area.
-- Standard inputs/buttons: **40px** height.
+Un petit motif de constellation/orbite peut apparaître sur l'icône, l'onboarding et les empty states. Il ne doit ni concurrencer les chiffres ni se transformer en graphique d'investissement fictif.
 
-### 3.5 Radius, borders and elevation
+## 4. Architecture de l'information
 
-- `6px`: small chips, code backgrounds.
-- `10px`: inputs, menus, compact buttons.
-- `14px`: default panels and cards.
-- `18px`: hero surfaces and large dialogs.
-- `9999px`: avatar and status dots only; pill-shaped buttons only when semantically appropriate.
-- Default borders: `1px solid var(--border-subtle)`.
-- Most surfaces should be flat and differentiated by background/border, not shadows.
-- Floating popovers: `0 12px 40px rgba(0,0,0,.28)` in dark mode, `0 12px 36px rgba(22,40,52,.14)` in light mode.
-- Avoid glassmorphism on text-heavy regions, thick glowing outlines and excessively blurred panels.
+La navigation principale du MVP suit `PRD.md` :
 
-## 4. Brand signature
-
-The Atlas signature is a **subtle navigational motif**: a small constellation / orbital mark created from connected points and arcs. It may appear in the logo, splash screen, empty states and exploration views — not repeatedly behind every card.
-
-- Use **one understated gradient** only for a hero illustration or selected discovery view: `linear-gradient(135deg, rgba(103,226,207,.14), rgba(182,164,246,.07) 60%, transparent)`.
-- Use a fine noise texture only if it can be implemented unobtrusively without affecting readability or performance.
-- Hero illustrations must not compete with actual content.
-- No cliché hacker imagery, skulls, glowing code rain or exaggerated cyber motifs.
-
-## 5. Application shell and navigation
-
-### Desktop layout
-
-1. **Persistent left sidebar** containing Atlas identity, primary navigation, search/command entry and utility destinations.
-2. **Top bar** containing current location/breadcrumb, contextual actions and user controls.
-3. **Main content area** with a clear page header and focused content region.
-4. **Optional right inspector**, width about `320px`, only when relevant to the selected object (properties, backlinks, related knowledge, contextual information). It is dismissible and must never appear as a permanently empty panel.
-
-Sidebar navigation items:
-- Default: muted icon and secondary text, transparent background.
-- Hover: raised background, no layout shift.
-- Active: accent-tinted background, primary text, restrained accent marker; do not use a full bright accent fill.
-- Provide icon labels via tooltip when collapsed.
-- Persist collapsed/expanded state when technically feasible.
-
-### Responsive behavior
-
-- `>= 1280px`: sidebar and optional inspector visible when needed.
-- `768–1279px`: sidebar collapsible, inspector opens as drawer.
-- `< 768px`: navigation via accessible drawer or compact mobile navigation; inspector becomes a sheet; main content takes full width.
-- No horizontal page scrolling for ordinary content. Large tables and code blocks may scroll inside their own containers.
-
-## 6. Core component rules
-
-### Buttons
-
-- **Primary:** accent fill, dark/light adaptive contrast text, 40px height, 10px radius, 14px horizontal padding. Maximum one dominant primary action per local decision area.
-- **Secondary:** surface or raised background with subtle border.
-- **Ghost:** transparent until hover, ideal for toolbar actions.
-- **Danger:** reserved for destructive confirmation, never the everyday accent.
-- Loading state preserves width and disables repeat submission.
-- Disabled states are not indicated solely by opacity; remain legible.
-
-### Cards and panels
-
-- Use when grouping heterogeneous information, not as a mandatory wrapper for every row.
-- Background `--bg-surface`, 1px subtle border, 14px radius, 16–20px padding.
-- Interactive card hover: subtle background/border shift, no scale animation.
-- Show a clear title, optional context, and a minimal set of actions.
-- Avoid nested card-in-card stacks and repeated prominent badges.
-
-### Lists and knowledge results
-
-- Prefer rows to cards for large note collections.
-- One prominent title; a concise excerpt below; metadata aligned consistently.
-- Show meaningful context (source, topic, relationship, update time) only when available.
-- Active row must be recognizable without relying on color alone.
-- Long text uses sensible wrapping or accessible expansion; do not truncate essential identifiers without reveal-on-hover/focus.
-- Use empty results messaging with a corrective action.
-
-### Search and command palette
-
-- Search should feel central to the application, not buried inside settings.
-- Keyboard shortcut: `Cmd/Ctrl + K` to open a command palette if applicable to implemented functionality.
-- Palette width: `min(640px, calc(100vw - 32px))`; centered near upper third of viewport.
-- Clear query focus, accessible result categories, keyboard highlight and Enter to select.
-- Escape closes; focus returns to trigger; preserve reasonable search state.
-- Use clear no-result feedback and optional relevant suggestions; never fabricate results.
-
-### Inputs and forms
-
-- Height 40px by default, 10px radius, raised/surface background, 1px strong border on focus plus visible focus ring.
-- Labels remain visible; placeholders supplement labels, never replace them.
-- Validation messages appear next to the affected input and are announced accessibly.
-- Use monospace only for URLs, code, paths and technical IDs.
-
-### Tags, badges, links
-
-- Tags use small tinted surfaces with muted text; one color per semantic role, not random rainbow accents.
-- Status badges are concise and understated.
-- Knowledge links use secondary accent with clear hover/focus underline or comparable non-color cue.
-- External links indicate their destination behavior.
-
-### Tooltips, popovers and modals
-
-- Tooltips: 12px text, concise, delay ~400ms for mouse hover; show immediately on keyboard focus where appropriate.
-- Popovers: 10–14px radius, restrained shadow, use viewport collision handling.
-- Confirming destructive actions requires a clear modal with explicit action label.
-- Dialogs trap focus and restore it on close; Escape closes non-destructive dialogs.
-
-### Editor / reading surface (if included)
-
-- A quiet canvas with a 760px reading column, 16px/27px body typography and generous paragraph rhythm.
-- Structured headings, visible links, readable code blocks, restrained blockquotes.
-- Optional outline/metadata should not squeeze the main reading line length.
-- Visible, reliable save/sync status when supported. Never claim a save succeeded unless confirmed.
-
-### Graph or relationship explorer (if included)
-
-- Nodes and edges should emphasize **understanding**, not a chaotic light show.
-- Use low-contrast edges, clearly selected nodes and readable labels on demand.
-- Progressive detail based on zoom; filters and keyboard alternatives are required.
-- Motion must be stable; disable unnecessary continuous physics once layout settles.
-- Provide a list-based equivalent for core navigation and accessibility.
-
-## 7. Motion and micro-interactions
-
-Motion should convey responsiveness and continuity:
-
-| Interaction | Duration | Easing |
+| Destination | Question utilisateur | Contenu prioritaire |
 | --- | --- | --- |
-| Button / row hover | `120–160ms` | `ease-out` |
-| Sidebar collapse / panel reveal | `180–240ms` | `cubic-bezier(.2,.8,.2,1)` |
-| Modal / command palette enter | `160–220ms` | `cubic-bezier(.2,.8,.2,1)` |
-| Toast entrance / exit | `160–200ms` | `ease-out` |
-| Loading skeleton pulse | `1200–1600ms` | gentle, no bright flashes |
+| **Accueil** | « Où en suis-je ? » | Valeur consolidée, P&L, courbe, répartition, portefeuilles, top 10 |
+| **Portefeuilles** | « Où sont détenus mes investissements ? » | Regroupements logiques, comptes, liquidités, positions |
+| **Actifs** | « Qu'est-ce qui monte ou baisse ? » | Liste/filtre, cours vs performance personnelle, fiche actif |
+| **Activité** | « Qu'ai-je fait ? » | Opérations, filtres, détails, duplication, correction et imports selon phase |
 
-- Animate opacity/transform where possible; avoid expensive layout animations on large lists.
-- Keep hover transforms minimal or absent on dense UI.
-- No permanent floating elements, pulsing neon or autoplay decorative loops.
-- Respect `prefers-reduced-motion: reduce` by removing nonessential movement.
-- Skeletons resemble final content and do not cause major layout shift.
+- **Administration** et **Paramètres** sont secondaires et soumis aux autorisations. Ne pas introduire un onglet Research ou un assistant IA avant leur phase dans le PRD.
+- Desktop : sidebar persistante ; zone centrale flexible ; panneau de détail optionnel uniquement s'il est utile.
+- Mobile : barre de navigation inférieure ou navigation équivalente visible, actions prioritaires accessibles au pouce, tableaux convertis en lignes compactes ; ne pas dépendre du hover.
+- Tablette : navigation compacte, grille à colonnes réduites.
+- Recherche et raccourcis (`Ctrl/Cmd+K`) possibles pour les contenus *implémentés*, mais la command palette n'est pas une obligation MVP.
+- Le dashboard peut devenir personnalisable en V1 ; **ne pas développer le drag-and-drop au MVP**.
 
-## 8. States and feedback
+## 5. Écrans de référence et composition
 
-Each significant feature must handle **default, hover, focus-visible, active/selected, loading, empty, error, disabled and success** states as applicable.
+### 5.1 Accueil / Dashboard (MVP)
 
-- **Loading:** lightweight skeleton for structured content, spinner only for small isolated actions.
-- **Empty:** meaningful title, one-sentence explanation, one concrete next step. Optional subtle orbital illustration.
-- **Error:** describe what failed and provide retry or recovery; preserve user input.
-- **Success:** understated toast, short duration with accessible announcement; do not interrupt workflow.
-- **Offline/sync:** show accurate state and distinguish pending from confirmed persistence.
+**Ordre recommandé au premier affichage :**
 
-## 9. Accessibility and internationalization
+1. Header : titre « Vue d'ensemble », date/heure de dernière actualisation, action « Ajouter une opération ».
+2. Hero : **valeur totale consolidée** en EUR et **gain/perte total** en EUR et %. Libellé temporel explicite. Si la valeur est partielle, la qualifier directement.
+3. Graphique principal : évolution historique sur une période clairement sélectionnée ; valeur vs performance si le PRD et les données le permettent. La période par défaut longue reste à arbitrer (PRD Q-08).
+4. Synthèse des portefeuilles : cartes compactes ou lignes avec nom, valeur, gain/perte et état de donnée.
+5. Allocation : répartition actions, ETF, crypto, épargne et liquidités ; catégories non applicables masquées, jamais inventées.
+6. Mes actifs : jusqu'à **10 lignes** et action « Voir tous les actifs » ; valeur, variation de cours, P&L de position selon disponibilité.
+7. Principales hausses/baisses : de préférence dans un module compact, en indiquant clairement le classement (variation du cours **ou** P&L personnel) et la période.
+8. Avertissements de qualité : anciens cours, prix manquants, historique incomplet, échecs de collecte, sous forme de message discret mais jamais invisible.
 
-- Target **WCAG 2.2 AA**.
-- Verify text contrast in both themes; no low-contrast text simply for a softer aesthetic.
-- Visible keyboard focus on all interactive controls; logical tab order.
-- Semantic landmarks, button names, form labels and accessible dialog patterns.
-- Honor browser zoom to 200% and text resizing; handle long French and English strings.
-- Do not rely on hover-only access for essential actions.
-- Icons must have meaningful accessible names or be decorative.
-- Format dates, counts and numbers by locale.
-- Avoid using color alone to denote status, selection or importance.
+Ne pas tout placer « above the fold » à n'importe quel prix. Le premier viewport est centré sur les trois informations essentielles ; le reste se découvre en descendant. Pas de mur de KPI ou de tuiles identiques.
 
-## 10. CSS token implementation
+### 5.2 Portefeuilles et comptes
+
+- Liste : nom, valeur, gain/perte, part du patrimoine, fraîcheur des prix concernés.
+- Détail : synthèse du portefeuille, comptes rattachés, positions, liquidités, historique.
+- Actions contextualisées : renommer, archiver, ajouter un compte, enregistrer une opération.
+- Vue globale : un actif détenu dans plusieurs comptes peut être consolidé, avec décomposition visible sur demande.
+- Livret A / PEL : afficher **solde** et **intérêts crédités** ; ne pas simuler un cours de marché ni assimiler un taux attendu à un gain acquis.
+
+### 5.3 Liste et détail d'actif
+
+- Liste : nom + ticker + identifiant désambiguïsant si nécessaire (place/ISIN), quantité, valeur, variation de marché, P&L personnel ; tri explicite et filtres simples.
+- Détail : cours et variation de marché (période), quantité, PRU/CMP, coût restant, valeur actuelle, gains latents/réalisés et opérations passées selon données disponibles.
+- **Variation du marché** et **résultat de détention** doivent avoir des libellés et espaces distincts : un actif peut être en hausse aujourd'hui mais en moins-value depuis son acquisition.
+- Les périodes du graphique d'actif et celles de la performance personnelle doivent être distinguées.
+- En cas de cours manquant, montrer l'indisponibilité et l'ancien cours daté ; pas de zéro de substitution.
+
+### 5.4 Activité / opérations
+
+- Liste chronologique, filtrable par compte, portefeuille, type et date ; chaque opération affiche type, actif, quantité/montant, devise, frais, statut, date.
+- Détail d'opération avec provenance (saisie ou import), valeurs d'origine, éventuelle correction et audit adapté.
+- Actions de duplication/correction visibles mais non ambiguës ; jamais afficher « enregistré » avant confirmation serveur.
+- Import CSV : sélection de fichier → analyse → aperçu des lignes → erreurs/doublons → confirmation → rapport ; ne pas masquer les données rejetées.
+- Import PDF : **pas de parcours promis au MVP** ; seulement après prise en charge réelle d'un format identifié (PRD P1).
+
+### 5.5 Premier lancement / empty states
+
+- Première page sans patrimoine : « Ajoute ton premier portefeuille » avec un seul CTA principal.
+- Puis compte et première opération, ou import compatible s'il est déjà disponible.
+- Ne jamais préremplir le dashboard avec des chiffres fictifs présentés comme personnels.
+- Environnements de démonstration : bannière explicite « Données de démonstration » et séparation stricte des comptes réels.
+
+### 5.6 Paramètres et administration
+
+- Préférences : thème, affichage/locale, paramètres de compte.
+- Administration technique (selon phase) : santé instance, fournisseurs, synchronisation, sauvegardes ; jamais tableau transversal des investissements des utilisateurs.
+- L'administration ne donne pas un droit implicite de lecture sur les données financières privées.
+
+## 6. Visualisations financières
+
+### 6.1 Principe de véracité
+
+- Toute série représente des points de données réellement disponibles ou une **simulation explicitement identifiée comme telle** (V1).
+- Ne pas lisser ou interpoler un trou de données sans indication visuelle explicite ; distinguer intervalle non couvert et chute réelle.
+- Ne pas faire commencer une courbe à zéro pour dramatiser les évolutions ni choisir une échelle trompeuse ; indiquer les axes et unités pertinents.
+- Un graphique de **valeur** n'est pas un graphique de **rendement**. Les apports/retraits doivent être contextualisés.
+- Distinguer valorisation ponctuelle, performance depuis l'achat, variation journalière et rendement sur période.
+- Éviter les camemberts complexes ; privilégier barres de répartition et légendes lisibles pour de nombreuses catégories.
+
+### 6.2 Interactions graphiques
+
+- Tooltips : date/heure, montant, devise, type de série, mention de prix ancien si besoin.
+- Périodes courantes : 1J, 1S, 1M, 1A, Tout, **uniquement si la série et les calculs existent** ; états désactivés expliqués.
+- Sur mobile, utiliser tap/focus et une légende accessible ; ne jamais rendre l'information essentielle uniquement disponible au hover.
+- Couleur d'une courbe : neutre ou accent pour la valeur, `success`/`danger` pour une performance positive/négative **sur la période nommée**.
+- Les projections et benchmarks V1 ont un style visuellement distinct des données réalisées ; sources et hypothèses visibles.
+- Prévoir une alternative textuelle ou tabulaire aux graphiques pour lecteurs d'écran.
+
+### 6.3 États de qualité de données
+
+| État | Présentation | Règle |
+| --- | --- | --- |
+| Courant | Affichage normal + horodatage accessible | Ne pas affirmer « temps réel » sans garantie |
+| Différé | Mention « Différé » + heure du cours | Ne pas confondre avec direct |
+| Marché fermé | Mention « Marché fermé » si statut fiable | Dernier cours connu, daté |
+| Ancien | Message discret `warning` + âge du cours | Éviter les conclusions de performance trompeuses |
+| Manquant | Valeur `—` + explication | Ne jamais remplacer par `0` |
+| Historique incomplet | Avertissement dans synthèse et détails | Ne pas afficher un rendement total non justifié |
+| Erreur de fournisseur | Indication + action de réessai si utile | Ne pas supprimer les données valides en cache |
+
+## 7. Montants, dates et libellés
+
+- Locale par défaut `fr-FR`, devise d'affichage EUR ; format illustratif : `12 345,67 €`, `+1 234,50 €`, `−3,25 %`.
+- Toujours afficher un signe pour gain/perte non nul. Un `0,00 €` est neutre, pas un gain.
+- Dans les listes, chiffres tabulaires et colonnes alignées à droite ; ne pas tronquer une somme importante sans mécanisme d'accès au montant exact.
+- La quantité crypto peut avoir plus de deux décimales ; précision adaptée à l'actif et possibilité de consulter la valeur exacte.
+- Distinguer **date d'opération**, **date du cours**, **date de rafraîchissement** et **date de calcul**.
+- Pas de pourcentage sans dénominateur pertinent et données suffisantes : afficher `—` + explication.
+- Labels à privilégier : « Valeur actuelle », « Montant investi », « Gain/perte latent(e) », « Gain/perte réalisé(e) », « Variation du cours », « Dernier cours connu ».
+- Les formats n'autorisent aucun arrondi dans le moteur financier : cette spécification ne concerne que l'affichage.
+
+## 8. Formulaires et interaction métier
+
+### 8.1 Ajouter une opération
+
+- Une action primaire claire « Ajouter une opération » ; la sélection de type présente uniquement les types **implémentés**.
+- Préremplir le portefeuille/compte depuis le contexte si disponible ; tous les champs restent contrôlables.
+- Achat : actif, compte, date, montant total, prix et frais pertinents ; Atlas calcule la quantité dans le contexte décrit par le PRD.
+- Vente : même logique, quantité disponible lisible et avertissement/blocage en cas de dépassement.
+- Dépôt/retrait, transfert, dividende et récompense de staking : formulaires adaptés et moins chargés que le formulaire d'achat.
+- Récapitulatif avant soumission : actif, quantité, prix, frais, devise, total et compte.
+- Validation inline côté client pour l'ergonomie, **validation métier définitive côté serveur**.
+- Pendant l'enregistrement : bouton désactivé ou état de progression, prévention des doubles soumissions ; succès seulement après confirmation.
+- En cas d'erreur : conserver toutes les valeurs saisies, expliquer le problème et proposer correction/reprise.
+- L'utilisateur ne doit jamais avoir à renseigner des identifiants ou notions comptables internes (transaction legs, snapshots, etc.).
+
+### 8.2 Imports
+
+- Zone de dépôt accessible aussi par sélecteur de fichier ; afficher formats réellement supportés.
+- Aperçu paginé ou tabulaire avec colonnes date, type, actif, quantité, montant, devise, frais, statut.
+- Grouper les lignes « nouvelles », « doublons », « invalides », « à confirmer » ; afficher les motifs.
+- Contrôles de mapping visibles si nécessaire ; ne jamais importer en silence une opération ambiguë.
+- Écran final avec nombres acceptés/rejetés/en attente ; accès au rapport.
+
+### 8.3 Composants génériques
+
+- Inputs : hauteur 40 px, radius 10 px, label persistant, aide et erreur associés sémantiquement.
+- Bouton primaire : réservé à l'action dominante d'une zone ; actions secondaires neutres ; destructives confirmées.
+- Tables : tri indiqué, en-têtes lisibles, défilement maîtrisé et adaptation en liste mobile.
+- Dialogues : piège de focus, Escape pour fermer si non destructif, retour du focus au déclencheur.
+- Tooltips : jamais seuls détenteurs d'une information essentielle.
+- Menu d'action : ne jamais masquer une fonction centrale derrière trois niveaux de sous-menus.
+
+## 9. Mouvement et micro-interactions
+
+| Interaction | Durée cible | Intention |
+| --- | --- | --- |
+| Hover/focus d'une ligne | 120–160 ms | Réactivité |
+| Navigation/panneau | 180–240 ms | Continuité spatiale |
+| Dialogues | 160–220 ms | Transition claire |
+| Toast | 160–200 ms | Feedback discret |
+| Changement de période graphique | 180–300 ms | Mise à jour perceptible, sans falsifier le tracé |
+| Skeleton | 1200–1600 ms, léger | Attente, sans flash |
+
+- Animer `opacity`/`transform` si possible ; éviter de réanimer toute une liste à chaque cotation.
+- Le changement d'un cours ne doit pas déclencher d'effet lumineux continu ni de saut de mise en page.
+- Favoriser la stabilité des colonnes/chiffres pendant les mises à jour.
+- Respecter `prefers-reduced-motion`; pas d'animation indispensable à la compréhension.
+- Les animations ajoutent du plaisir d'usage **sans attirer artificiellement l'attention sur les fluctuations**.
+
+## 10. États, feedback et confiance
+
+Tous les composants pertinents couvrent : `default`, `hover`, `focus-visible`, `active`, `disabled`, `loading`, `empty`, `partial`, `error`, `success`.
+
+- `loading` : skeleton proche de la structure finale ; pas de faux chiffres.
+- `empty` : explication courte + action concrète.
+- `partial` : ce qui est connu reste lisible et la limite de complétude est explicite.
+- `error` : cause compréhensible et possibilité de reprise ; données en cours de saisie préservées.
+- `success` : uniquement après confirmation effective.
+- `offline` : dernière synchronisation connue ; ne jamais promettre une saisie synchronisée si elle ne l'est pas.
+- `permissions` : pas de révélation de données d'autres utilisateurs dans erreurs, suggestions ou journaux.
+- Les alertes financières ne doivent pas ressembler à des recommandations d'achat/vente ; rester factuelles.
+
+## 11. Responsive, accessibilité et langue
+
+- Cible WCAG 2.2 AA, contraste 4.5:1 pour texte normal et 3:1 pour grand texte et composants non textuels applicables.
+- Navigation clavier complète ; focus visible ; ordre logique ; cibles tactiles adaptées ; contrôles avec noms accessibles.
+- Responsive : desktop ≥ 1200 px, tablette 768–1199 px, mobile < 768 px comme **repères de conception**, pas contraintes de framework.
+- Les listes/tabulaires doivent rester consultables en mode portrait sans scroll horizontal du site complet ; un tableau technique peut défiler localement avec indication visuelle.
+- Mobile : hero compact, cartes empilées, graphiques exploitables au toucher, formulaire en écran/modal suffisamment large.
+- Conserver la valeur et la performance visibles avant les analyses secondaires.
+- Éviter toute dépendance aux gestes non documentés ou au survol.
+- Textes UI en français au lancement, structure compatible i18n ; libellés compréhensibles sans connaissance financière avancée.
+- Respecter taille de police système, zoom 200 %, et préférences de mouvement.
+
+## 12. CSS de référence
 
 ```css
 :root {
@@ -291,8 +318,8 @@ Each significant feature must handle **default, hover, focus-visible, active/sel
   --accent: #67E2CF;
   --accent-hover: #8DEBDD;
   --accent-pressed: #46C7B3;
-  --accent-tint: rgba(103, 226, 207, 0.10);
-  --accent-border: rgba(103, 226, 207, 0.28);
+  --accent-tint: rgba(103,226,207,.10);
+  --accent-border: rgba(103,226,207,.28);
   --accent-ink: #09231F;
   --secondary-accent: #B6A4F6;
   --success: #6DD6A4;
@@ -306,9 +333,7 @@ Each significant feature must handle **default, hover, focus-visible, active/sel
   --sidebar-width: 252px;
   --sidebar-collapsed-width: 68px;
   --topbar-height: 60px;
-  --reading-width: 760px;
 }
-
 :root[data-theme="light"] {
   color-scheme: light;
   --bg-canvas: #F5F7F8;
@@ -324,8 +349,8 @@ Each significant feature must handle **default, hover, focus-visible, active/sel
   --accent: #087B70;
   --accent-hover: #06685F;
   --accent-pressed: #05564E;
-  --accent-tint: rgba(8, 123, 112, 0.08);
-  --accent-border: rgba(8, 123, 112, 0.24);
+  --accent-tint: rgba(8,123,112,.08);
+  --accent-border: rgba(8,123,112,.24);
   --accent-ink: #FFFFFF;
   --secondary-accent: #7053B1;
   --success: #166B48;
@@ -333,69 +358,69 @@ Each significant feature must handle **default, hover, focus-visible, active/sel
   --danger: #AE3541;
   --focus-ring: #087B70;
 }
-
-:focus-visible {
-  outline: 2px solid var(--focus-ring);
-  outline-offset: 2px;
-}
-
+.financial-number { font-variant-numeric: tabular-nums; }
+:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
-    animation-duration: 0.01ms !important;
+    animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    transition-duration: .01ms !important;
     scroll-behavior: auto !important;
   }
 }
 ```
 
-If using Tailwind or a component library, map these semantic tokens into its theming system. **Do not scatter raw hex colors and arbitrary pixel values across components.**
+Adapter ces variables au système de thème retenu (CSS, Tailwind ou librairie UI). Ne pas disperser des valeurs hexadécimales dans les composants.
 
-## 11. Anti-patterns
+## 13. Anti-patterns
 
-**Do:**
-- Build an instantly recognizable, quiet dark interface.
-- Prioritize excellent typography, precise alignment and predictable hierarchy.
-- Keep one visual focal point per view.
-- Let information density adapt to the task.
-- Use premium finishing details: consistent iconography, crisp separators, responsive states.
-- Test real content: long note titles, empty collections, technical identifiers, multiple locales.
+**À faire :**
+- Faire ressortir valeur et résultats avant les analyses.
+- Afficher les valeurs, dates, devises et provenances adéquates.
+- Séparer mouvements de marché, P&L personnel et versements.
+- Utiliser des tableaux/listes sobres, denses et scannables.
+- Soigner transitions, accessibilité et petites interactions.
+- Tester avec actifs longs, devises différentes, valeurs négatives, positions nulles et historiques partiels.
 
-**Don't:**
-- Copy YouTube's red accent, thumbnail-first grids or pill-heavy chrome.
-- Turn Atlas into a generic SaaS analytics dashboard.
-- Overuse gradients, glass effects, glowing outlines or decorative charts.
-- Hide navigation behind mystery-meat icons.
-- Use too many cards, too many competing accent colors or 12px body text everywhere.
-- Add animations that slow down reading or searching.
-- Invent AI actions, metrics, recommendations or knowledge relationships to make screens look populated.
+**À éviter :**
+- Reproduire la surcharge visuelle de plateformes d'analyse financière.
+- Ajouter un ratio technique au dashboard sans besoin PRD explicite.
+- Créer des graphiques décoratifs ou les remplir avec des cours inventés.
+- Employer le vert pour toute information favorable sans contexte, ni le rouge pour toute baisse comme s'il s'agissait d'une alerte critique.
+- Assimiler Livret A/PEL à une action cotée.
+- Confondre montant déposé et gain de marché.
+- Multiplier cartes, gradients, animations ou palettes concurrentes.
+- Ajouter un onglet IA/Research avant sa phase produit.
+- Utiliser une maquette visuelle comme preuve de fonctionnalité.
 
-## 12. Representative screens and quality bar
+## 14. Recette visuelle et UX
 
-Apply this system coherently to whichever of the following screens exist in Atlas:
+Une livraison UI ne peut être déclarée terminée sans vérification des points applicables :
 
-1. **Home / overview:** helpful orientation and recent or relevant content; one strong action, not a wall of KPI cards.
-2. **Knowledge listing / library:** powerful search, useful filters, scan-friendly rows and obvious metadata.
-3. **Knowledge detail / reader:** calm typography, links and relationships, focused contextual inspector.
-4. **Explore / graph:** restrained but compelling spatial navigation.
-5. **Global command palette:** fast, keyboard-accessible and visually polished.
-6. **Settings:** readable preference groups with immediate, honest feedback.
+- [ ] **Hiérarchie :** valeur totale, gain/perte et période immédiatement compréhensibles.
+- [ ] **Sémantique :** distinction variation de marché / P&L personnel / rendement.
+- [ ] **Confiance :** cours différés, anciens ou manquants correctement signalés.
+- [ ] **Zéro données fictives :** hors démo explicitement balisée.
+- [ ] **Navigation :** Accueil, Portefeuilles, Actifs, Activité cohérents avec les fonctions disponibles.
+- [ ] **Saisie :** champs essentiels, récapitulatif, validation, erreurs conservant les valeurs.
+- [ ] **Actifs :** jusqu'à 10 éléments sur l'accueil, liste détaillée lisible et triable.
+- [ ] **Épargne :** solde et intérêts crédités distingués des cours de marché.
+- [ ] **Thèmes :** sombre, clair, système ; contraste acceptable.
+- [ ] **Responsive :** desktop, tablette, smartphone testés.
+- [ ] **Accessibilité :** clavier, focus, contraste, labels, lecteurs d'écran et reduced motion.
+- [ ] **États :** empty, loading, partial, error, disabled, success visibles et honnêtes.
+- [ ] **Mouvement :** agréable mais sans distraction, sans saut de layout ni fausse urgence.
+- [ ] **Intégration :** aucune interface simulant une opération réussie non persistée.
 
-### Acceptance checklist
+## 15. Instructions aux agents
 
-- [ ] Every screen uses semantic design tokens instead of ad hoc colors.
-- [ ] Dark and light themes both work and remain legible.
-- [ ] Desktop, tablet and mobile layouts are intentional.
-- [ ] Long and empty content does not break layouts.
-- [ ] Key controls are accessible with keyboard alone.
-- [ ] Focus, loading, error and empty states are implemented.
-- [ ] Motion is subtle and honors reduced-motion preference.
-- [ ] The UI still looks polished without mock illustrations or demo data.
-- [ ] Visual hierarchy supports core Atlas workflows, not decorative dashboard conventions.
-- [ ] No product feature is introduced merely because it is mentioned in this visual specification.
+1. Lire `PRD.md`, ce document et les ADR pertinents avant toute implémentation UI.
+2. Vérifier la phase de `ROADMAP.md` : ne pas construire les fonctionnalités V1/Futur en avance.
+3. Implémenter d'abord les tokens et primitives réutilisables, puis les écrans réels du périmètre livré.
+4. Conserver le thème Midnight Observatory, en adaptant sa composition au contenu financier, **pas** au modèle de notes/knowledge graph de la version antérieure.
+5. Utiliser des données de test clairement fictives en développement uniquement ; les données financières réelles viennent des contrats backend, avec état de fraîcheur.
+6. Inspecter visuellement en desktop et mobile, ainsi que les états vides/erreurs, dès que l'outillage le permet.
+7. Si une règle de calcul, un état de prix ou un libellé financier est ambigu, vérifier le PRD ; ne pas inventer une définition dans le frontend.
+8. Toute nouvelle composante de design réutilisable doit être ajoutée ici, pas codée comme exception isolée.
 
-## 13. Instructions to implementation agents
-
-Treat this document as the **visual source of truth**, not as a feature requirements document. Prioritize existing Atlas product requirements and existing app architecture for functional scope. Implement the token system and reusable shell/components first, then apply them across existing screens. Prefer small, maintainable, accessible components over one-off page styling. When an unspecified visual decision is needed, choose the simpler, quieter, more readable solution. If using a prebuilt component library, customize it consistently rather than mixing incompatible design languages.
-
-**Desired outcome:** Opening Atlas should feel like entering a personal, meticulously designed workspace — inspiring enough to enjoy, restrained enough to use for hours.
+**Résultat attendu :** à chaque ouverture, Atlas donne une compréhension rapide et fiable de sa situation financière, tout en offrant une expérience sobre, précise et agréable à explorer.
