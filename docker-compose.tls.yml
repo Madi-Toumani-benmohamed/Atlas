@@ -1,0 +1,25 @@
+# Optional public HTTPS termination. Set a real domain before deployment.
+services:
+  api:
+    ports: !override []
+  proxy:
+    image: caddy:2-alpine@sha256:78bd35025c7ba85961dd149ae670315129954e77abe2383ac47c89106b35ade9
+    environment:
+      ATLAS_DOMAIN: "${ATLAS_DOMAIN:?Set a real HTTPS domain}"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - atlas_tls_data:/data
+      - atlas_tls_config:/config
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+volumes:
+  atlas_tls_data:
+  atlas_tls_config:

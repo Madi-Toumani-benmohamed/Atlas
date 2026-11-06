@@ -1,0 +1,10 @@
+[Unit]
+Description=Daily encrypted Atlas backup
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+Unit=atlas-backup.service
+
+[Install]
+WantedBy=timers.target

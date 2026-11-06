@@ -2,7 +2,7 @@
 
 > **Produit :** Atlas Portfolio  
 > **Version :** 0.2 — 2026-11-05  
-> **Statut :** Registre initial enrichi ; propositions techniques non approuvées  
+> **Statut :** Registre initial enrichi ; stack acceptée par délégation ; autres propositions à instruire
 > **Références :** `PRD.md` v0.2, `ROADMAP.md` v0.1, `AGENTS.md`, `design.md`, `ARCHITECTURE.md`
 
 ## 1. Objet et autorité
@@ -22,11 +22,11 @@ Les orientations expressément choisies par le responsable produit dans le cadra
 | ADR-0001 | Produit auto-hébergeable, gratuit, Docker Compose Linux | `accepted` | MVP | PRD §2, F-022 |
 | ADR-0002 | Opérations comme source de vérité des positions | `accepted` | MVP | PRD §7, F-008/F-013 |
 | ADR-0003 | Isolation multi-utilisateur et moindre privilège | `accepted` | MVP | PRD F-001/F-002, US-009 |
-| ADR-0004 | Monolithe modulaire plutôt que microservices | `proposed` | Stack | Phase 0 |
-| ADR-0005 | React/TypeScript, Go, PostgreSQL | `proposed` | Stack | Phase 0 |
+| ADR-0004 | Monolithe modulaire plutôt que microservices | `accepted` | Stack | Phase 0 |
+| ADR-0005 | React/TypeScript, Go, PostgreSQL | `accepted` | Stack | Phase 0 |
 | ADR-0006 | Journal de mouvements, nombres décimaux exacts, calculs déterministes | `proposed` | Modèle technique | PRD §7, NFR-01/02 |
 | ADR-0007 | Adaptateurs de marché interchangeables et cache traçable | `proposed` | Intégration | PRD F-018/F-019, Q-05/Q-06 |
-| ADR-0008 | Authentification locale sécurisée et séparation admin/finance | `proposed` | Sécurité | PRD §9 |
+| ADR-0008 | Authentification locale sécurisée et séparation admin/finance | `accepted` | Sécurité | PRD §9 |
 | ADR-0009 | Import en deux temps, rapprochement et idempotence | `proposed` | Imports | PRD F-011/F-012 |
 
 ## 3. Fiches synthétiques des décisions
@@ -60,20 +60,20 @@ Les orientations expressément choisies par le responsable produit dans le cadra
 
 ### ADR-0004 — Monolithe modulaire
 
-- **Statut :** `proposed`.
+- **Statut :** `accepted` — 2026-11-05, par délégation explicite du responsable produit (« Prends les décisions […] écrits les et ensuite commence le développement »).
 - **Contexte :** MVP en auto-hébergement, ressources limitées, faible intérêt à gérer plusieurs services métiers.
-- **Proposition :** backend unique séparé par domaines (`identity`, `portfolio`, `ledger`, `valuation`, `marketdata`, `imports`), avec interfaces explicites entre composants.
+- **Décision :** backend unique séparé par domaines (`identity`, `portfolio`, `ledger`, `valuation`, `marketdata`, `imports`), avec interfaces explicites entre composants.
 - **Alternatives :** microservices (complexité de déploiement/observabilité), monolithe sans frontières (risque de couplage).
 - **Conséquences :** déploiement simple, séparation métier/infrastructure, extraction ultérieure possible mais non préparée artificiellement.
-- **Validation requise :** accord sur le style architectural et ses frontières avant scaffolding backend.
+- **Portée :** autorise C-01 ; ne résout pas les politiques financières. Versions et preuves : `docs/decisions/C-01.md`.
 
 ### ADR-0005 — Stack applicative
 
-- **Statut :** `proposed`.
-- **Proposition :** React + TypeScript + Vite pour le web/PWA ; Go pour API et moteur métier ; PostgreSQL pour la persistance ; tests Go, TypeScript et E2E adaptés aux outils finalement retenus.
+- **Statut :** `accepted` — 2026-11-05, par délégation explicite du responsable produit (« Prends les décisions […] écrits les et ensuite commence le développement »).
+- **Décision :** React + TypeScript + Vite pour le web/PWA ; Go pour API et moteur métier ; PostgreSQL pour la persistance ; tests Go, TypeScript et E2E adaptés aux outils finalement retenus.
 - **Alternatives :** backend TypeScript full-stack, autres bases relationnelles ; comparer simplicité opérationnelle et bibliothèque décimale disponible.
 - **Conséquences :** séparation front/back ; pipeline de builds et tests ; disponibilité ARM64 à vérifier.
-- **Validation requise :** confirmer explicitement la stack et les versions lors de la phase 0. Aucune commande de scaffolding ne doit présumer l'approbation de cet ADR.
+- **Portée :** autorise C-01 ; ne résout pas les politiques financières. Versions et preuves : `docs/decisions/C-01.md`.
 
 ### ADR-0006 — Mouvements et précision financière
 
@@ -93,11 +93,14 @@ Les orientations expressément choisies par le responsable produit dans le cadra
 
 ### ADR-0008 — Sessions et autorisations
 
-- **Statut :** `proposed`.
-- **Proposition :** authentification locale avec stockage sûr des mots de passe, sessions en cookies sécurisés, contrôles de propriété systématiques ; rôle admin limité à la gestion technique. Variante OIDC ultérieure si besoin.
+- **Statut :** `accepted` — 2026-11-05, délégation explicite de choix et poursuite autonome par le responsable produit.
+- **Décision :** authentification locale avec stockage sûr des mots de passe, sessions en cookies sécurisés, contrôles de propriété systématiques ; rôle admin limité à la gestion technique. Variante OIDC ultérieure si besoin.
 - **Alternatives :** jetons persistants dans le navigateur, admin global ayant accès à tous les portefeuilles — écartés pour risque de fuite.
 - **Conséquences :** protections CSRF adaptées, limitation des tentatives, rotation/invalidation des sessions, logs expurgés, tests d'isolation.
-- **Validation requise :** mode d'accès distant, premier compte administrateur, politique de récupération de compte.
+- **Choix délégués :** HTTPS par défaut, aucun administrateur financier, inscription explicitement activée.
+
+
+Contrat C-02 : `docs/decisions/C-02.md`. Pas de rôle admin implicite au premier inscrit ; récupération non exposée tant que son parcours sûr n’est pas livré.
 
 ### ADR-0009 — Pipeline d'import vérifiable
 

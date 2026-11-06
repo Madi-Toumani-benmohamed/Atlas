@@ -1,7 +1,7 @@
 # Atlas Portfolio — Architecture technique cible
 
 > **Version :** 0.1 — 2026-11-05  
-> **Statut :** Architecture de référence **proposée**, non implémentée  
+> **Statut :** Architecture cible ; stack acceptée, socle C-01 en cours
 > **Source produit :** `PRD.md` v0.2 ; **décisions :** `ADR.md` ; **exécution :** `ROADMAP.md` v0.1 ; **UX :** `design.md`  
 > **Important :** les choix liés aux ADR `proposed` ne sont pas une autorisation implicite de développement.
 
@@ -18,11 +18,12 @@ Atlas Portfolio permet à plusieurs utilisateurs de suivre des portefeuilles log
 | Docker Compose sur Linux, auto-hébergement, coût récurrent obligatoire nul | Confirmé côté produit | ADR-0001 `accepted` |
 | Opérations sources de vérité, snapshots dérivés | Confirmé côté produit | ADR-0002 `accepted` |
 | Comptes individuels et isolation financière | Confirmé côté produit | ADR-0003 `accepted` |
-| Monolithe modulaire | Proposition | ADR-0004 `proposed` |
-| React + TypeScript + Vite / Go / PostgreSQL | Proposition | ADR-0005 `proposed` |
+| Monolithe modulaire | Accepté par délégation | ADR-0004 `accepted` |
+| React + TypeScript + Vite / Go / PostgreSQL | Accepté par délégation | ADR-0005 `accepted` |
 | Mouvements exacts + contrôles d'intégrité | Proposition | ADR-0006 `proposed` |
 | Fournisseurs de cours via adaptateurs | Proposition | ADR-0007 `proposed` |
-| Sessions sécurisées locales et pipeline CSV | Proposition | ADR-0008/0009 `proposed` |
+| Sessions locales | Accepté, API C-02 implémentée | ADR-0008 `accepted` |
+| Pipeline CSV | Proposition | ADR-0009 `proposed` |
 
 Le dépôt ne doit **pas** être décrit comme implémentant ce diagramme avant que du code réel n'existe. `CODEBASE_GRAPH.md` documentera l'implémentation vérifiée, non cette cible.
 
@@ -238,7 +239,7 @@ Les jeux de tests chiffrés T-01 à T-12 du `PRD.md` servent de référence. Cod
 
 ## 13. Questions en attente et condition de démarrage
 
-**Avant le scaffolding de l'application :** confirmer ADR-0004 et ADR-0005 ; ne pas présenter le dossier envisagé comme une arborescence existante.
+**Scaffolding :** ADR-0004 et ADR-0005 acceptés par délégation le 2026-11-05 ; le code réel reste décrit exclusivement dans CODEBASE_GRAPH.md.
 
 **Avant le ledger et la valorisation :** Q-02 et Q-03 + règles de précision et fixtures validées (ADR-0006).
 
@@ -251,3 +252,25 @@ Les jeux de tests chiffrés T-01 à T-12 du `PRD.md` servent de référence. Cod
 Le premier prompt Codex recommandé est un **audit C-00 sans implémentation métier** : vérifier l'état du dépôt, les documents et les décisions ouvertes, proposer une séquence de travaux et des scénarios de test, puis solliciter les approbations réellement bloquantes.
 
 **Cette architecture est une cible à valider, pas une description de services déjà développés.**
+
+## État C-01
+
+ADR-0004/0005 acceptés par délégation explicite le 2026-11-05. Le socle technique commence ; le diagramme métier reste une cible. Voir `CODEBASE_GRAPH.md` pour le code réel.
+
+### Compose implémenté pour le socle
+
+`docker-compose.yml` exécute uniquement le serveur Go actuel, avec healthcheck, utilisateur non root, lecture seule et publication sur toutes les interfaces IPv4. La configuration multi-service de §10 reste la cible future ; aucun stockage métier existant.
+
+### Identité C-02
+
+API REST de sessions et PostgreSQL disponibles via `docker-compose.auth.yml`. Contrat et limites : `docs/decisions/C-02.md`. Le frontend C-02 appelle les routes d’identité depuis la même origine (proxy Vite en développement, proxy HTTPS à configurer en hébergement). Inscription, connexion, session et déconnexion sont implémentées ; aucune récupération de compte livrée ; la séparation financière sera testée avec les ressources métier correspondantes.
+
+## Implémentation locale C-03 à C-09 — 2026-11-06
+
+Le catalogue privé, journal et moteur exact existent désormais dans `internal/catalog` et `internal/ledger`. Les migrations additives v2–v5 sont sérialisées ; les contraintes composites imposent la propriété des références. Les montants sources sont des chaînes décimales dans les événements JSONB ; les calculs utilisent des rationnels exacts et un affichage arrondi séparé. Les corrections ne réécrivent pas le payload original : elles désactivent l’ancienne version et ajoutent un événement lié dans la même transaction, avec rejeu complet. Verrous propriétaire → ressources pour les écritures.
+
+Le frontend consomme réellement ces contrats et Go sert aussi son build statique. Les observations manuelles et FX BCE sont persistantes et datées ; aucune couverture automatique d’actifs n’est présumée. Les exports incluent données et audit du seul propriétaire dans un instantané cohérent. Le cache fournisseur ne contient que les taux publics de la BCE.
+
+L’image inclut frontend/API/healthcheck/archive ; Caddy est une terminaison HTTPS optionnelle. Les cookies HTTPS `__Host-` sont distincts du laboratoire HTTP. Des scripts chiffrent les dumps et restaurent vers une base neuve ; les unités quotidiennes restent à configurer/activer sur le serveur cible.
+
+Contrat détaillé : `docs/decisions/C-03-C-09.md`. La cartographie et le rapport de validation précisent les fichiers réels, tests et réserves. Les modules Research/V1, les CSV de courtiers et les sources d’actifs non validées restent des cibles, pas des fonctions connectées.
