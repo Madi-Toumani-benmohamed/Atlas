@@ -1,8 +1,10 @@
 package main
 
 import (
+	"atlas.local/backend/internal/catalog"
 	"atlas.local/backend/internal/httpserver"
 	"atlas.local/backend/internal/identity"
+	"atlas.local/backend/internal/ledger"
 	"context"
 	"database/sql"
 	"errors"
@@ -11,6 +13,7 @@ import (
 	"net/url"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"syscall"
 	"time"
 )
@@ -37,13 +40,25 @@ func main() {
 		db.SetConnMaxLifetime(30 * time.Minute)
 		initCtx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 		err = identity.Migrate(initCtx, db)
+		if err == nil {
+			err = catalog.Migrate(initCtx, db)
+		}
+		if err == nil {
+			err = ledger.Migrate(initCtx, db)
+		}
 		cancel()
 		if err != nil {
 			log.Fatal("database migration failed")
 		}
 		auth = append(auth, identity.New(db, origin, u.Scheme == "https", os.Getenv("ATLAS_REGISTRATION") == "true"))
 	}
-	srv := &http.Server{Addr: addr, Handler: httpserver.Handler(auth...), ReadHeaderTimeout: 5 * time.Second, ReadTimeout: 10 * time.Second, WriteTimeout: 10 * time.Second, IdleTimeout: 60 * time.Second}
+	webDir := os.Getenv("ATLAS_WEB_DIR")
+	if webDir != "" {
+		if info, err := os.Stat(filepath.Join(webDir, "index.html")); err != nil || !info.Mode().IsRegular() {
+			log.Fatal("ATLAS_WEB_DIR must contain the built index.html")
+		}
+	}
+	srv := &http.Server{Addr: addr, Handler: httpserver.HandlerWithWeb(webDir, auth...), ReadHeaderTimeout: 5 * time.Second, ReadTimeout: 10 * time.Second, WriteTimeout: 10 * time.Second, IdleTimeout: 60 * time.Second}
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 	go func() {

@@ -61,12 +61,13 @@ func TestIntegration(t *testing.T) {
 		w := request("POST", "/api/v1/auth/login", creds(email), origin, nil)
 		check(w, 200)
 		c := w.Result().Cookies()[0]
-		if !c.HttpOnly || !c.Secure || c.SameSite != http.SameSiteStrictMode {
+		if c.Name != "__Host-atlas_session" || c.Domain != "" || c.Path != "/" || !c.HttpOnly || !c.Secure || c.SameSite != http.SameSiteStrictMode {
 			t.Fatal("unsafe cookie")
 		}
 		return c
 	}
 	ca, cb := login(a), login(b)
+	check(request("GET", "/api/v1/me", "", "", &http.Cookie{Name: "atlas_session", Value: ca.Value}), 401)
 	for _, tc := range []struct {
 		cookie *http.Cookie
 		email  string
@@ -123,5 +124,78 @@ func TestInputAndOrigin(t *testing.T) {
 				t.Fatalf("got %d", w.Code)
 			}
 		})
+	}
+}
+
+func TestPasswordByteBoundaries(t *testing.T) {
+	for _, tc := range []struct {
+		name, password string
+		valid          bool
+	}{
+		{"eleven bytes", strings.Repeat("a", 11), false},
+		{"twelve bytes", strings.Repeat("a", 12), true},
+		{"seventy two bytes", strings.Repeat("a", 72), true},
+		{"seventy three bytes", strings.Repeat("a", 73), false},
+		{"unicode twelve bytes", strings.Repeat("é", 6), true},
+		{"unicode seventy two bytes", strings.Repeat("é", 36), true},
+		{"unicode seventy four bytes", strings.Repeat("é", 37), false},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			body, err := json.Marshal(credentials{Email: "test@example.test", Password: tc.password})
+			if err != nil {
+				t.Fatal(err)
+			}
+			r := httptest.NewRequest("POST", "/", strings.NewReader(string(body)))
+			r.Header.Set("Content-Type", "application/json; charset=utf-8")
+			w := httptest.NewRecorder()
+			got, valid := readCredentials(w, r)
+			if valid != tc.valid {
+				t.Fatalf("accepted=%v want %v", valid, tc.valid)
+			}
+			if valid && got.Password != tc.password {
+				t.Fatal("password was changed or truncated")
+			}
+			if !valid && w.Code != 400 {
+				t.Fatalf("status %d want 400", w.Code)
+			}
+		})
+	}
+}
+
+func TestAllWritesRejectUntrustedOrigins(t *testing.T) {
+	s := &Server{Origin: "https://atlas.test", Registration: true}
+	mux := http.NewServeMux()
+	s.RegisterRoutes(mux)
+	for _, path := range []string{"register", "login", "logout"} {
+		for _, tc := range []struct{ name, origin, site string }{
+			{"absent", "", ""},
+			{"foreign", "https://other.test", ""},
+			{"cross site", s.Origin, "cross-site"},
+		} {
+			t.Run(path+"/"+tc.name, func(t *testing.T) {
+				r := httptest.NewRequest("POST", "/api/v1/auth/"+path, strings.NewReader("{}"))
+				r.Header.Set("Origin", tc.origin)
+				r.Header.Set("Sec-Fetch-Site", tc.site)
+				w := httptest.NewRecorder()
+				mux.ServeHTTP(w, r)
+				if w.Code != 403 {
+					t.Fatalf("status %d want 403", w.Code)
+				}
+			})
+		}
+	}
+}
+
+func TestHTTPSRejectsLegacyCookieBeforeDatabaseAccess(t *testing.T) {
+	s := &Server{Secure: true}
+	w := httptest.NewRecorder()
+	r := httptest.NewRequest("GET", "/api/v1/me", nil)
+	r.AddCookie(&http.Cookie{Name: "atlas_session", Value: strings.Repeat("a", 64)})
+	s.me(w, r)
+	if w.Code != 401 {
+		t.Fatal("HTTPS accepted a legacy cookie")
+	}
+	if s.cookieName() != "__Host-atlas_session" || (&Server{}).cookieName() != "atlas_session" {
+		t.Fatal("cookie namespace not separated by transport")
 	}
 }

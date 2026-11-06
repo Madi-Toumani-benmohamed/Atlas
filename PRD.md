@@ -286,7 +286,7 @@ Ces règles expriment les **résultats attendus**. Les algorithmes, modèles phy
 - Un achat transforme du cash en actif ; **il ne constitue pas un nouvel apport externe**.
 - Un dépôt/retrait externe affecte les apports nets ; un transfert interne entre comptes du même périmètre consolidé ne modifie pas les apports nets globaux.
 - Les frais et revenus sont comptabilisés une seule fois, au bon compte et dans la bonne devise.
-- Le fonctionnement lors d'un solde cash négatif ou d'un historique partiel est **[À ARBITRER — voir Q-02]** ; jamais de correction implicite.
+- Q-02 validée le 2026-11-06 : ouvertures explicites, aucun découvert ni vente à découvert ; résultat global masqué pour un historique incomplet. Voir `docs/decisions/financial-policy.md`.
 - Tout actif doit être identifié sans ambiguïté (le ticker seul ne suffit pas systématiquement).
 
 ### 7.2 Valeur, coût de revient et P&L
@@ -322,7 +322,7 @@ Ces règles expriment les **résultats attendus**. Les algorithmes, modèles phy
 
 - Livret A et PEL : comptes valorisés par solde et mouvements enregistrés ; intérêts reconnus lorsqu'ils sont effectivement enregistrés, sauf mode distinct explicitement étiqueté « estimation ».
 - Récompenses simples de staking : enregistrer la quantité reçue, l'actif, la date, le compte et, lorsqu'elle est disponible, la valeur de référence à la date de réception.
-- Le traitement détaillé des récompenses dans le coût moyen, les flux et la fiscalité est **[À ARBITRER — Q-03]** et doit faire l'objet de tests spécifiques.
+- Q-03 validée le 2026-11-06 : cours daté à réception, reconnu comme revenu et coût d’acquisition économique ; tests spécifiques obligatoires, aucun traitement fiscal revendiqué.
 - Les swaps crypto et la DeFi complexe ne doivent pas être improvisés dans un modèle initial conçu seulement pour achats/ventes.
 
 ## 8. UX et interface
@@ -461,10 +461,10 @@ Le MVP est livrable seulement si toutes les conditions suivantes sont vérifiée
 
 ### Questions ouvertes prioritaires
 
-- **Q-01 [Bloquante pour les imports] :** quels exports CSV réels de Coinbase et Trade Republic seront officiellement supportés dans le premier lot ?
-- **Q-02 [Bloquante pour le ledger] :** comment représenter les positions historiques sans dépôt initial enregistré, les soldes d'ouverture et les liquidités négatives ?
-- **Q-03 [Bloquante pour le staking] :** quelle règle de coût/valorisation appliquer aux récompenses crypto reçues ?
-- **Q-04 [Bloquante pour certaines crypto] :** les swaps de stablecoins ou crypto déjà présents dans l'historique doivent-ils être pris en charge au MVP ou laissés en anomalies à corriger ?
+- **Q-01 [Choix délégué le 2026-11-06] :** exports Coinbase avec ID et Trade Republic transactions à 23 colonnes retenus ; [périmètre exact des adaptateurs](docs/formats/broker-csv.md). Tests synthétiques ; compatibilité avec chaque variante réelle non garantie.
+- **Q-02 [Résolue le 2026-11-06] :** ouvertures explicites, aucun découvert ni vente à découvert ; résultat global masqué si l’historique est incomplet. Contrat validé : `docs/decisions/financial-policy.md`.
+- **Q-03 [Résolue le 2026-11-06] :** cours daté à réception, reconnu comme revenu et coût d’acquisition économique. Contrat validé : `docs/decisions/financial-policy.md`.
+- **Q-04 [Résolue le 2026-11-06] :** swaps non pris en charge ; signalement en anomalie sans conversion automatique. Contrat validé : `docs/decisions/financial-policy.md`.
 - **Q-05 [Bloquante pour les cours] :** quels titres/ETF pilotes et places de marché doivent absolument être couverts gratuitement ?
 - **Q-06 [Haute] :** quels fournisseurs de marché sont utilisables légalement pour l'auto-hébergement et la distribution open source ?
 - **Q-07 [Haute] :** quelles données les produits d'épargne doivent-ils afficher en l'absence d'import automatisé ?

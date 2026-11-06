@@ -263,4 +263,14 @@ ADR-0004/0005 acceptés par délégation explicite le 2026-11-05. Le socle techn
 
 ### Identité C-02
 
-API REST de sessions et PostgreSQL disponibles via `docker-compose.auth.yml`. Contrat et limites : `docs/decisions/C-02.md`. Aucun frontend de connexion ni récupération de compte livré ; la séparation financière sera testée avec les ressources métier correspondantes.
+API REST de sessions et PostgreSQL disponibles via `docker-compose.auth.yml`. Contrat et limites : `docs/decisions/C-02.md`. Le frontend C-02 appelle les routes d’identité depuis la même origine (proxy Vite en développement, proxy HTTPS à configurer en hébergement). Inscription, connexion, session et déconnexion sont implémentées ; aucune récupération de compte livrée ; la séparation financière sera testée avec les ressources métier correspondantes.
+
+## Implémentation locale C-03 à C-09 — 2026-11-06
+
+Le catalogue privé, journal et moteur exact existent désormais dans `internal/catalog` et `internal/ledger`. Les migrations additives v2–v5 sont sérialisées ; les contraintes composites imposent la propriété des références. Les montants sources sont des chaînes décimales dans les événements JSONB ; les calculs utilisent des rationnels exacts et un affichage arrondi séparé. Les corrections ne réécrivent pas le payload original : elles désactivent l’ancienne version et ajoutent un événement lié dans la même transaction, avec rejeu complet. Verrous propriétaire → ressources pour les écritures.
+
+Le frontend consomme réellement ces contrats et Go sert aussi son build statique. Les observations manuelles et FX BCE sont persistantes et datées ; aucune couverture automatique d’actifs n’est présumée. Les exports incluent données et audit du seul propriétaire dans un instantané cohérent. Le cache fournisseur ne contient que les taux publics de la BCE.
+
+L’image inclut frontend/API/healthcheck/archive ; Caddy est une terminaison HTTPS optionnelle. Les cookies HTTPS `__Host-` sont distincts du laboratoire HTTP. Des scripts chiffrent les dumps et restaurent vers une base neuve ; les unités quotidiennes restent à configurer/activer sur le serveur cible.
+
+Contrat détaillé : `docs/decisions/C-03-C-09.md`. La cartographie et le rapport de validation précisent les fichiers réels, tests et réserves. Les modules Research/V1, les CSV de courtiers et les sources d’actifs non validées restent des cibles, pas des fonctions connectées.

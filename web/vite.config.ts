@@ -1,2 +1,8 @@
-import { defineConfig } from 'vite';
-export default defineConfig({build:{lib:{entry:'src/index.ts',formats:['es'],fileName:'atlas'},rollupOptions:{external:['react','react-dom/client']}}});
+import { defineConfig } from "vite";
+export default defineConfig({
+  server: {
+    port: 5173,
+    strictPort: true,
+    proxy: { "/api/": { target: "http://127.0.0.1:8080" } },
+  },
+});

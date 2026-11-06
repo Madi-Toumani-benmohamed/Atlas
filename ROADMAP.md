@@ -307,3 +307,27 @@ F-022, NFR-10 ; préparation P5.2, sans déclarer la publication MVP. Ajout de `
 F-001/F-002, US-001/US-009, NFR-02/04/05/13 ; P1.1/P1.2/P1.9. ADR-0008 accepté par délégation. Implémenté : PostgreSQL, schéma v1, inscription opt-in, connexion, session persistante/expiration/rotation, déconnexion et identité privée. Tests d’intégration avec deux utilisateurs, refus d’accès, CSRF par origine, rate limit et migration rejouée réussis ; build/vet/race et smoke HTTP avec redémarrage réussis. Contrat : `docs/decisions/C-02.md`.
 
 Lot API vérifié ; C-02 global reste en cours : aucun écran ni récupération de compte. C-03 et les règles financières ne sont pas commencés. Phase 0 et publication MVP non déclarées terminées.
+
+### C-02 — Parcours web, 2026-11-06
+
+Suite locale : interface d’inscription/connexion, restauration de session, déconnexion et état connecté explicite sans portefeuille. F-001/F-002, identité de US-001/US-009, NFR-09/15 ; P1.1/P1.2 et préparation P3.2. Lint, typage/build, tests HTTP et parcours Chromium avec API simulée réussis ; trois largeurs contrôlées. Détails et reproduction : `docs/decisions/C-02-web.md`. Suite vérifiée : intégration réelle Chromium/API/PostgreSQL avec deux utilisateurs, rotation, CSRF, déconnexion et session conservée après redémarrage ; tests Go avec race detector réussis. Job CI E2E ajouté, non exécuté sur GitHub. Hébergement HTTPS de production encore à vérifier ; récupération de compte absente. C-02 reste IN_PROGRESS, C-03 non commencé.
+
+### C-02 — Validation élargie, 2026-11-06
+
+NFR-04/05/09/10/13/15 : parcours réel HTTPS sur build statique et API conteneurisée, cookie Secure, persistance après redémarrage, 12 analyses axe sans violation détectée, contrôles Node 22/24, frontières UTF-8 et CSRF serveur, vérification des modules et audits de dépendances. Restauration d’une sauvegarde chiffrée sur base distincte et reprise de session vérifiées sur données synthétiques ; compilation statique ARM64 réussie sans exécution ARM64. CI enrichie, pas de run hébergé. **READY_WITH_RESERVATIONS pour le périmètre livré**, pas de publication MVP : alertes npm de développement, Dockerfile multi-stage complet et hébergement public restent à traiter/vérifier. Rapport : `docs/validation/C-02.md`.
+
+### C-03 à C-09 — poursuite autorisée, 2026-11-06
+
+Le responsable produit a demandé de poursuivre tous les lots au-delà de C-02 et approuvé la politique d’ouverture, de contraintes cash/inventaire, de staking et de swaps non pris en charge. Le choix des formats CSV est délégué : Coinbase historique avec ID et Trade Republic transactions à 23 colonnes retenus, avec périmètre limité documenté.
+
+| Lot | État observé |
+| --- | --- |
+| C-03 | Implémenté, API/DB privée vérifiée |
+| C-04 | Implémenté, journal transactionnel et corrections vérifiés |
+| C-05 | Implémenté, résultats numériques et consolidation vérifiés |
+| C-06 | Implémenté pour observations manuelles/FX BCE/historique ; couverture automatique d’actifs ouverte |
+| C-07 | Implémenté, recette navigateur réelle, états vides et 22 analyses axe sur données synthétiques vérifiés |
+| C-08 | Atlas v1 et adaptateurs limités Coinbase/Trade Republic vérifiés en tests SQL et navigateur sur fixtures synthétiques |
+| C-09 | Export/archives/scripts/TLS et builds multi-architecture implémentés ; restauration des neuf tables et exécution ARM émulée vérifiées |
+
+Les paragraphes C-01/C-02 ci-dessus sont des étapes historiques et ne décrivent plus seuls l’état courant. Preuves, commandes, réserves et couverture exacte : [rapport C-03–C-09](docs/validation/C-03-C-09.md). Aucun statut global MVP `DONE` ni CI distante revendiqué.

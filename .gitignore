@@ -5,3 +5,8 @@ dist/
 !.env.example
 coverage/
 *.test
+/backups/
+/bin/
+/restore/
+*.aesgcm
+*.key

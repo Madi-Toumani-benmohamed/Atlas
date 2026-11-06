@@ -1,0 +1,12 @@
+[Unit]
+Description=Encrypted Atlas PostgreSQL backup
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+User=atlas
+WorkingDirectory=/srv/atlas
+EnvironmentFile=/etc/atlas/backup.env
+ExecStart=/usr/bin/bash /srv/atlas/scripts/backup.sh
+UMask=0077

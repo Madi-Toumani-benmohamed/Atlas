@@ -210,35 +210,68 @@ func (s *Server) login(w http.ResponseWriter, r *http.Request) {
 		fail(w, 503)
 		return
 	}
-	http.SetCookie(w, &http.Cookie{Name: "atlas_session", Value: token, Path: "/", HttpOnly: true, Secure: s.Secure, SameSite: http.SameSiteStrictMode, MaxAge: 43200, Expires: expiry})
+	http.SetCookie(w, &http.Cookie{Name: s.cookieName(), Value: token, Path: "/", HttpOnly: true, Secure: s.Secure, SameSite: http.SameSiteStrictMode, MaxAge: 43200, Expires: expiry})
 	reply(w, 200, map[string]string{"status": "authenticated"})
 }
 func (s *Server) me(w http.ResponseWriter, r *http.Request) {
-	c, err := r.Cookie("atlas_session")
+	id, email, ok := s.currentUser(w, r)
+	if ok {
+		reply(w, 200, map[string]string{"id": id, "email": email})
+	}
+}
+
+// WithUser supplies only the session owner's ID and protects every write's origin.
+func (s *Server) WithUser(next func(http.ResponseWriter, *http.Request, string)) http.HandlerFunc {
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		id, _, ok := s.currentUser(w, r)
+		if ok {
+			next(w, r, id)
+		}
+	}
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet && r.Method != http.MethodHead {
+			s.guard(handler, false)(w, r)
+			return
+		}
+		handler(w, r)
+	}
+}
+
+func (s *Server) currentUser(w http.ResponseWriter, r *http.Request) (string, string, bool) {
+	c, err := r.Cookie(s.cookieName())
 	if err != nil || len(c.Value) != 64 {
 		fail(w, 401)
-		return
+		return "", "", false
 	}
 	var id, email string
 	err = s.DB.QueryRowContext(r.Context(), "SELECT u.id,u.email FROM users u JOIN sessions s ON s.user_id=u.id WHERE s.token_hash=$1 AND s.expires_at>now()", digest(c.Value)).Scan(&id, &email)
 	if errors.Is(err, sql.ErrNoRows) {
 		fail(w, 401)
-		return
+		return "", "", false
 	}
 	if err != nil {
 		fail(w, 503)
-		return
+		return "", "", false
 	}
-	reply(w, 200, map[string]string{"id": id, "email": email})
+	return id, email, true
 }
 func (s *Server) logout(w http.ResponseWriter, r *http.Request) {
-	if c, err := r.Cookie("atlas_session"); err == nil {
+	if c, err := r.Cookie(s.cookieName()); err == nil {
 		if _, err = s.DB.ExecContext(r.Context(), "DELETE FROM sessions WHERE token_hash=$1", digest(c.Value)); err != nil {
 			fail(w, 503)
 			return
 		}
 	}
-	http.SetCookie(w, &http.Cookie{Name: "atlas_session", Value: "", Path: "/", HttpOnly: true, Secure: s.Secure, SameSite: http.SameSiteStrictMode, MaxAge: -1})
+	http.SetCookie(w, &http.Cookie{Name: s.cookieName(), Value: "", Path: "/", HttpOnly: true, Secure: s.Secure, SameSite: http.SameSiteStrictMode, MaxAge: -1})
 	w.Header().Set("Cache-Control", "no-store")
 	w.WriteHeader(204)
+}
+
+// Host-prefixed HTTPS cookies cannot be planted through a parent-domain cookie.
+// Laboratory HTTP keeps a separate name; HTTPS never falls back to that cookie.
+func (s *Server) cookieName() string {
+	if s.Secure {
+		return "__Host-atlas_session"
+	}
+	return "atlas_session"
 }
