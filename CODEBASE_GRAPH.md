@@ -18,7 +18,7 @@
 - `backend/Dockerfile` / `.dockerignore` : build Node/Go, cibles amd64/arm64, secrets CA optionnels uniquement pendant les builds, image scratch avec UI et notices légales. `web/scripts/licenses.mjs` / `scripts/licenses.sh` collectent les notices.
 - `docker-compose.yml` + `.auth.yml` : API et PostgreSQL avec volume persistant, rôle non superuser et secret applicatif distinct du secret administrateur. `.tls.yml` / `deploy/Caddyfile` : terminaison HTTPS optionnelle et isolation du port API.
 - `scripts/backup.sh`, `restore.sh`, `deploy/systemd/` : sauvegarde chiffrée, restauration dans une base neuve, timer quotidien à configurer/activer par l’exploitant.
-- `.github/workflows/ci.yml` : Go/race/DB/vet/vuln, frontend, E2E et accessibilité, builds Docker deux architectures ; aucune exécution distante déclarée sans push.
+- `.github/workflows/ci.yml` : Go/race/DB/vet/vuln, frontend, E2E et accessibilité, builds Docker deux architectures ; cinq jobs hébergés réussis pour le commit applicatif `3f033c88`, voir le rapport de validation.
 
 Flux : navigateur → routes même origine → session/propriétaire → catalog/ledger → PostgreSQL. L’écriture financière sérialise le propriétaire puis verrouille les ressources et rejoue l’historique avant commit. Les prix restent des observations datées, pas la source des positions. La BCE reçoit uniquement une requête publique fixe, sans portefeuille, quantité ou identité. Exports et rapports d’import sont filtrés par le même propriétaire.
 

@@ -273,4 +273,4 @@ Le frontend consomme réellement ces contrats et Go sert aussi son build statiqu
 
 L’image inclut frontend/API/healthcheck/archive ; Caddy est une terminaison HTTPS optionnelle. Les cookies HTTPS `__Host-` sont distincts du laboratoire HTTP. Des scripts chiffrent les dumps et restaurent vers une base neuve ; les unités quotidiennes restent à configurer/activer sur le serveur cible.
 
-Contrat détaillé : `docs/decisions/C-03-C-09.md`. La cartographie et le rapport de validation précisent les fichiers réels, tests et réserves. Les modules Research/V1, les CSV de courtiers et les sources d’actifs non validées restent des cibles, pas des fonctions connectées.
+Contrat détaillé : `docs/decisions/C-03-C-09.md`. La cartographie et le rapport de validation précisent les fichiers réels, tests et réserves. Les variantes CSV Coinbase/Trade Republic prises en charge sont documentées dans `docs/formats/broker-csv.md` et validées sur fixtures synthétiques, avec aperçu et confirmation atomique. Les modules Research/V1 et les sources de cours d’actifs non validées restent des cibles, pas des fonctions connectées.

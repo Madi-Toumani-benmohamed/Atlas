@@ -122,7 +122,7 @@ ATLAS_E2E_ORIGIN=http://127.0.0.1:5173 ATLAS_E2E_TEST_INSTANCE=true npm run test
 
 Les trois dernières suites créent des comptes et opérations **synthétiques dans une instance dédiée**. La suite portefeuille vérifie les montants attendus, les achats/ventes, erreurs, corrections, imports, export, rechargement et accessibilité des écrans peuplés. Les suites UI avec API simulée restent distinctes.
 
-La CI comporte contrôles Go, frontend, intégration réelle avec rôle non superuser, accessibilité et builds Docker amd64/arm64. Les exécutions hébergées nécessitent un push explicite.
+La CI comporte contrôles Go, frontend, intégration réelle avec rôle non superuser, accessibilité et builds Docker amd64/arm64. Le commit applicatif `3f033c88` a passé les cinq jobs du workflow [Quality #2](https://github.com/Madi-Toumani-benmohamed/Atlas/actions/runs/42267576348).
 
 ## Exploitation et limites de livraison
 
