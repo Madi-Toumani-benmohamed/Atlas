@@ -165,7 +165,7 @@ Une phase peut contenir des travaux parallèles, mais son jalon est considéré 
 - [ ] **P5.2 — Docker Compose :** installation vierge Linux, configuration d'environnement, stockage persistant, lancement et mises à jour documentées.
 - [ ] **P5.3 — Sauvegardes :** procédure quotidienne, sauvegardes chiffrées et exercice de restauration réel ; pas d'affirmation de succès sans vérification.
 - [ ] **P5.4 — Sécurité :** sessions, contrôles d'accès, secrets, validation, dépendances, journalisation et protections d'exposition distante.
-- [ ] **P5.5 — Observabilité minimale :** santé applicative, disponibilité DB, erreurs fournisseurs, quotas, synchronisation ; pas de fuite d'informations financières.
+- [x] **P5.5 — Observabilité minimale :** santé applicative, disponibilité DB, erreurs fournisseurs, quotas, synchronisation ; pas de fuite d'informations financières.
 - [x] **P5.6 — CI et reproductibilité :** lint, typage, unitaires, intégration, E2E, builds, migrations et checks de sécurité.
 - [ ] **P5.7 — Documentation publique :** README, installation, configuration, utilisateurs, limites d'actifs couverts, sauvegarde/restauration, export et contribution.
 - [ ] **P5.8 — Licence open source :** choisir une licence compatible avec les dépendances et les conditions des fournisseurs ; préciser que les flux de marché ne sont pas nécessairement redistribuables.
@@ -337,4 +337,9 @@ Les paragraphes C-01/C-02 ci-dessus sont des étapes historiques et ne décriven
 
 Implémenté et vérifié : CSV Atlas soldes v1, compte/devise/instant explicites, comparaison historique exacte, couverture partielle/complète déclarée, rapport exportable et aucune écriture du journal. Source/API/écran et tests : [rapport P4.5](docs/validation/P4-5-reconciliation.md).
 
-Les cases des lots P1.1–P1.9, P4.2–P4.7 et P5.6 reflètent désormais les preuves C-03–C-09 et P4.5. P4.1 reste partiel faute de recette sur exports réels ; P4.8 reste hors obligation MVP. Les autres cases non cochées incluent des lots partiellement implémentés : ne pas les lire comme une absence totale de code. La couverture automatique des cours (P2.5, Q-05/Q-06), l’observabilité minimale (P5.5) et les gates de publication restent à traiter sans promouvoir les fonctions V1/Research.
+Les cases des lots P1.1–P1.9, P4.2–P4.7 et P5.6 reflètent désormais les preuves C-03–C-09 et P4.5. P4.1 reste partiel faute de recette sur exports réels ; P4.8 reste hors obligation MVP. Les autres cases non cochées incluent des lots partiellement implémentés : ne pas les lire comme une absence totale de code. La couverture automatique des cours (P2.5, Q-05/Q-06), les gates de publication restent à traiter sans promouvoir les fonctions V1/Research.
+
+
+### P5.5 — Observabilité minimale, 2026-11-06
+
+Implémenté : vitalité/readiness distinctes, DB sondée avec timeout et mutualisation, sonde Compose adaptée, état BCE sans récupération implicite, statut de persistance privé, backoff/Retry-After, concurrence et logs JSON expurgés. Panne/reprise PostgreSQL réelle et erreurs fournisseur contrôlées vérifiées. Contrats, résultats et limites : [guide](docs/operations/observability.md), [rapport](docs/validation/P5-5-observability.md). Aucun fournisseur d’actifs ni service de supervision obligatoire ajouté ; gates MVP/déploiement cible non fermés par ce lot.

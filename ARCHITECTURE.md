@@ -279,3 +279,8 @@ Contrat détaillé : `docs/decisions/C-03-C-09.md`. La cartographie et le rappor
 ### Rapprochement P4.5 — 2026-11-06
 
 `ledger/reconciliation.go` lit un relevé Atlas soldes v1, reconstruit les opérations actives à l’instant demandé et compare cash/quantités en rationnels exacts. Lecture SQL repeatable-read sous le propriétaire authentifié ; aucune table, écriture ou migration supplémentaire. La déclaration explicite de complétude des positions permet de signaler les détentions omises sans supposer zéro dans un relevé partiel. Rapport JSON généré à la demande, non persisté. Contrat : `docs/formats/atlas-balances-v1.md` ; preuves : `docs/validation/P4-5-reconciliation.md`.
+
+
+### Observabilité P5.5 — 2026-11-06
+
+Vitalité indépendante de la DB sur `/healthz` ; readiness générique sur `/readyz`, PingContext borné et mutualisé. Compose authentifié utilise la seconde sonde. L’état BCE sépare cache public commun, récupération exclusive hors verrou d’état, backoff après panne et métadonnées de persistance filtrées par propriétaire. Les lectures de statut ne récupèrent pas de données externes. Logs JSON bornés sans identités, paramètres financiers ou erreurs brutes. Aucun schéma, fournisseur d’actifs ou rôle administrateur supplémentaire. Contrat : `docs/operations/observability.md`.

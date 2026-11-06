@@ -120,18 +120,21 @@ ATLAS_E2E_ORIGIN=http://127.0.0.1:5173 ATLAS_E2E_TEST_INSTANCE=true npm run test
 ATLAS_E2E_ORIGIN=http://127.0.0.1:5173 ATLAS_E2E_TEST_INSTANCE=true npm run test:portfolio
 ATLAS_E2E_ORIGIN=http://127.0.0.1:5173 ATLAS_E2E_TEST_INSTANCE=true npm run test:brokers
 ATLAS_E2E_ORIGIN=http://127.0.0.1:5173 ATLAS_E2E_TEST_INSTANCE=true npm run test:reconciliation
+ATLAS_E2E_ORIGIN=http://127.0.0.1:5173 ATLAS_E2E_TEST_INSTANCE=true npm run test:market-status
 ```
 
-Les quatre dernières suites créent des comptes et opérations **synthétiques dans une instance dédiée**. La suite portefeuille vérifie les montants attendus, les achats/ventes, erreurs, corrections, imports, export, rechargement et accessibilité des écrans peuplés. Les suites UI avec API simulée restent distinctes.
+Les cinq dernières suites créent des comptes et opérations **synthétiques dans une instance dédiée**. La suite portefeuille vérifie les montants attendus, les achats/ventes, erreurs, corrections, imports, export, rechargement et accessibilité des écrans peuplés. Les suites UI avec API simulée restent distinctes.
 
 La CI comporte contrôles Go, frontend, intégration réelle avec rôle non superuser, accessibilité et builds Docker amd64/arm64. Le commit applicatif `3f033c88` a passé les cinq jobs du workflow [Quality #2](https://github.com/Madi-Toumani-benmohamed/Atlas/actions/runs/42267576348).
 
 ## Exploitation et limites de livraison
 
-`/healthz` mesure la vitalité du processus, pas la disponibilité continue de PostgreSQL ou des fournisseurs. Consulter aussi les erreurs API/les logs (`docker compose logs --tail=100 api`) et vérifier les sauvegardes. Le serveur fonctionne sans privilèges, en lecture seule, avec délais et arrêt propre. En HTTPS, la session utilise `__Host-atlas_session`, sans Domain et avec Path=/ ; le cookie HTTP de laboratoire est distinct et n’est jamais accepté comme repli en HTTPS. Une mise à jour depuis le prototype C-02 peut demander une nouvelle connexion, sans perte de données. Les réponses privées ne sont pas mises en cache ; aucun token de session ni mot de passe n’est stocké dans JavaScript.
+`/healthz` mesure la vitalité du processus ; `/readyz` contrôle PostgreSQL avec une sonde bornée et mutualisée. La stack authentifiée utilise readiness pour son healthcheck. L’état BCE et votre dernière persistance sont consultables dans Activité, avec backoff en cas d’échec ; aucun appel externe pour lire cet état. Voir [le guide d’observabilité](docs/operations/observability.md). Consulter aussi les erreurs API/les logs (`docker compose logs --tail=100 api`) et vérifier les sauvegardes. Le serveur fonctionne sans privilèges, en lecture seule, avec délais et arrêt propre. En HTTPS, la session utilise `__Host-atlas_session`, sans Domain et avec Path=/ ; le cookie HTTP de laboratoire est distinct et n’est jamais accepté comme repli en HTTPS. Une mise à jour depuis le prototype C-02 peut demander une nouvelle connexion, sans perte de données. Les réponses privées ne sont pas mises en cache ; aucun token de session ni mot de passe n’est stocké dans JavaScript.
 
 Les schémas v2 à v5 sont des migrations additives et sérialisées. Avant mise à jour, sauvegarder et tester une restauration dans une base distincte. Ne pas réécrire une migration publiée ou revenir à un ancien binaire sur des données qu’il ne sait pas interpréter ; restaurer un instantané compatible dans une nouvelle base si nécessaire. Ne pas exécuter `down -v` sur des données à conserver.
 
 Les budgets de charge, la recette avec lecteurs d’écran, le matériel ARM64 réel et le déploiement sur le mini-PC cible restent à établir. La couverture boursière/crypto automatique, la récupération de compte, le hors-ligne et les fonctions V1/Research ne sont pas présentés comme livrés. Le MVP global ne peut pas être déclaré terminé en masquant ces écarts.
 
 Références : [PRD](PRD.md), [roadmap](ROADMAP.md), [architecture](ARCHITECTURE.md), [cartographie](CODEBASE_GRAPH.md), [rapport initial C-02](docs/validation/C-02.md).
+
+La suite `npm run test:readiness` nécessite une **instance de recette dédiée**, `ATLAS_E2E_API_ORIGIN`, `ATLAS_E2E_HEALTHCHECK` et `ATLAS_E2E_DATABASE_CONTAINER` : elle arrête puis redémarre ce conteneur DB pour prouver la reprise. Ne jamais la pointer sur une instance de production.

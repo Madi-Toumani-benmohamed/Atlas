@@ -82,6 +82,8 @@ export function resourceError(error: unknown): string {
         return "Le total ne correspond pas à la quantité, au prix et aux frais.";
       return "Les données ou leur chronologie sont incohérentes. Vérifiez dates, montants, devises et identifiants.";
     }
+    if (error.status === 503 && error.code?.startsWith("ecb_"))
+      return "La BCE est temporairement indisponible. Les taux déjà enregistrés restent inchangés ; consultez l’état BCE avant de réessayer, ou saisissez un taux manuel daté.";
     if (error.status === 401)
       return "Votre session a expiré. Reconnectez-vous.";
     if (error.status === 400)

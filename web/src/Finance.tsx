@@ -3,6 +3,7 @@ import type { FormEvent } from "react";
 import { all, api, resourceError } from "./api";
 import type { Account, Asset, Portfolio } from "./api";
 import { ApiError } from "./auth";
+import { MarketStatus } from "./MarketStatus";
 import { Reconciliation } from "./Reconciliation";
 import { HistoryChart } from "./HistoryChart";
 import type { HistoryPoint } from "./HistoryChart";
@@ -200,6 +201,7 @@ export function Finance({
     [voiding, setVoiding] = useState(false),
     [generation, setGeneration] = useState(0);
   const [importReport, setImportReport] = useState("");
+  const [marketRevision, setMarketRevision] = useState(0);
   const [importFormat, setImportFormat] = useState("atlas-csv-v1");
   const [importAccount, setImportAccount] = useState("");
   const [brokerSymbols, setBrokerSymbols] = useState<Record<string,string>>({});
@@ -977,7 +979,7 @@ export function Finance({
                 disabled={busy}
                 onClick={() =>
                   void act(async () => {
-                    await api("market/fx/refresh", "POST", {});
+                    try { await api("market/fx/refresh", "POST", {}); } finally { setMarketRevision(value=>value+1); }
                   }, "Taux de référence BCE reçus. Les taux de transaction restent distincts.")
                 }
               >
@@ -996,6 +998,7 @@ export function Finance({
                 d’actifs restent manuels tant qu’aucune couverture pilote n’est
                 validée.
               </p>
+              <MarketStatus revision={marketRevision} disabled={busy} expired={expired} />
               <h4>Saisie manuelle</h4>
               <p>
                 Un taux sans actif représente une unité de la devise saisie en

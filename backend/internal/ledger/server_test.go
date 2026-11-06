@@ -13,7 +13,9 @@ import (
 	"os"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"testing"
+	"time"
 )
 
 func TestJournalIntegration(t *testing.T) {
@@ -324,6 +326,75 @@ func TestJournalIntegration(t *testing.T) {
 	}
 	if beforeOperations != afterOperations || beforeBatches != afterBatches {
 		t.Fatal("reconciliation wrote operations/import batches")
+	}
+
+	// Operational status never fetches market data and exposes only this owner's persistence.
+	var providerCalls atomic.Int32
+	var providerHTTP atomic.Int32
+	providerHTTP.Store(429)
+	providerServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		providerCalls.Add(1)
+		if providerHTTP.Load() != 200 {
+			w.Header().Set("Retry-After", "120")
+			w.WriteHeader(int(providerHTTP.Load()))
+			w.Write([]byte("private upstream body"))
+			return
+		}
+		w.Write([]byte(ecbFixture))
+	}))
+	defer providerServer.Close()
+	s.ECB = &ECBProvider{URL: providerServer.URL, Client: providerServer.Client()}
+	check(req("GET", "/api/v1/market/status", nil, -1, ""), 401)
+	w = req("GET", "/api/v1/market/status", nil, 0, "")
+	check(w, 200)
+	if providerCalls.Load() != 0 || !strings.Contains(w.Body.String(), "never_fetched") {
+		t.Fatal("status contacted provider")
+	}
+	beforePrices := 0
+	if err = db.QueryRow("SELECT count(*) FROM price_observations WHERE user_id=$1", owners[0]).Scan(&beforePrices); err != nil {
+		t.Fatal(err)
+	}
+	w = req("POST", "/api/v1/market/fx/refresh", map[string]string{}, 0, "")
+	check(w, 503)
+	if w.Header().Get("Retry-After") == "" || strings.Contains(w.Body.String(), "private upstream") {
+		t.Fatal("missing retry hint or leaked provider error")
+	}
+	afterPrices := 0
+	if err = db.QueryRow("SELECT count(*) FROM price_observations WHERE user_id=$1", owners[0]).Scan(&afterPrices); err != nil {
+		t.Fatal(err)
+	}
+	if beforePrices != afterPrices {
+		t.Fatal("provider failure changed stored observations")
+	}
+	w = req("POST", "/api/v1/market/fx/refresh", map[string]string{}, 0, "")
+	check(w, 503)
+	if providerCalls.Load() != 1 {
+		t.Fatal("failure backoff did not protect provider quota")
+	}
+	s.ECB.mu.Lock()
+	s.ECB.nextAllowed = time.Time{}
+	s.ECB.mu.Unlock()
+	providerHTTP.Store(200)
+	check(req("POST", "/api/v1/market/fx/refresh", map[string]string{}, 0, ""), 200)
+	var operational struct {
+		Provider        providerSnapshot `json:"provider"`
+		Synchronization struct {
+			Last      *time.Time `json:"last_persisted_at"`
+			Reference string     `json:"reference_date"`
+		} `json:"synchronization"`
+	}
+	w = req("GET", "/api/v1/market/status", nil, 0, "")
+	check(w, 200)
+	if err = json.Unmarshal(w.Body.Bytes(), &operational); err != nil || operational.Provider.State != "cached" || operational.Synchronization.Last == nil || operational.Synchronization.Reference != "2020-01-02" {
+		t.Fatalf("own sync missing: %s", w.Body.String())
+	}
+	w = req("GET", "/api/v1/market/status", nil, 1, "")
+	check(w, 200)
+	if err = json.Unmarshal(w.Body.Bytes(), &operational); err != nil || operational.Synchronization.Last != nil || operational.Synchronization.Reference != "" || strings.Contains(w.Body.String(), owners[0]) {
+		t.Fatalf("foreign sync leaked: %s", w.Body.String())
+	}
+	if providerCalls.Load() != 2 {
+		t.Fatal("status bypassed provider cache")
 	}
 
 }
