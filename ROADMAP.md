@@ -81,15 +81,15 @@ Une phase peut contenir des travaux parallèles, mais son jalon est considéré 
 
 ### Lots
 
-- [ ] **P1.1 — Authentification :** inscription/connexion, sessions sûres, renouvellement et déconnexion ; protections des identifiants et erreurs.
-- [ ] **P1.2 — Isolation multi-utilisateur :** contrôle de propriété systématique sur ressources et requêtes ; tests négatifs entre deux comptes.
-- [ ] **P1.3 — Portefeuilles logiques :** création, renommage, archivage ; rattachement au propriétaire.
-- [ ] **P1.4 — Comptes :** plusieurs comptes par portefeuille ; type, devise, fournisseur facultatif et statut d'archivage.
-- [ ] **P1.5 — Référentiel d'actifs :** distinction action, ETF, crypto, stablecoin et produit d'épargne ; identité sans dépendre du ticker seul.
-- [ ] **P1.6 — Journal d'opérations :** achats, ventes, dépôts, retraits, transferts, frais, dividendes et récompenses de staking selon règles validées.
-- [ ] **P1.7 — Enregistrement atomique :** écritures équilibrées/cohérentes, identifiants uniques, idempotence côté API pour les opérations critiques.
-- [ ] **P1.8 — Lecture et validation :** consultation filtrée de l'historique ; rejets explicites (quantités, dates, comptes, permissions, devises).
-- [ ] **P1.9 — Migrations et fixtures :** migrations versionnées et jeux d'essai exclusivement fictifs.
+- [x] **P1.1 — Authentification :** inscription/connexion, sessions sûres, renouvellement et déconnexion ; protections des identifiants et erreurs.
+- [x] **P1.2 — Isolation multi-utilisateur :** contrôle de propriété systématique sur ressources et requêtes ; tests négatifs entre deux comptes.
+- [x] **P1.3 — Portefeuilles logiques :** création, renommage, archivage ; rattachement au propriétaire.
+- [x] **P1.4 — Comptes :** plusieurs comptes par portefeuille ; type, devise, fournisseur facultatif et statut d'archivage.
+- [x] **P1.5 — Référentiel d'actifs :** distinction action, ETF, crypto, stablecoin et produit d'épargne ; identité sans dépendre du ticker seul.
+- [x] **P1.6 — Journal d'opérations :** achats, ventes, dépôts, retraits, transferts, frais, dividendes et récompenses de staking selon règles validées.
+- [x] **P1.7 — Enregistrement atomique :** écritures équilibrées/cohérentes, identifiants uniques, idempotence côté API pour les opérations critiques.
+- [x] **P1.8 — Lecture et validation :** consultation filtrée de l'historique ; rejets explicites (quantités, dates, comptes, permissions, devises).
+- [x] **P1.9 — Migrations et fixtures :** migrations versionnées et jeux d'essai exclusivement fictifs.
 
 **Critères de sortie :** deux utilisateurs sans fuite de données ; opérations persistées atomiquement ; transferts comptabilisés une seule fois dans la consolidation ; validation serveur éprouvée. Aucun écran simulant un gain réel.
 
@@ -143,12 +143,12 @@ Une phase peut contenir des travaux parallèles, mais son jalon est considéré 
 ### Lots
 
 - [ ] **P4.1 — Formats CSV pilotes :** sélectionner les exports réels autorisés (Q-01), constituer des fixtures anonymisées et documenter les versions supportées.
-- [ ] **P4.2 — Prévisualisation :** extraction et mapping des colonnes ; examen des montants, actifs, dates, devises et frais avant écriture.
-- [ ] **P4.3 — Validation des imports :** contrôle de cohérence, signalement des opérations non supportées et rejet sans perte du lot.
-- [ ] **P4.4 — Détection des doublons :** empreinte de lot, identifiants externes, règles déterministes et intervention humaine en cas d'ambiguïté.
-- [ ] **P4.5 — Rapprochement :** écarts entre soldes ou positions calculés et états importés ; pas de correction silencieuse.
-- [ ] **P4.6 — Correction/audit :** modifier ou annuler logiquement une opération avec historique ; recalcul des impacts et affichage des changements.
-- [ ] **P4.7 — Rapport :** opérations acceptées, rejetées, doublons, ambiguïtés et limites documentées.
+- [x] **P4.2 — Prévisualisation :** extraction et mapping des colonnes ; examen des montants, actifs, dates, devises et frais avant écriture.
+- [x] **P4.3 — Validation des imports :** contrôle de cohérence, signalement des opérations non supportées et rejet sans perte du lot.
+- [x] **P4.4 — Détection des doublons :** empreinte de lot, identifiants externes, règles déterministes et intervention humaine en cas d'ambiguïté.
+- [x] **P4.5 — Rapprochement :** écarts entre soldes ou positions calculés et états importés ; pas de correction silencieuse.
+- [x] **P4.6 — Correction/audit :** modifier ou annuler logiquement une opération avec historique ; recalcul des impacts et affichage des changements.
+- [x] **P4.7 — Rapport :** opérations acceptées, rejetées, doublons, ambiguïtés et limites documentées.
 - [ ] **P4.8 — PDF :** **hors obligation MVP** ; prototype seulement si un format pilote est explicitement approuvé, sans généraliser l'extraction.
 
 **Critères de sortie :** un même fichier réimporté ne duplique aucune transaction ; les données ambiguës restent en attente ; correction antidatée déclenche un recalcul ; rapport exploitable par l'utilisateur. T-06 et T-07 passent.
@@ -166,7 +166,7 @@ Une phase peut contenir des travaux parallèles, mais son jalon est considéré 
 - [ ] **P5.3 — Sauvegardes :** procédure quotidienne, sauvegardes chiffrées et exercice de restauration réel ; pas d'affirmation de succès sans vérification.
 - [ ] **P5.4 — Sécurité :** sessions, contrôles d'accès, secrets, validation, dépendances, journalisation et protections d'exposition distante.
 - [ ] **P5.5 — Observabilité minimale :** santé applicative, disponibilité DB, erreurs fournisseurs, quotas, synchronisation ; pas de fuite d'informations financières.
-- [ ] **P5.6 — CI et reproductibilité :** lint, typage, unitaires, intégration, E2E, builds, migrations et checks de sécurité.
+- [x] **P5.6 — CI et reproductibilité :** lint, typage, unitaires, intégration, E2E, builds, migrations et checks de sécurité.
 - [ ] **P5.7 — Documentation publique :** README, installation, configuration, utilisateurs, limites d'actifs couverts, sauvegarde/restauration, export et contribution.
 - [ ] **P5.8 — Licence open source :** choisir une licence compatible avec les dépendances et les conditions des fournisseurs ; préciser que les flux de marché ne sont pas nécessairement redistribuables.
 - [ ] **P5.9 — Recette globale :** cocher les 15 critères du PRD §12, preuves et écarts connus à l'appui.
@@ -215,10 +215,10 @@ Une phase peut contenir des travaux parallèles, mais son jalon est considéré 
 
 | ID PRD | Décision | À résoudre avant | Politique en attendant |
 | --- | --- | --- | --- |
-| Q-01 | CSV pilotes Coinbase / Trade Republic | Phase 4 | Import manuel d'opérations, pas de parser présumé |
-| Q-02 | Soldes d'ouverture et historiques partiels | Phases 1–2 | Ne pas calculer un P&L réputé complet |
-| Q-03 | Coût des récompenses staking | Implémentation staking en phases 1–2 | Tracer les récompenses sans inventer leur coût |
-| Q-04 | Swaps présents dans l'historique | Imports concernés | Rejet/attente explicite jusqu'à arbitrage |
+| Q-01 | CSV pilotes Coinbase / Trade Republic | Choix délégué le 2026-11-06 | Adaptateurs limités documentés ; recette d’exports réels encore partielle |
+| Q-02 | Soldes d'ouverture et historiques partiels | Résolu le 2026-11-06 | Ouvertures explicites, aucun découvert/short, performance incomplète masquée |
+| Q-03 | Coût des récompenses staking | Résolu le 2026-11-06 | Cours daté à réception, revenu et coût d’acquisition |
+| Q-04 | Swaps présents dans l'historique | Résolu le 2026-11-06 | Rejet explicite sans conversion automatique |
 | Q-05 | Liste d'actifs/places pilotes | Phase 2 | Couverture non garantie |
 | Q-06 | Fournisseurs et droits de marché | Phase 2 / publication | Prix manuels datés ou actif non valorisé |
 | Q-07 | Affichage des produits d'épargne | Phase 3 | Solde et intérêts crédités uniquement |
@@ -331,3 +331,10 @@ Le responsable produit a demandé de poursuivre tous les lots au-delà de C-02 e
 | C-09 | Export/archives/scripts/TLS et builds multi-architecture implémentés ; restauration des neuf tables et exécution ARM émulée vérifiées |
 
 Les paragraphes C-01/C-02 ci-dessus sont des étapes historiques et ne décrivent plus seuls l’état courant. Preuves, commandes, réserves et couverture exacte : [rapport C-03–C-09](docs/validation/C-03-C-09.md). Aucun statut global MVP `DONE`. Après publication autorisée, CI GitHub [Quality #2](https://github.com/Madi-Toumani-benmohamed/Atlas/actions/runs/42267576348) réussie sur le commit applicatif `3f033c88` : backend, web, E2E réels et builds Docker AMD64/ARM64, cinq jobs sur cinq. La réserve de CI distante de ce lot est levée ; les réserves de cours automatiques et de déploiement cible restent ouvertes.
+
+
+### P4.5 — Rapprochement de relevés, 2026-11-06
+
+Implémenté et vérifié : CSV Atlas soldes v1, compte/devise/instant explicites, comparaison historique exacte, couverture partielle/complète déclarée, rapport exportable et aucune écriture du journal. Source/API/écran et tests : [rapport P4.5](docs/validation/P4-5-reconciliation.md).
+
+Les cases des lots P1.1–P1.9, P4.2–P4.7 et P5.6 reflètent désormais les preuves C-03–C-09 et P4.5. P4.1 reste partiel faute de recette sur exports réels ; P4.8 reste hors obligation MVP. Les autres cases non cochées incluent des lots partiellement implémentés : ne pas les lire comme une absence totale de code. La couverture automatique des cours (P2.5, Q-05/Q-06), l’observabilité minimale (P5.5) et les gates de publication restent à traiter sans promouvoir les fonctions V1/Research.

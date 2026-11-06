@@ -80,7 +80,8 @@ func (s *Server) RegisterRoutes(m *http.ServeMux) {
 		"POST /api/v1/prices": s.createPrice, "GET /api/v1/prices": s.prices, "GET /api/v1/summary": s.summary,
 		"POST /api/v1/market/fx/refresh": s.refreshFX,
 		"GET /api/v1/history":            s.timeline, "GET /api/v1/financial-export": s.export,
-		"POST /api/v1/imports/preview": s.previewImport, "POST /api/v1/imports/{id}/confirm": s.confirmImport,
+		"POST /api/v1/reconciliations/preview": s.previewReconciliation,
+		"POST /api/v1/imports/preview":         s.previewImport, "POST /api/v1/imports/{id}/confirm": s.confirmImport,
 	} {
 		m.HandleFunc(pattern, s.Auth.WithUser(fn))
 	}

@@ -58,6 +58,7 @@ Le manifeste web permet l’ouverture en mode application lorsque le navigateur 
 - **Cours et taux :** observations manuelles positives, datées et sourcées ; bouton pour les taux de référence BCE. Ils sont distincts des taux réellement appliqués à une transaction. Aucun portefeuille ou montant n’est transmis à la BCE.
 - **Accueil :** valeur globale, résultats, liquidités/épargne, consolidation par compte et portefeuille, allocation connue, dix principales positions, PRU et résultats réalisés/latents. Les variations de cours sont séparées du rendement personnel. La courbe journalière utilise les positions de chaque date ; les dates incomplètes interrompent le tracé. Choisir une plage d’au plus 366 jours à la fois.
 - **Corrections :** remplacer ou annuler une opération avec motif. L’original reste dans l’audit. Tout l’historique est rejoué ; une correction créant un découvert ou une vente à découvert est refusée sans modification partielle.
+- **Rapprochement :** comparez un relevé de liquidités et positions au journal à une date donnée, sans correction automatique. Le contrôle distingue les éléments fournis d’un relevé déclaré complet ; rapport JSON exportable. Voir [Atlas soldes v1](docs/formats/atlas-balances-v1.md).
 - **Imports :** CSV Atlas v1 et variantes Coinbase/Trade Republic documentées, prévisualisation sans écriture financière puis confirmation atomique du lot. Réimport idempotent par identifiant externe. Les swaps et opérations non supportées sont signalés ; aucune transformation silencieuse. Voir [Atlas v1](docs/formats/atlas-csv-v1.md) et [les formats courtiers](docs/formats/broker-csv.md).
 - **Export :** JSON versionné de toutes les ressources privées disponibles, y compris journal/audit, prix et rapports d’import. Aucun mot de passe ou jeton. Les opérations actives se rejouent par `occurred_at`, puis `replay_order`, ordre relatif au seul utilisateur. L’export est lisible hors Atlas ; aucun import JSON de restauration n’est annoncé.
 
@@ -118,9 +119,10 @@ npm run test:a11y
 ATLAS_E2E_ORIGIN=http://127.0.0.1:5173 ATLAS_E2E_TEST_INSTANCE=true npm run test:e2e
 ATLAS_E2E_ORIGIN=http://127.0.0.1:5173 ATLAS_E2E_TEST_INSTANCE=true npm run test:portfolio
 ATLAS_E2E_ORIGIN=http://127.0.0.1:5173 ATLAS_E2E_TEST_INSTANCE=true npm run test:brokers
+ATLAS_E2E_ORIGIN=http://127.0.0.1:5173 ATLAS_E2E_TEST_INSTANCE=true npm run test:reconciliation
 ```
 
-Les trois dernières suites créent des comptes et opérations **synthétiques dans une instance dédiée**. La suite portefeuille vérifie les montants attendus, les achats/ventes, erreurs, corrections, imports, export, rechargement et accessibilité des écrans peuplés. Les suites UI avec API simulée restent distinctes.
+Les quatre dernières suites créent des comptes et opérations **synthétiques dans une instance dédiée**. La suite portefeuille vérifie les montants attendus, les achats/ventes, erreurs, corrections, imports, export, rechargement et accessibilité des écrans peuplés. Les suites UI avec API simulée restent distinctes.
 
 La CI comporte contrôles Go, frontend, intégration réelle avec rôle non superuser, accessibilité et builds Docker amd64/arm64. Le commit applicatif `3f033c88` a passé les cinq jobs du workflow [Quality #2](https://github.com/Madi-Toumani-benmohamed/Atlas/actions/runs/42267576348).
 

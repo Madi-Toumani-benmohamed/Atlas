@@ -274,3 +274,8 @@ Le frontend consomme réellement ces contrats et Go sert aussi son build statiqu
 L’image inclut frontend/API/healthcheck/archive ; Caddy est une terminaison HTTPS optionnelle. Les cookies HTTPS `__Host-` sont distincts du laboratoire HTTP. Des scripts chiffrent les dumps et restaurent vers une base neuve ; les unités quotidiennes restent à configurer/activer sur le serveur cible.
 
 Contrat détaillé : `docs/decisions/C-03-C-09.md`. La cartographie et le rapport de validation précisent les fichiers réels, tests et réserves. Les variantes CSV Coinbase/Trade Republic prises en charge sont documentées dans `docs/formats/broker-csv.md` et validées sur fixtures synthétiques, avec aperçu et confirmation atomique. Les modules Research/V1 et les sources de cours d’actifs non validées restent des cibles, pas des fonctions connectées.
+
+
+### Rapprochement P4.5 — 2026-11-06
+
+`ledger/reconciliation.go` lit un relevé Atlas soldes v1, reconstruit les opérations actives à l’instant demandé et compare cash/quantités en rationnels exacts. Lecture SQL repeatable-read sous le propriétaire authentifié ; aucune table, écriture ou migration supplémentaire. La déclaration explicite de complétude des positions permet de signaler les détentions omises sans supposer zéro dans un relevé partiel. Rapport JSON généré à la demande, non persisté. Contrat : `docs/formats/atlas-balances-v1.md` ; preuves : `docs/validation/P4-5-reconciliation.md`.

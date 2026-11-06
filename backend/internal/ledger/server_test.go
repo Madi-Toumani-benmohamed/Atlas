@@ -269,4 +269,61 @@ func TestJournalIntegration(t *testing.T) {
 		t.Fatal("broker foreign mapping accepted")
 	}
 
+	// P4.5 is a read-only comparison, including archived references and historical dates.
+	live := summary()
+	var cashRef, quantityRef string
+	for _, cash := range live.Cash {
+		if cash.AccountID == accountIDs[0] {
+			cashRef = cash.Amount.Display
+		}
+	}
+	for _, position := range live.Positions {
+		if position.AccountID == accountIDs[0] && position.AssetID == assetIDs[0] {
+			quantityRef = position.Quantity.Exact
+		}
+	}
+	reconcileIn := reconciliationRequest{Format: "atlas-balances-v1", AccountID: accountIDs[0], Currency: "EUR", AsOf: "2026-01-02T12:00:00Z", CSV: "kind,asset_id,value\ncash,," + cashRef + "\nposition," + assetIDs[0] + "," + quantityRef + "\n"}
+	var beforeOperations, beforeBatches int
+	if err = db.QueryRow("SELECT (SELECT count(*) FROM operations WHERE user_id=$1),(SELECT count(*) FROM import_batches WHERE user_id=$1)", owners[0]).Scan(&beforeOperations, &beforeBatches); err != nil {
+		t.Fatal(err)
+	}
+	w = req("POST", "/api/v1/reconciliations/preview", reconcileIn, 0, "")
+	check(w, 200)
+	var reconciled reconciliationReport
+	if err = json.Unmarshal(w.Body.Bytes(), &reconciled); err != nil || reconciled.Differences != 0 || len(reconciled.Rows) != 2 || !reconciled.CashChecked {
+		t.Fatalf("reconciliation: %s", w.Body.String())
+	}
+	reconcileIn.AsOf = "2019-01-01T00:00:00Z"
+	reconcileIn.CSV = "kind,asset_id,value\ncash,,0\nposition," + assetIDs[0] + ",0\n"
+	w = req("POST", "/api/v1/reconciliations/preview", reconcileIn, 0, "")
+	check(w, 200)
+	if err = json.Unmarshal(w.Body.Bytes(), &reconciled); err != nil || reconciled.Differences != 0 {
+		t.Fatalf("historical reconciliation: %s", w.Body.String())
+	}
+	check(req("PATCH", "/api/v1/portfolios/"+accountIDs[0]+"/accounts/"+accountIDs[0], map[string]bool{"archived": true}, 0, ""), 200)
+	w = req("POST", "/api/v1/reconciliations/preview", reconcileIn, 0, "")
+	check(w, 200)
+	check(req("PATCH", "/api/v1/portfolios/"+accountIDs[0]+"/accounts/"+accountIDs[0], map[string]bool{"archived": false}, 0, ""), 200)
+	reconcileIn.AccountID = accountIDs[1]
+	check(req("POST", "/api/v1/reconciliations/preview", reconcileIn, 0, ""), 404)
+	reconcileIn.AccountID = accountIDs[0]
+	reconcileIn.CSV = "kind,asset_id,value\nposition," + assetIDs[1] + ",0\n"
+	check(req("POST", "/api/v1/reconciliations/preview", reconcileIn, 0, ""), 404)
+	reconcileIn.CSV = "kind,asset_id,value\ncash,,0\n"
+	reconcileIn.Currency = "USD"
+	check(req("POST", "/api/v1/reconciliations/preview", reconcileIn, 0, ""), 422)
+	reconcileIn.Currency = "EUR"
+	reconcileIn.AsOf = "2999-01-01T00:00:00Z"
+	check(req("POST", "/api/v1/reconciliations/preview", reconcileIn, 0, ""), 422)
+	reconcileIn.AsOf = "2019-01-01T00:00:00Z"
+	check(req("POST", "/api/v1/reconciliations/preview", reconcileIn, -1, ""), 401)
+	check(req("POST", "/api/v1/reconciliations/preview", map[string]string{"format": "atlas-balances-v1", "unexpected": "field"}, 0, ""), 400)
+	var afterOperations, afterBatches int
+	if err = db.QueryRow("SELECT (SELECT count(*) FROM operations WHERE user_id=$1),(SELECT count(*) FROM import_batches WHERE user_id=$1)", owners[0]).Scan(&afterOperations, &afterBatches); err != nil {
+		t.Fatal(err)
+	}
+	if beforeOperations != afterOperations || beforeBatches != afterBatches {
+		t.Fatal("reconciliation wrote operations/import batches")
+	}
+
 }

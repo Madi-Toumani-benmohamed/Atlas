@@ -3,6 +3,7 @@ import type { FormEvent } from "react";
 import { all, api, resourceError } from "./api";
 import type { Account, Asset, Portfolio } from "./api";
 import { ApiError } from "./auth";
+import { Reconciliation } from "./Reconciliation";
 import { HistoryChart } from "./HistoryChart";
 import type { HistoryPoint } from "./HistoryChart";
 
@@ -1273,6 +1274,7 @@ export function Finance({
           )}
         </section>
       )}
+      {view === "imports" && <Reconciliation accounts={accounts} assets={assets} disabled={busy} run={work => void act(work, "Rapprochement calculé. Aucune opération modifiée.")} />}
     </section>
   );
 }
