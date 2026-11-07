@@ -33,3 +33,10 @@ Contrats : `docs/decisions/C-03-C-09.md`, `docs/decisions/financial-policy.md`. 
 - `scripts/check-docs.py` : liens locaux Markdown hors fences ; `scripts/check-compose-docs.py` : rendu des profils documentés sans démarrer de service. Nouveau job documentation, portant le workflow à six jobs avec les deux builds Docker. Validation hébergée de ce changement encore à effectuer.
 - `docker-compose.loopback.yml` : laboratoire local facultatif ; `docker-compose.restore.yml` : DSN vers une base existante explicitement nommée, même projet/volume. Aucun défaut du Compose de base modifié.
 - `docs/validation/MVP-readiness.md` : preuves et réserves des quinze critères ; aucune publication MVP déclarée.
+
+## Lecture externe P5.1 — 2026-11-07
+
+- `scripts/read-export.py` : fichier local v1 → validation structurelle/références/audit → résumé JSON et journal actif facultatif ; nombres Fraction exacts, instants nanoseconde, aucune dépendance Go/SQL/réseau ni écriture. Ne rejoue pas les calculs financiers.
+- `scripts/tests/test_read_export.py` : cas synthétiques exacts et refus du CLI ; job documentation existant étendu sans nouveau job.
+- `web/test/export-reader.mjs` : invocation indépendante sur un fichier temporaire privé issu du vrai export ; utilisé par les parcours portefeuille/courtiers, vérifie l’intégrité du fichier source après lecture.
+- Contrat et limites : `docs/usage/read-export.md`, `docs/formats/atlas-portfolio-v1.md`, preuves `docs/validation/P5-1-export-reader.md`.

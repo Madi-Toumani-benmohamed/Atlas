@@ -288,3 +288,7 @@ Vitalité indépendante de la DB sur `/healthz` ; readiness générique sur `/re
 ### Profils documentaires P5.7 — 2026-11-07
 
 Deux surcharges optionnelles ne changent pas les valeurs du Compose de base : loopback pour le laboratoire HTTP, et sélection d’une base déjà restaurée pour une reprise dans le même projet. L’ordre des fichiers importe : le profil loopback ne doit pas suivre le profil TLS. Le profil restauration ne crée ni ne supprime de base et ne rétrograde aucun schéma. Les guides publics et les contrôles de rendu figurent dans `docs/index.md` et `CODEBASE_GRAPH.md`.
+
+### Lecture externe P5.1 — 2026-11-07
+
+Le lecteur Python standard `scripts/read-export.py` est un outil local hors du runtime applicatif. Il lit les exports v1 avec arithmétique rationnelle et ordre d’instants conservé, vérifie les références/audit et produit un résumé ou un journal actif. Aucun accès DB, API ou réseau ; aucune restauration ou logique de valorisation supplémentaire. Le fichier original et ses champs inconnus restent intacts. Le guide `docs/usage/read-export.md` distingue cette lecture de la restauration PostgreSQL.

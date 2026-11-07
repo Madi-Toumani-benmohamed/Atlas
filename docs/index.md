@@ -13,7 +13,7 @@ Atlas est en développement. Une CI réussie prouve les contrôles du commit con
 | Comparer les soldes d’un relevé sans corriger le journal | [Atlas soldes v1](formats/atlas-balances-v1.md) |
 | Contribuer au code ou à la documentation | [Contribution](../CONTRIBUTING.md) |
 | Signaler un problème de sécurité | [Politique de signalement](../SECURITY.md) |
-| Lire un export hors Atlas | [JSON Atlas Portfolio v1](formats/atlas-portfolio-v1.md) |
+| Lire un export hors Atlas | [Lecteur hors ligne](usage/read-export.md), [JSON Atlas Portfolio v1](formats/atlas-portfolio-v1.md) |
 | Consulter la licence du code | [Apache 2.0](../LICENSE) |
 
 ## État et limites
