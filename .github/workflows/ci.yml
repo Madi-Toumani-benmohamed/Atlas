@@ -153,6 +153,7 @@ jobs:
           npm run test:reconciliation
           npm run test:market-status
           npm run test:keyboard
+          npm run test:quote-history
           npm run test:a11y
           npm run test:readiness
 
