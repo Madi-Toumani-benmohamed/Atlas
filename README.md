@@ -148,3 +148,5 @@ La suite `npm run test:readiness` nécessite une **instance de recette dédiée*
 Recette : [état des quinze critères MVP](docs/validation/MVP-readiness.md) et [validation documentaire P5.7](docs/validation/P5-7-public-docs.md).
 
 Lecture externe sans Atlas : [guide du lecteur Python hors ligne](docs/usage/read-export.md) et [preuves P5.1](docs/validation/P5-1-export-reader.md).
+
+Durcissement en cours : [recette isolée installation/restauration](docs/operations/instance-verification.md), [licences et notices embarquées](docs/licenses/README.md), [preuves et limites du lot](docs/validation/P5-operations-hardening.md).

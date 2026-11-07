@@ -3,6 +3,22 @@ on: [push, pull_request]
 permissions:
   contents: read
 jobs:
+  licenses:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: backend/go.mod
+          cache: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.22.1'
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+        working-directory: web
+      - run: python3 scripts/check-licenses.py
   documentation:
     runs-on: ubuntu-latest
     steps:
@@ -144,3 +160,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: docker build --platform linux/${{ matrix.arch }} -f backend/Dockerfile -t atlas-ci:${{ matrix.arch }} .
+      - name: Verify shipped license notices
+        run: |
+          container_id=$(docker create --platform linux/${{ matrix.arch }} atlas-ci:${{ matrix.arch }})
+          trap 'docker rm "$container_id" >/dev/null' EXIT
+          docker cp "$container_id:/web/licenses" "${{ runner.temp }}/atlas-notices"
+          python3 scripts/check-licenses.py --artifact-dir "${{ runner.temp }}/atlas-notices"
+      - name: Verify fresh Compose installation and encrypted recovery
+        if: matrix.arch == 'amd64'
+        run: |
+          docker pull postgres:18.6
+          python3 scripts/verify-instance.py --image atlas-ci:amd64 --work-dir "${{ runner.temp }}/atlas-instance-check"

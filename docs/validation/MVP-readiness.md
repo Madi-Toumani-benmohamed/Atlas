@@ -14,10 +14,10 @@ Cette matrice prépare P5.9 ; elle ne déclare ni la recette globale ni une publ
 | 8 — CSV | Aperçu, rejets, doublons et atomicité vérifiés ; variantes courtiers limitées à des fixtures synthétiques, exports réels à qualifier. |
 | 9 — Corrections | Vérifié : audit conservé, rejeu et recalcul, rollback des corrections incohérentes. |
 | 10 — Export | JSON privé et audit vérifiés ; [contrat de lecture externe](../formats/atlas-portfolio-v1.md) documenté. [Lecture externe indépendante vérifiée](P5-1-export-reader.md) sur exports réels de recette ; pas de restauration globale par JSON annoncée. |
-| 11 — Sauvegarde/restauration cible | Non acquis : exercice chiffré en laboratoire et base distincte démontrés ; serveur cible et planification opérateur non validés. |
-| 12 — Qualité et sécurité | Suites locales et CI des lots applicatifs consignées. Dernière CI applicative : [42308975841](https://github.com/Madi-Toumani-benmohamed/Atlas/actions/runs/42308975841). CI du lot documentaire courant à exécuter après publication ; réserves d’audit détaillées dans les rapports. |
+| 11 — Sauvegarde/restauration cible | Non acquis : exercice chiffré et base distincte vérifiés en [CI Linux](P5-operations-hardening.md) ; serveur cible, copie hors machine et planification opérateur non validés. |
+| 12 — Qualité et sécurité | Suites locales et CI des lots applicatifs consignées. Dernière CI du lot exploitation : [42385363672](https://github.com/Madi-Toumani-benmohamed/Atlas/actions/runs/42385363672), sept jobs réussis ; réserves d’audit détaillées dans les rapports. |
 | 13 — Design, clavier, mobile | Audits axe, focus, thèmes et parcours responsive effectués ; recette lecteur d’écran et revue humaine exhaustive encore ouvertes. |
-| 14 — Coûts et connexions réelles | Pas d’offre payante indispensable dans l’implémentation ; seul connecteur marché actif : FX BCE. Licences et couverture de futurs flux à instruire avant ajout. |
+| 14 — Coûts et connexions réelles | Pas d’offre payante indispensable dans l’implémentation ; seul connecteur marché actif : FX BCE. [Licences runtime et notices embarquées vérifiées](../licenses/README.md) ; couverture/droits de futurs flux à instruire avant ajout. |
 | 15 — Limites et décisions | Guides et rapports publics disponibles ; [couverture marché](../decisions/market-coverage.md), décisions et réserves conservées. |
 
-Les lots P5.2/P5.3/P5.4/P5.8/P5.9/P5.10 restent ouverts dans la roadmap. Les guides ne remplacent pas une installation, une restauration, un audit, un choix de licence ou un tag de version. Aucun service ni timer activé sur un serveur cible par ce lot.
+Les lots P5.3/P5.4/P5.9/P5.10 restent ouverts dans la roadmap. Les guides ne remplacent pas une installation, une restauration, un audit, un choix de licence ou un tag de version. Aucun service ni timer activé sur un serveur cible par ce lot.

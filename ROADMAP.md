@@ -162,13 +162,13 @@ Une phase peut contenir des travaux parallèles, mais son jalon est considéré 
 ### Lots
 
 - [x] **P5.1 — Export complet :** portefeuilles, comptes et opérations dans des formats ouverts/documentés ; lecture externe indépendante vérifiée. [Preuves P5.1](docs/validation/P5-1-export-reader.md).
-- [ ] **P5.2 — Docker Compose :** installation vierge Linux, configuration d'environnement, stockage persistant, lancement et mises à jour documentées.
+- [x] **P5.2 — Docker Compose :** installation vierge Linux, configuration d'environnement, stockage persistant, lancement et mises à jour documentées. Installation Linux vierge, persistance et reprise vérifiées en CI : [lot exploitation](docs/validation/P5-operations-hardening.md).
 - [ ] **P5.3 — Sauvegardes :** procédure quotidienne, sauvegardes chiffrées et exercice de restauration réel ; pas d'affirmation de succès sans vérification.
 - [ ] **P5.4 — Sécurité :** sessions, contrôles d'accès, secrets, validation, dépendances, journalisation et protections d'exposition distante.
 - [x] **P5.5 — Observabilité minimale :** santé applicative, disponibilité DB, erreurs fournisseurs, quotas, synchronisation ; pas de fuite d'informations financières.
 - [x] **P5.6 — CI et reproductibilité :** lint, typage, unitaires, intégration, E2E, builds, migrations et checks de sécurité.
 - [x] **P5.7 — Documentation publique :** README, installation, configuration, utilisateurs, limites d'actifs couverts, sauvegarde/restauration, export et contribution. Preuves : [rapport P5.7](docs/validation/P5-7-public-docs.md) ; réserves de recette conservées.
-- [ ] **P5.8 — Licence open source :** choisir une licence compatible avec les dépendances et les conditions des fournisseurs ; préciser que les flux de marché ne sont pas nécessairement redistribuables.
+- [x] **P5.8 — Licence open source :** Apache 2.0 existante, inventaire runtime et notices transitives vérifiés ; 15 fichiers de notices contrôlés dans chaque image AMD64/ARM64. [Licences et droits des flux](docs/licenses/README.md).
 - [ ] **P5.9 — Recette globale :** cocher les 15 critères du PRD §12, preuves et écarts connus à l'appui.
 - [ ] **P5.10 — Publication :** version initiale taguée, notes de version et procédure de mise à jour/réversibilité.
 
