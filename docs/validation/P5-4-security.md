@@ -39,9 +39,11 @@ Références source/tests : [identité](../../backend/internal/identity/identity
 
 Local : gofmt, syntaxe shell, `git diff --check`, liens documentaires et **13 tests Python** réussis. Les deux nouveaux tests shell vérifient l’absence de secret dans les arguments/entrée standard et le refus des secrets identiques, avec un psql de test ; ils ne sont pas présentés comme une connexion PostgreSQL. Le bootstrap réel est exercé par les intégrations et le Compose en CI.
 
-Trois nouveaux tests Go couvrent les liens/chemins privés, les fichiers spéciaux, HEAD/Range et le maintien des en-têtes, avec le test du build existant. Le laboratoire local restant limité en disque, aucune compilation Go ou exécution de ces nouveaux tests n’est revendiquée localement. Ils doivent réussir dans la CI de la branche de vérification avant publication sur main ; état encore en attente à cette rédaction.
+Trois nouveaux tests Go couvrent les liens/chemins privés, les fichiers spéciaux, HEAD/Range et le maintien des en-têtes, avec le test du build existant. Le laboratoire local restant limité en disque, aucune compilation Go ou exécution de ces nouveaux tests n’est revendiquée localement. Ils réussissent dans la CI de la branche de vérification avant publication sur main.
 
-Les tests financiers/intégration/E2E/build/vuln existants restent requis dans les sept jobs. La seule activation d’un workflow ne prouve pas leur succès. Les preuves hébergées seront ajoutées après leur exécution.
+Les tests financiers/intégration/E2E/build/vuln existants restent requis dans les sept jobs. [Quality 42388263087](https://github.com/Madi-Toumani-benmohamed/Atlas/actions/runs/42388263087), commit `1eb226fcb2829124b1c1b4242654e61f72d2acfb` : **sept jobs réussis**. Go vet/race/build/vuln et intégrations PostgreSQL réels passent, ainsi que les parcours navigateur, les builds AMD64/ARM64, licences et documentation. La recette Compose neuve confirme le rôle applicatif utilisable avec le nouveau bootstrap, la sauvegarde chiffrée, la restauration distincte et l’original préservé.
+
+P5.4 clôturé pour ce périmètre de revue interne. Les réserves d’exploitation ci-dessous restent ouvertes ; cette clôture ne signifie pas une certification ni une absence de vulnérabilité future.
 
 ## Réserves d’exploitation
 

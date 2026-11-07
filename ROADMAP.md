@@ -164,7 +164,7 @@ Une phase peut contenir des travaux parallèles, mais son jalon est considéré 
 - [x] **P5.1 — Export complet :** portefeuilles, comptes et opérations dans des formats ouverts/documentés ; lecture externe indépendante vérifiée. [Preuves P5.1](docs/validation/P5-1-export-reader.md).
 - [x] **P5.2 — Docker Compose :** installation vierge Linux, configuration d'environnement, stockage persistant, lancement et mises à jour documentées. Installation Linux vierge, persistance et reprise vérifiées en CI : [lot exploitation](docs/validation/P5-operations-hardening.md).
 - [ ] **P5.3 — Sauvegardes :** procédure quotidienne, sauvegardes chiffrées et exercice de restauration réel ; pas d'affirmation de succès sans vérification.
-- [ ] **P5.4 — Sécurité :** sessions, contrôles d'accès, secrets, validation, dépendances, journalisation et protections d'exposition distante.
+- [x] **P5.4 — Sécurité :** sessions, contrôles d'accès, secrets, validation, dépendances, journalisation et protections d'exposition distante ; revue interne, correctifs et CI vérifiés. [Preuves et réserves P5.4](docs/validation/P5-4-security.md).
 - [x] **P5.5 — Observabilité minimale :** santé applicative, disponibilité DB, erreurs fournisseurs, quotas, synchronisation ; pas de fuite d'informations financières.
 - [x] **P5.6 — CI et reproductibilité :** lint, typage, unitaires, intégration, E2E, builds, migrations et checks de sécurité.
 - [x] **P5.7 — Documentation publique :** README, installation, configuration, utilisateurs, limites d'actifs couverts, sauvegarde/restauration, export et contribution. Preuves : [rapport P5.7](docs/validation/P5-7-public-docs.md) ; réserves de recette conservées.
