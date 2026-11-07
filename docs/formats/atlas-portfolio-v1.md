@@ -57,3 +57,5 @@ Pour restaurer **l’instance** avec utilisateurs et sessions, utiliser [la sauv
 ## Lecture externe vérifiée
 
 Un [lecteur hors ligne Python indépendant](../usage/read-export.md) inspecte les ressources, le journal/audit et les nombres exacts sans Atlas. Il ne réimporte rien et ne remplace pas le fichier original ; preuves dans [P5.1](../validation/P5-1-export-reader.md).
+
+Les quantités entières canoniques produites par un achat au total peuvent dépasser 36 chiffres. L’API accepte leur réutilisation dans la borne de la fraction équivalente `n/1` (8190 chiffres pour l’entier, 8192 caractères pour la fraction). Les bornes des montants/prix décimaux ne changent pas. [Régression et preuve de liquidation](../validation/P5-9-canonical-quantities.md).

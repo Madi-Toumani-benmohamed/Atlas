@@ -8,7 +8,7 @@ L’[audit de roadmap P5.9](P5-9-roadmap-audit.md) détaille les écarts et la p
 | 2 — Portefeuilles, comptes, consolidation | Vérifié en laboratoire : transfert entre comptes et instrument consolidé sans doublon. |
 | 3 — Achats, ventes, frais, dates, devises | Vérifié en laboratoire : moteur exact, validation API/UI et vente excessive refusée. |
 | 4 — Flux et staking | Vérifié selon la politique approuvée ; ouvertures explicites, pas de découvert/short, swaps non pris en charge. |
-| 5 — PRU, quantités, P&L | Scénarios T-01–T-12 couverts par suites métier/SQL ; historique incomplet signalé, performance globale masquée. |
+| 5 — PRU, quantités, P&L | Scénarios T-01–T-12 couverts par suites métier/SQL ; [round-trip des quantités dérivées](P5-9-canonical-quantities.md) ajouté ; historique incomplet signalé, performance globale masquée. |
 | 6 — Valeur et affichages desktop/mobile | Parcours financiers et consolidation vérifiés à 1440/390/320 px ; ne vaut pas revue produit exhaustive de tous les classements. |
 | 7 — Cours et taux datés | Partiel : observations manuelles et FX BCE, états manquants/anciens. Aucun flux automatique actions/ETF/crypto validé ; Q-05/Q-06 ouverts. |
 | 8 — CSV | Aperçu, rejets, doublons et atomicité vérifiés ; variantes courtiers limitées à des fixtures synthétiques, exports réels à qualifier. |

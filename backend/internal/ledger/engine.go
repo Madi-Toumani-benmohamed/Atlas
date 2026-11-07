@@ -72,9 +72,20 @@ func number(s string) (*big.Rat, error) {
 }
 
 var fraction = regexp.MustCompile(`^[0-9]+/[1-9][0-9]*$`)
+var quantityInteger = regexp.MustCompile(`^[1-9][0-9]*$`)
 
 func quantityNumber(s string) (*big.Rat, error) {
 	if !strings.Contains(s, "/") {
+		// RatString can return a derived quantity larger than the 36-digit
+		// source decimal bound. Accept its canonical integer if the already
+		// supported equivalent n/1 would fit the 8192-byte quantity limit.
+		if len(s) > 36 && len(s)+2 <= 8192 && quantityInteger.MatchString(s) {
+			n, ok := new(big.Rat).SetString(s)
+			if !ok {
+				return nil, errors.New("invalid_quantity")
+			}
+			return n, nil
+		}
 		return number(s)
 	}
 	if len(s) > 8192 || !fraction.MatchString(s) {
