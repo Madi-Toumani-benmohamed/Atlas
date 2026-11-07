@@ -11,6 +11,7 @@ import socket
 import subprocess
 import sys
 import time
+import traceback
 import urllib.error
 import urllib.request
 import uuid
@@ -218,8 +219,9 @@ def main():
         ok = True
     except VerificationError as error:
         print('FAIL: ' + str(error), file=sys.stderr)
-    except (OSError, ValueError, KeyError, subprocess.TimeoutExpired, urllib.error.URLError):
-        print('FAIL: isolated instance verification; private diagnostics are not printed.', file=sys.stderr)
+    except (OSError, ValueError, KeyError, subprocess.TimeoutExpired, urllib.error.URLError) as error:
+        frame = traceback.extract_tb(error.__traceback__)[-1]
+        print(f'FAIL: {type(error).__name__} at {Path(frame.filename).name}:{frame.lineno}; input values withheld.', file=sys.stderr)
     finally:
         if lab is not None and lab.owns_project:
             try:
