@@ -40,3 +40,9 @@ Contrats : `docs/decisions/C-03-C-09.md`, `docs/decisions/financial-policy.md`. 
 - `scripts/tests/test_read_export.py` : cas synthétiques exacts et refus du CLI ; job documentation existant étendu sans nouveau job.
 - `web/test/export-reader.mjs` : invocation indépendante sur un fichier temporaire privé issu du vrai export ; utilisé par les parcours portefeuille/courtiers, vérifie l’intégrité du fichier source après lecture.
 - Contrat et limites : `docs/usage/read-export.md`, `docs/formats/atlas-portfolio-v1.md`, preuves `docs/validation/P5-1-export-reader.md`.
+
+## Durcissement d’exploitation — 2026-11-07
+
+- `scripts/verify-instance.py` : orchestration locale d’un projet Compose neuf, données synthétiques et scripts chiffrés existants ; retour vers l’original, pas de suppression de volume. Préflight disque/projet/répertoire hors Git et Docker local. `scripts/tests/test_verify_instance.py` couvre le confinement sans DB/Docker. Exécution complète encore à valider.
+- `scripts/check-licenses.py`, `docs/licenses/dependencies.json` : inventaire versionné et empreintes des notices ; mode source Go/npm et mode artefact `/web/licenses` distincts. `web/scripts/licenses.mjs` collecte aussi les dépendances transitives (`--all`).
+- `.github/workflows/ci.yml` : sept jobs avec ajout licences ; notices des deux images et scénario Compose/reprise sur AMD64. CI du nouveau lot encore à exécuter. Contrat/preuves : `docs/operations/instance-verification.md`, `docs/validation/P5-operations-hardening.md`.

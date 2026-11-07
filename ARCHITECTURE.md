@@ -292,3 +292,7 @@ Deux surcharges optionnelles ne changent pas les valeurs du Compose de base : lo
 ### Lecture externe P5.1 — 2026-11-07
 
 Le lecteur Python standard `scripts/read-export.py` est un outil local hors du runtime applicatif. Il lit les exports v1 avec arithmétique rationnelle et ordre d’instants conservé, vérifie les références/audit et produit un résumé ou un journal actif. Aucun accès DB, API ou réseau ; aucune restauration ou logique de valorisation supplémentaire. Le fichier original et ses champs inconnus restent intacts. Le guide `docs/usage/read-export.md` distingue cette lecture de la restauration PostgreSQL.
+
+### Outillage d’exploitation et notices — 2026-11-07
+
+Le scénario de recette crée un projet/volume distinct sur le Docker local, une origine HTTP loopback synthétique et des secrets privés hors checkout. Il exerce les scripts existants sans ajouter de fonction de production ni supprimer de volume ; la reprise compare l’export et la valorisation avant/après. Sa validation complète attend un hôte avec l’espace nécessaire. L’inventaire des licences sépare graphe runtime source et notices effectivement copiées dans chaque image ; les données de marché restent soumises à leurs propres droits.

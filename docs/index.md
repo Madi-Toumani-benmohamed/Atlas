@@ -8,13 +8,14 @@ Atlas est en développement. Une CI réussie prouve les contrôles du commit con
 | Créer mon premier portefeuille et saisir mes données | [Premiers pas](usage/first-steps.md) |
 | Mettre à jour une instance et préparer un retour arrière | [Mise à jour et récupération](operations/upgrades.md) |
 | Sauvegarder ou restaurer une base distincte | [Sauvegardes chiffrées](operations/backup-restore.md) |
+| Reproduire une recette Compose et restauration isolées | [Recette automatisée](operations/instance-verification.md) |
 | Comprendre une indisponibilité DB/BCE | [Observabilité](operations/observability.md) |
 | Importer des opérations | [Atlas CSV v1](formats/atlas-csv-v1.md), [Coinbase/Trade Republic](formats/broker-csv.md) |
 | Comparer les soldes d’un relevé sans corriger le journal | [Atlas soldes v1](formats/atlas-balances-v1.md) |
 | Contribuer au code ou à la documentation | [Contribution](../CONTRIBUTING.md) |
 | Signaler un problème de sécurité | [Politique de signalement](../SECURITY.md) |
 | Lire un export hors Atlas | [Lecteur hors ligne](usage/read-export.md), [JSON Atlas Portfolio v1](formats/atlas-portfolio-v1.md) |
-| Consulter la licence du code | [Apache 2.0](../LICENSE) |
+| Consulter les licences et leurs notices | [Apache 2.0](../LICENSE), [dépendances et données](licenses/README.md) |
 
 ## État et limites
 

@@ -8,7 +8,7 @@ import {
 } from "node:fs/promises";
 import { join, resolve } from "node:path";
 const root = resolve(".");
-const modules = execFileSync("npm", ["ls", "--omit=dev", "--parseable"], {
+const modules = execFileSync("npm", ["ls", "--omit=dev", "--parseable", "--all"], {
   encoding: "utf8",
 })
   .trim()

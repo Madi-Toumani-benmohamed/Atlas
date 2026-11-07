@@ -85,3 +85,5 @@ La rétention, la copie hors machine et les permissions relèvent de l’exploit
 Sur un volume déjà initialisé, modifier `.env` ne modifie pas les mots de passe PostgreSQL. Pour migrer depuis le prototype qui partageait un secret, effectuer une sauvegarde, arrêter l’API, puis utiliser `docker compose exec db psql -U postgres -d atlas` et la commande interactive `\password atlas` pour saisir le nouveau secret applicatif sans l’inscrire dans l’historique des commandes. Mettre à jour `ATLAS_DATABASE_PASSWORD` dans le `.env` privé puis recréer l’API. Conserver le secret administrateur séparément et vérifier l’accès avant toute autre rotation. Aucun volume ne doit être réinitialisé pour cette migration.
 
 Pour sélectionner ensuite une base restaurée dans le même projet Compose, suivre [mise à jour et retour arrière](upgrades.md). Le fichier facultatif `docker-compose.restore.yml` ne réalise pas la restauration.
+
+Recette reproductible du code de reprise : [scénario Compose isolé](instance-verification.md). Ses assertions et son état de validation restent distincts d’un exercice sur votre serveur cible.
