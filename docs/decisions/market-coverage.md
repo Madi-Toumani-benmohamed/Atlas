@@ -1,6 +1,6 @@
 # Sources et couverture — 2026-11-06
 
-F-018/F-019 ; C-06. Le choix de titres/ETF et des places pilotes (Q-05) reste demandé au responsable produit. Aucune couverture boursière ou crypto automatique ne peut être revendiquée sans validation de source et d’identité.
+F-018/F-019 ; C-06. Le responsable produit retient le 7 novembre 2026 BTC, ETH et un ETF S&P 500 encore à préciser (nom/ISIN/place). Q-05 est donc partiellement renseignée ; Q-06 sur les sources/droits reste ouverte. Aucune couverture boursière ou crypto automatique ne peut être revendiquée sans validation de source et d’identité.
 
 ## Implémenté
 
@@ -24,3 +24,7 @@ Le code Atlas est Apache 2.0 ; cela ne donne pas automatiquement une licence sur
 - Dernière observation d’une date antérieure : source/date visibles et bannière dédiée ; ce n’est ni une preuve de cours actuel ni une preuve de marché fermé.
 - Variation jour/semaine/mois/année : calcul uniquement si les deux dates nécessaires sont couvertes par des observations compatibles ; pas de variation nulle fabriquée avec le même ancien cours.
 - Historique : positions de chaque date, observations connues à cette date, interruptions explicites pour les jours incomplets. Pas de backfill artificiel avec les positions actuelles.
+
+## Pilotes exprimés le 7 novembre 2026
+
+BTC et ETH sont les premiers symboles demandés. Pour le S&P 500, le responsable produit précise vouloir un **ETF**, pas l’indice lui-même ; le fonds exact et la place restent à confirmer. Aucun ISIN, ticker coté ou compte réel n’est inventé ; aucune position ni ressource privée n’est créée par cette sélection. La sélection ne vaut pas validation d’un fournisseur, d’une licence de données ou de son quota. ADR-0007 reste proposé.
