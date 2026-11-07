@@ -33,7 +33,7 @@ La mise à jour de cases reflète l’état observé ; elle ne change pas le PRD
 | P2.8 | Résultats en montant et variations de cours disponibles ; ratio personnel universel ou rendement temporel non inventé. Mesures/présentation restantes à cadrer selon leur sens financier |
 | P2.10/P3.8 | États absent/ancien/partiel et panne BCE éprouvés ; calendrier de marché et cours différés non revendiqués pour des fournisseurs d’actifs non connectés |
 | P3.3 | Dashboard et dix instruments consolidés présents ; période par défaut Q-08 et recette produit exhaustive encore ouvertes |
-| P3.4/P3.5/US-005 | Valeurs de comptes/portefeuilles et métriques de positions présentes ; vues dédiées d’évolution/répartition par portefeuille et historique d’actif à qualifier. Ne pas ajouter un filtre financier qui change silencieusement les flux externes |
+| P3.4/P3.5/US-005 | Valeurs de comptes/portefeuilles et métriques de positions présentes ; vues dédiées d’évolution/répartition par portefeuille encore à qualifier. Les [observations de cours par actif](P3-5-quote-history.md) sont consultables sans conversion ni interpolation ; la vue d’évolution complète reste ouverte. Ne pas ajouter un filtre financier qui change silencieusement les flux externes |
 | P3.9/NFR-09 | Parcours E2E, focus, axe et captures historiques existants ; nouveau parcours clavier vérifié sur API/PostgreSQL réels ; recette avec lecteur d’écran humain toujours ouverte |
 | P4.1 | Variantes CSV nommées et fixtures synthétiques ; qualification d’exports réels autorisés encore absente |
 | P4.8 | PDF P1, hors obligation MVP ; aucun prototype ajouté par simple passage dans la roadmap |

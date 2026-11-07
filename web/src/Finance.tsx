@@ -6,6 +6,7 @@ import { ApiError } from "./auth";
 import { MarketStatus } from "./MarketStatus";
 import { Reconciliation } from "./Reconciliation";
 import { HistoryChart } from "./HistoryChart";
+import { QuoteHistory } from "./QuoteHistory";
 import type { HistoryPoint } from "./HistoryChart";
 
 type Value = { exact: string; display: string; approximate: boolean };
@@ -599,6 +600,7 @@ export function Finance({
                       <Numeral v={p.market_changes_percent.year} unit="%" />
                     </p>
                   </details>
+                  <QuoteHistory key={p.asset_id} assetId={p.asset_id} observations={prices} />
                 </li>
               ))}
             </ul>
