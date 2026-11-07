@@ -44,6 +44,25 @@ class InstanceContainmentTests(unittest.TestCase):
                     lab.exercise()
             lab.run.assert_not_called()
 
+    def test_readiness_retries_transport_resets_and_unready_status(self):
+        with tempfile.TemporaryDirectory() as parent:
+            lab = module.Lab(Path(parent) / 'new', 'atlas:test', 'postgres:18.6')
+            lab.request = Mock(side_effect=[ConnectionResetError(), module.VerificationError('unready'), {}])
+            with patch.object(module.time, 'sleep'):
+                lab.wait_ready()
+            self.assertEqual(lab.request.call_count, 3)
+            for call in lab.request.call_args_list:
+                self.assertEqual(call.args, ('/readyz',))  # Only the read-only probe is retried.
+                self.assertEqual(call.kwargs['timeout'], 2)
+
+    def test_readiness_timeout_is_not_success(self):
+        with tempfile.TemporaryDirectory() as parent:
+            lab = module.Lab(Path(parent) / 'new', 'atlas:test', 'postgres:18.6')
+            lab.request = Mock()
+            with self.assertRaisesRegex(module.VerificationError, 'readiness_timeout'):
+                lab.wait_ready(timeout=0)
+            lab.request.assert_not_called()
+
 
 if __name__ == '__main__':
     unittest.main()

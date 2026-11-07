@@ -2,6 +2,7 @@
 """Exercise a fresh isolated Compose instance and encrypted recovery; preserve volumes."""
 import argparse
 import http.cookiejar
+import http.client
 import json
 import os
 from pathlib import Path
@@ -81,7 +82,7 @@ class Lab:
     def compose(self, *args):
         return self.run(['docker', 'compose', *args])
 
-    def request(self, path, data=None, *, status=200, origin=None, anonymous=False):
+    def request(self, path, data=None, *, status=200, origin=None, anonymous=False, timeout=10):
         client = self.http if not anonymous else urllib.request.build_opener(urllib.request.ProxyHandler({}))
         headers = {'Origin': origin or self.origin, 'Idempotency-Key': uuid.uuid4().hex}
         raw = None
@@ -90,7 +91,7 @@ class Lab:
             headers['Content-Type'] = 'application/json'
         request = urllib.request.Request(self.origin + path, data=raw, headers=headers)
         try:
-            response = client.open(request, timeout=10)
+            response = client.open(request, timeout=timeout)
         except urllib.error.HTTPError as error:
             response = error
         with response:
@@ -109,7 +110,17 @@ class Lab:
         if self.env['ATLAS_ORIGIN'] != self.origin:
             self.env['ATLAS_ORIGIN'] = self.origin
             self.compose(*args, 'api')
-        self.request('/readyz')
+        self.wait_ready()
+
+    def wait_ready(self, timeout=30):
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
+            try:
+                self.request('/readyz', timeout=2)
+                return
+            except (OSError, VerificationError, http.client.HTTPException):
+                time.sleep(0.25)
+        raise VerificationError('readiness_timeout')
 
     def sql(self, query):
         return self.compose('exec', '-T', 'db', 'psql', '-U', 'postgres', '-d', 'atlas', '-At', '-v', 'ON_ERROR_STOP=1', '-c', query).decode().strip()
@@ -160,12 +171,7 @@ class Lab:
         summary = self.request('/api/v1/summary')
         require(summary['total_value_eur']['exact'] == '1175', 'unexpected_valuation')
         self.compose('restart', 'api')
-        for _ in range(30):
-            try:
-                self.request('/readyz')
-                break
-            except (urllib.error.URLError, VerificationError):
-                time.sleep(1)
+        self.wait_ready()
         require(self.export() == before, 'restart_data_changed')
         print('PASS: persisted financial data, correction/audit, origin refusal and anonymous export refusal', flush=True)
         self.run(['docker', 'cp', api + ':/archive', self.env['ATLAS_ARCHIVE_BIN']])
@@ -220,8 +226,10 @@ def main():
     except VerificationError as error:
         print('FAIL: ' + str(error), file=sys.stderr)
     except (OSError, ValueError, KeyError, subprocess.TimeoutExpired, urllib.error.URLError) as error:
-        frame = traceback.extract_tb(error.__traceback__)[-1]
-        print(f'FAIL: {type(error).__name__} at {Path(frame.filename).name}:{frame.lineno}; input values withheld.', file=sys.stderr)
+        frames = traceback.extract_tb(error.__traceback__)
+        frame = frames[-1]
+        local_lines = ','.join(str(item.lineno) for item in frames if Path(item.filename).name == 'verify-instance.py')
+        print(f'FAIL: {type(error).__name__} at {Path(frame.filename).name}:{frame.lineno}; harness lines {local_lines}; input values withheld.', file=sys.stderr)
     finally:
         if lab is not None and lab.owns_project:
             try:
