@@ -13,7 +13,7 @@ Atlas est en développement. Une CI réussie prouve les contrôles du commit con
 | Importer des opérations | [Atlas CSV v1](formats/atlas-csv-v1.md), [Coinbase/Trade Republic](formats/broker-csv.md) |
 | Comparer les soldes d’un relevé sans corriger le journal | [Atlas soldes v1](formats/atlas-balances-v1.md) |
 | Contribuer au code ou à la documentation | [Contribution](../CONTRIBUTING.md) |
-| Signaler un problème de sécurité | [Politique de signalement](../SECURITY.md) |
+| Signaler un problème de sécurité | [Politique de signalement](../SECURITY.md), [revue P5.4](validation/P5-4-security.md) |
 | Lire un export hors Atlas | [Lecteur hors ligne](usage/read-export.md), [JSON Atlas Portfolio v1](formats/atlas-portfolio-v1.md) |
 | Consulter les licences et leurs notices | [Apache 2.0](../LICENSE), [dépendances et données](licenses/README.md) |
 

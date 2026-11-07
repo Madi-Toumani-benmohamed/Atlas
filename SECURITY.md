@@ -22,3 +22,5 @@ Préparer une reproduction synthétique minimale : commit, type d’installation
 La récupération de compte, l’administration financière globale et le partage public de portefeuilles ne sont pas livrés. Un administrateur d’infrastructure pouvant accéder au système et à PostgreSQL est distinct d’un rôle applicatif : ne pas présenter l’isolation entre utilisateurs comme une protection contre un hôte compromis.
 
 En cas d’incident, préserver les preuves, limiter l’exposition de l’instance et faire évaluer les rotations/révocations par son exploitant. Restaurer un snapshot peut restaurer des sessions encore valides ; cela ne remplace pas leur révocation lors d’un incident de sécurité.
+
+La [revue P5.4](docs/validation/P5-4-security.md) relie les protections à leurs tests et aux réserves d’exploitation. Le répertoire web doit contenir le build public prévu, sans fichiers privés ; le serveur refuse les liens symboliques et les fichiers non réguliers.

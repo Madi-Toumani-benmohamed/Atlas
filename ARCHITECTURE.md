@@ -296,3 +296,7 @@ Le lecteur Python standard `scripts/read-export.py` est un outil local hors du r
 ### Outillage d’exploitation et notices — 2026-11-07
 
 Le scénario de recette crée un projet/volume distinct sur le Docker local, une origine HTTP loopback synthétique et des secrets privés hors checkout. Il exerce les scripts existants sans ajouter de fonction de production ni supprimer de volume ; la reprise compare l’export et la valorisation avant/après. Sa validation complète réussit sur le runner CI Linux AMD64 ; la recette du serveur cible reste distincte. L’inventaire des licences sépare graphe runtime source et notices effectivement copiées dans chaque image ; les données de marché restent soumises à leurs propres droits.
+
+### Confinement des fichiers publics — P5.4
+
+Le contenu statique est lu depuis un descripteur de racine `os.OpenRoot` puis un descripteur de fichier validé régulier, sans ouverture hors de la racine en cas de remplacement du chemin sur Linux. Les chemins cachés et liens symboliques sont refusés lors de la validation ; aucun listing ni fallback d’API vers HTML. Le build reste un artefact public de confiance et non un espace d’upload utilisateur. L’initialisation PostgreSQL conserve ses rôles et secrets, mais lit le mot de passe depuis l’environnement de psql au lieu des arguments du processus.
