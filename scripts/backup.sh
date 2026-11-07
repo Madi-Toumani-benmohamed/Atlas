@@ -12,5 +12,6 @@ trap 'rm -f "$backup_temp/dump.aesgcm"; rmdir "$backup_temp" 2>/dev/null || true
 backup_file="$(date -u +%Y%m%dT%H%M%SZ)-${backup_temp##*.}.aesgcm"
 # pg_dump failure propagates through pipefail. Only completed pipelines publish a backup.
 docker compose exec -T db pg_dump -U atlas -d "$backup_database" -Fc | "$archive_bin" encrypt -key-file "$ATLAS_BACKUP_KEY_FILE" -out "$backup_temp/dump.aesgcm"
+"$archive_bin" verify -key-file "$ATLAS_BACKUP_KEY_FILE" < "$backup_temp/dump.aesgcm"
 ln "$backup_temp/dump.aesgcm" "$ATLAS_BACKUP_DIR/$backup_file"
 printf '%s\n' "$ATLAS_BACKUP_DIR/$backup_file"

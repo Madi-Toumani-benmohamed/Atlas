@@ -7,7 +7,7 @@ Atlas est en développement. Une CI réussie prouve les contrôles du commit con
 | Installer une instance privée ou un laboratoire | [Installation et configuration](operations/installation.md) |
 | Créer mon premier portefeuille et saisir mes données | [Premiers pas](usage/first-steps.md) |
 | Mettre à jour une instance et préparer un retour arrière | [Mise à jour et récupération](operations/upgrades.md) |
-| Sauvegarder ou restaurer une base distincte | [Sauvegardes chiffrées](operations/backup-restore.md) |
+| Sauvegarder, vérifier ou restaurer une base distincte | [Sauvegardes chiffrées](operations/backup-restore.md), [preuves P5.3](validation/P5-3-backup-checks.md) |
 | Reproduire une recette Compose et restauration isolées | [Recette automatisée](operations/instance-verification.md) |
 | Comprendre une indisponibilité DB/BCE | [Observabilité](operations/observability.md) |
 | Importer des opérations | [Atlas CSV v1](formats/atlas-csv-v1.md), [Coinbase/Trade Republic](formats/broker-csv.md) |

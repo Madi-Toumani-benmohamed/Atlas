@@ -88,3 +88,5 @@ Adapter le nom à une base réellement restaurée et vérifiée. Choisir le code
 Après bascule, régler aussi `ATLAS_DATABASE_NAME` sur ce nom pour les futures sauvegardes. Le nom `atlas` de la base d’origine n’est pas supprimé. Les sessions présentes dans la sauvegarde peuvent encore être valides : une révocation pour incident de sécurité est une décision distincte d’une simple reprise technique.
 
 La clé d’archive, les secrets DB, les volumes TLS et la version applicative ont des fonctions différentes. Les changements de rôle/mot de passe se font selon [la procédure des secrets existants](backup-restore.md), jamais par réinitialisation des volumes.
+
+Après mise à jour de l’image, extraire aussi le nouvel outil `/archive` dans le chemin opérateur configuré avant d’utiliser les scripts du nouveau commit. Les scripts avec vérification post-écriture exigent `archive verify`. Le point de retour avant mise à jour utilise le script et l’outil de l’ancienne version ensemble.

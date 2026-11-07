@@ -80,7 +80,7 @@ func writeNew(path string, data []byte) error {
 }
 func run(args []string, stdin io.Reader) error {
 	if len(args) < 1 {
-		return errors.New("usage: archive keygen|encrypt|decrypt -out FILE [-key-file FILE]")
+		return errors.New("usage: archive keygen|encrypt|decrypt|verify [-out FILE] [-key-file FILE]")
 	}
 	flags := flag.NewFlagSet("archive", flag.ContinueOnError)
 	out := flags.String("out", "", "new output file")
@@ -88,7 +88,18 @@ func run(args []string, stdin io.Reader) error {
 	if err := flags.Parse(args[1:]); err != nil {
 		return err
 	}
-	if *out == "" || flags.NArg() != 0 {
+	mode := args[0]
+	if mode != "keygen" && mode != "encrypt" && mode != "decrypt" && mode != "verify" {
+		return errors.New("unsupported mode")
+	}
+	if flags.NArg() != 0 {
+		return errors.New("unexpected positional arguments")
+	}
+	if mode == "verify" {
+		if *out != "" {
+			return errors.New("verify does not create output files")
+		}
+	} else if *out == "" {
 		return errors.New("an output file is required")
 	}
 	if args[0] == "keygen" {
@@ -114,9 +125,17 @@ func run(args []string, stdin io.Reader) error {
 	if len(input) >= maximum+128 {
 		return errors.New("archive too large")
 	}
-	data, err := transform(args[0], key, input)
+	transformMode := mode
+	if mode == "verify" {
+		transformMode = "decrypt"
+	}
+	data, err := transform(transformMode, key, input)
 	if err != nil {
 		return err
+	}
+	if mode == "verify" {
+		clear(data)
+		return nil
 	}
 	return writeNew(*out, data)
 }

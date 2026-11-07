@@ -38,7 +38,7 @@ export ATLAS_DATABASE_NAME=atlas
 bash scripts/backup.sh
 ```
 
-Le script utilise `pg_dump -Fc -U atlas`, donc le rôle applicatif non superuser. Avec `pipefail`, un échec du dump ne publie pas une sauvegarde terminée. L’archive est d’abord écrite dans un répertoire temporaire privé ; seule une chaîne complète réussie publie un nouveau nom de fichier. Le fichier existant n’est pas écrasé.
+Le script utilise `pg_dump -Fc -U atlas`, donc le rôle applicatif non superuser. Avant publication, l’archive écrite sur disque est relue et authentifiée par `archive verify` ; un échec ne publie pas de nom de sauvegarde terminé. Avec `pipefail`, un échec du dump ne publie pas une sauvegarde terminée. L’archive est d’abord écrite dans un répertoire temporaire privé ; seule une chaîne complète réussie publie un nouveau nom de fichier. Le fichier existant n’est pas écrasé.
 
 Chiffrement standard **AES-256-GCM**, nonce aléatoire 96 bits, en-tête de version authentifié comme données associées. Le déchiffrement vérifie l’authenticité de toute l’archive avant de produire un fichier plaintext. Modification, troncature, ajout de données et mauvaise clé sont refusés. L’outil refuse les dumps de plus de 512 Mio ; il travaille en mémoire et n’est pas présenté comme une solution de streaming pour de très grandes bases.
 
@@ -87,3 +87,25 @@ Sur un volume déjà initialisé, modifier `.env` ne modifie pas les mots de pas
 Pour sélectionner ensuite une base restaurée dans le même projet Compose, suivre [mise à jour et retour arrière](upgrades.md). Le fichier facultatif `docker-compose.restore.yml` ne réalise pas la restauration.
 
 Recette reproductible du code de reprise : [scénario Compose isolé](instance-verification.md). Ses assertions et son état de validation restent distincts d’un exercice sur votre serveur cible.
+
+## Vérifier une archive sans produire de fichier déchiffré
+
+Utiliser l’outil `archive` du **même commit que les scripts**. La commande `verify` est ajoutée après la revue P5.4 ; un ancien binaire extrait doit être remplacé par celui de l’image mise à jour avant d’exécuter ces nouveaux scripts. Le script `backup.sh` exige désormais cette commande avant publication. L’ancien script et son ancien outil restent à utiliser ensemble pour le point de sauvegarde précédant une mise à jour.
+
+```sh
+"$ATLAS_ARCHIVE_BIN" verify -key-file "$ATLAS_BACKUP_KEY_FILE" < CHEMIN_ARCHIVE.aesgcm
+```
+
+Le succès renvoie 0, sans sortie de données ni fichier plaintext. `-out` est refusé avec `verify`. L’outil authentifie et déchiffre en mémoire, avec la même limite de 512 Mio ; il ne s’agit pas d’une solution de streaming. Ce contrôle détecte une mauvaise clé, une altération, une troncature ou un ajout, mais ne prouve pas qu’un dump restaurera une application utilisable. L’exercice de restauration reste nécessaire.
+
+Pour ajouter une politique d’ancienneté du fichier, choisir explicitement un seuil en secondes :
+
+```sh
+# Exemple opérateur, à adapter : ce n’est pas un SLO du produit.
+export ATLAS_BACKUP_MAX_AGE_SECONDS=129600
+bash scripts/check-backup.sh CHEMIN_ARCHIVE.aesgcm
+```
+
+Ce contrôle exige Bash et les outils GNU `stat`/`date` sur Linux. Il refuse un lien symbolique, un fichier accessible au groupe/à tous, une date future, un âge au-delà du seuil choisi et une archive non authentique. Le fichier reste inchangé ; aucun dump ni base ne sont créés. L’âge se fonde sur le **mtime du fichier**, qui peut changer lors d’une copie : il ne prouve pas la date de génération cryptographique du dump. Conserver l’historique des jobs et les preuves de restauration, pas uniquement cet indicateur.
+
+Le job quotidien utilise `backup.sh` et échoue si la vérification après écriture échoue. Ni ce lot ni la CI n’activent de timer sur votre machine. Le déploiement Linux x86 et son accès seront préparés ultérieurement, selon la décision du responsable produit du 7 novembre 2026 ; mot de passe Atlas conservé, SSO futur hors de ce lot.
