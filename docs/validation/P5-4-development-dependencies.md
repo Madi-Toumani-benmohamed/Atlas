@@ -19,4 +19,4 @@ La CI exécute maintenant `npm audit` sur le graphe **complet**, au lieu d’ome
 - `npm run lint`, `npm run build`, `npm test` : réussis ; cinq tests HTTP frontend. CSS/JS de production conservent les mêmes noms de contenu (`index-BeDCWMLw.css`, `index-DObdhabG.js`) observés avant correction.
 - Les versions/métadonnées des paquets de production sont identiques dans le lockfile ; contrôle des licences runtime conservé.
 
-Les sept jobs CI et les parcours clavier/finance réels doivent encore confirmer la compatibilité de cet override avant fusion. Cette mesure datée ne promet pas l’absence d’avis futurs.
+[Quality 42393477700](https://github.com/Madi-Toumani-benmohamed/Atlas/actions/runs/42393477700), commit `54368485` : sept jobs réussis, dont audit npm complet, lint/build, parcours clavier et financiers avec API/PostgreSQL réels, builds AMD64/ARM64 et notices. La CI du push [42393459953](https://github.com/Madi-Toumani-benmohamed/Atlas/actions/runs/42393459953) réussit également. Cette mesure datée ne promet pas l’absence d’avis futurs.
