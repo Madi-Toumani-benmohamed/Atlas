@@ -33,6 +33,6 @@ Linux AMD64, Go 1.27.3, CPU AMD EPYC 9V74, GOMAXPROCS=2, CGO désactivé. Les ca
 
 ## Limites et suites
 
-NFR-12 reste partiel : mesurer ensuite API/SQL, historique affiché et navigateur avec un historique personnel représentatif sur la machine de référence. Les preuves d’accessibilité et les 15 critères MVP restent dans [la matrice](MVP-readiness.md). La CI de ce nouveau benchmark doit encore être constatée avant fusion.
+NFR-12 reste partiel : mesurer ensuite API/SQL, historique affiché et navigateur avec un historique personnel représentatif sur la machine de référence. Les preuves d’accessibilité et les 15 critères MVP restent dans [la matrice](MVP-readiness.md). [Quality 42394952786](https://github.com/Madi-Toumani-benmohamed/Atlas/actions/runs/42394952786), commit `c0424999` : sept jobs réussis ; les six profils sont exécutés dans le job backend et leurs mesures conservées dans son log. Les contrôles numériques, la détection de concurrence et les parcours financiers/clavier restent verts.
 
 Dans ce même lot documentaire, ADR-0006/0009 passent à accepted après **validation explicite** du responsable produit ; ADR-0007 et les licences de cotation restent ouverts. BTC/ETH sont retenus et le S&P 500 doit être un ETF encore à identifier : [couverture et décisions](../decisions/market-coverage.md). Aucun fournisseur ou instrument coté n’est choisi par inférence.
