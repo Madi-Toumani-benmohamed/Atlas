@@ -77,3 +77,5 @@ Le contrôle documentaire vérifie les cibles locales des liens explicites Markd
 Les notices collectées pendant le build sont dans `/licenses/` et dans l’image. Ne pas retirer celles des dépendances pour simplifier un artefact. Ne pas publier de release, tag ou déploiement sur la seule base d’une CI verte si les gates MVP restent ouverts.
 
 Licences runtime : `python3 scripts/check-licenses.py` avec Go et les dépendances npm installées. Lire [la procédure et le périmètre](docs/licenses/README.md) avant de modifier le manifeste. Pour la recette Docker/reprise, suivre [le guide isolé](docs/operations/instance-verification.md) ; son succès complet doit être constaté, pas déduit de ses assertions.
+
+Recette clavier avec API/DB réelles : `npm run test:keyboard` dans `web/`, sur l’instance synthétique dédiée configurée comme les autres E2E. Le test utilise Tab/Entrée et conserve la distinction entre contrôles axe et recette humaine avec lecteur d’écran.

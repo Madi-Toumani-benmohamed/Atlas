@@ -13,7 +13,7 @@ F-022, NFR-05/11/13 ; base `main` `777164a`. Le responsable produit reporte le d
 
 `python3 -B -m unittest discover -s scripts/tests -v` : **15 tests réussis**. Deux tests nouveaux couvrent huit variantes de politique de fichier et l’absence de publication quand la vérification post-écriture échoue. Ils utilisent un outil crypto simulé pour isoler la politique du shell ; l’AES-GCM réel est testé en Go et dans la recette Compose.
 
-Syntaxe Bash, gofmt, liens documentaires et `git diff --check` contrôlés. Le test Go ajouté couvre succès de verify sans fichier produit, refus de -out, données invalides/tronquées/ajoutées et mauvaise clé. Les nouveaux tests Go et le scénario réel restent à constater dans la CI avant fusion ; aucune exécution locale de compilation Go n’est revendiquée sur le disque limité du laboratoire.
+Syntaxe Bash, gofmt, liens documentaires et `git diff --check` contrôlés. Le test Go ajouté couvre succès de verify sans fichier produit, refus de -out, données invalides/tronquées/ajoutées et mauvaise clé. Les nouveaux tests Go et le scénario réel passent dans [Quality 42391095402](https://github.com/Madi-Toumani-benmohamed/Atlas/actions/runs/42391095402), commit `92ddb9d8`, sept jobs réussis. La CI confirme aussi le contrôle d’âge choisi, l’altération refusée, la restauration distincte et l’original préservé. Fusion via PR #6 ; [CI main 42391314792](https://github.com/Madi-Toumani-benmohamed/Atlas/actions/runs/42391314792) également réussie. Aucune compilation Go locale n’est revendiquée sur le disque limité du laboratoire.
 
 ## Compatibilité et suites
 
