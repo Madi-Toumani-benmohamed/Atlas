@@ -130,7 +130,7 @@ Preuves de rapprochement et écarts : [audit P5.9](docs/validation/P5-9-roadmap-
 - [ ] **P3.4 — Portefeuilles/comptes :** liste, regroupements logiques, positions, liquidités, résultats et navigation.
 - [ ] **P3.5 — Détail d'actif :** prix et variation du marché, quantité, PRU, valeur, P&L personnel, historique et dernière cotation.
 - [x] **P3.6 — Formulaires :** achat par montant total, vente avec disponibilité, dépôt/retrait, transfert, dividende, staking et frais ; retour de validation compréhensible.
-- [ ] **P3.7 — Activité :** liste, filtres, détail, duplication ; correction traçable selon phase 4 si non disponible.
+- [x] **P3.7 — Activité :** liste, filtres, détail, duplication ; correction traçable selon phase 4 si non disponible.
 - [ ] **P3.8 — Information fiable :** indicateurs de données obsolètes, incompletes, différées ; langage accessible, aide contextuelle courte.
 - [ ] **P3.9 — Recette visuelle et E2E :** desktop/mobile, clavier, contraste, mouvement réduit, chargement/erreur/absence de données ; aucun faux état de connexion.
 

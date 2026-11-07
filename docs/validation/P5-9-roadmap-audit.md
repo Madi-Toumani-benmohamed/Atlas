@@ -17,7 +17,7 @@
 | P2.9 | Historique reconstruit depuis événements et observations disponibles à chaque date, points manquants non interpolés ; pas de TWR inventé |
 | P3.1/P3.2 | Navigation, thèmes, responsive, premier compte/portefeuille et états vides réels ; E2E et audits axe existants |
 | P3.6 | Formulaires et validations des opérations supportées, achat par total et vente excessive refusée ; E2E achat/vente et tests numériques des autres opérations |
-| P3.7 | Liste, filtre compte, copie préparée sans persistance et corrections présents dans Finance.tsx ; le nouveau parcours clavier ajoute une preuve de duplication explicite avant clôture |
+| P3.7 | Liste, filtre compte, copie préparée sans persistance et corrections présents dans Finance.tsx ; le nouveau parcours clavier vérifie la duplication explicite et le lot est clôturé |
 | P4.2–P4.7 | Aperçu, cohérence, doublons, rapprochement readonly, corrections et rapport vérifiés ; [rapprochement P4.5](P4-5-reconciliation.md) |
 | P5.1/P5.2/P5.4–P5.8 | Lots déjà clôturés avec rapports datés ; la disponibilité de ces composants n’est pas une recette globale du produit |
 
@@ -34,7 +34,7 @@ La mise à jour de cases reflète l’état observé ; elle ne change pas le PRD
 | P2.10/P3.8 | États absent/ancien/partiel et panne BCE éprouvés ; calendrier de marché et cours différés non revendiqués pour des fournisseurs d’actifs non connectés |
 | P3.3 | Dashboard et dix instruments consolidés présents ; période par défaut Q-08 et recette produit exhaustive encore ouvertes |
 | P3.4/P3.5/US-005 | Valeurs de comptes/portefeuilles et métriques de positions présentes ; vues dédiées d’évolution/répartition par portefeuille et historique d’actif à qualifier. Ne pas ajouter un filtre financier qui change silencieusement les flux externes |
-| P3.9/NFR-09 | Parcours E2E, focus, axe et captures historiques existants ; nouveau parcours clavier en cours de validation ; recette avec lecteur d’écran humain toujours ouverte |
+| P3.9/NFR-09 | Parcours E2E, focus, axe et captures historiques existants ; nouveau parcours clavier vérifié sur API/PostgreSQL réels ; recette avec lecteur d’écran humain toujours ouverte |
 | P4.1 | Variantes CSV nommées et fixtures synthétiques ; qualification d’exports réels autorisés encore absente |
 | P4.8 | PDF P1, hors obligation MVP ; aucun prototype ajouté par simple passage dans la roadmap |
 | P5.3/PRD §12.11 | Archive et restauration CI éprouvées ; machine cible et timer quotidien/copie hors machine non validés. Responsable produit : déploiement Linux x86 à préparer plus tard, mot de passe actuel, SSO futur |
@@ -46,4 +46,4 @@ La mise à jour de cases reflète l’état observé ; elle ne change pas le PRD
 
 `npm run test:keyboard` crée exclusivement des comptes/données synthétiques dans une instance dédiée et pilote inscription, premier portefeuille/compte et opérations par Tab/Entrée, sans clic ni focus forcé dans le test. La copie d’une opération ne doit rien écrire avant confirmation ; un retrait excessif doit préserver le brouillon, puis pouvoir être réparé. Noms longs, trois largeurs, deux thèmes et préférence de mouvement réduit sont contrôlés, avec six analyses axe. Il ne simule pas un lecteur d’écran.
 
-Le lint de ce test passe localement ; son résultat réel attend la CI avant fusion. Le laboratoire local ne lance pas de nouveau conteneur sur son disque limité. Les résultats et éventuels correctifs seront consignés après le parcours effectif.
+Le lint passe localement. Le parcours réel réussit dans [Quality 42392202583](https://github.com/Madi-Toumani-benmohamed/Atlas/actions/runs/42392202583), commit `e9b45d5a`, avec sept jobs réussis. Le marqueur de log confirme les six analyses axe, la saisie sans souris, la copie sans écriture avant confirmation, le retrait refusé avec brouillon conservé puis sa réparation. Le laboratoire local ne lance pas de nouveau conteneur sur son disque limité. P3.7 clôturé ; la recette humaine avec lecteur d’écran reste ouverte.

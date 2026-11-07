@@ -54,3 +54,5 @@ Contrats : `docs/decisions/C-03-C-09.md`, `docs/decisions/financial-policy.md`. 
 ## Vérification de sauvegarde P5.3
 
 `backend/cmd/archive` ajoute `verify`, sans fichier de sortie ; `backup.sh` authentifie le fichier avant publication. `scripts/check-backup.sh` contrôle permissions et âge mtime selon un seuil opérateur, puis GCM. `scripts/tests/test_backup_check.py` couvre la politique sans prétendre simuler une restauration. `verify-instance.py` exerce l’outil réel en CI avant la reprise. Guide et état : `docs/validation/P5-3-backup-checks.md`.
+
+`web/test/keyboard.e2e.mjs` ajoute la recette API/DB réelle sans souris : onboarding, duplication avec confirmation et retrait rejeté/réparé, noms longs, focus visible, six scans axe et préférence de mouvement réduit. `docs/validation/P5-9-roadmap-audit.md` rapproche les lots historiques sans lever les gates MVP.
