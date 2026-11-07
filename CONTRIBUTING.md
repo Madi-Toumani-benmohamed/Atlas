@@ -58,7 +58,7 @@ npm ci
 npm run lint
 npm run build
 npm test
-npm audit --omit=dev
+npm audit
 npm run dev
 ```
 

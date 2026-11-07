@@ -172,7 +172,7 @@ Preuves de rapprochement et écarts : [audit P5.9](docs/validation/P5-9-roadmap-
 - [x] **P5.7 — Documentation publique :** README, installation, configuration, utilisateurs, limites d'actifs couverts, sauvegarde/restauration, export et contribution. Preuves : [rapport P5.7](docs/validation/P5-7-public-docs.md) ; réserves de recette conservées.
 - [x] **P5.8 — Licence open source :** Apache 2.0 existante, inventaire runtime et notices transitives vérifiés ; 15 fichiers de notices contrôlés dans chaque image AMD64/ARM64. [Licences et droits des flux](docs/licenses/README.md).
 - [ ] **P5.9 — Recette globale :** cocher les 15 critères du PRD §12, preuves et écarts connus à l'appui.
-- [ ] **P5.10 — Publication :** version initiale taguée, notes de version et procédure de mise à jour/réversibilité.
+- [ ] **P5.10 — Publication :** [notes préparatoires](docs/releases/unreleased.md) disponibles ; version initiale/tag et publication restent conditionnés aux gates MVP et à la recette cible.
 
 **Critères de sortie :** **tous les P0 du PRD sont livrés**, testés et sans service payant obligatoire ; installation et restauration démontrées ; données et limites traçables ; aucun défaut critique de sécurité ou de calcul connu laissé sans traitement.
 
