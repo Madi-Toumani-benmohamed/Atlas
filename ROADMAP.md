@@ -1,9 +1,9 @@
 # Atlas — Roadmap produit et livraison
 
 > **Produit :** Atlas Portfolio  
-> **Version du document :** 0.1  
-> **Date :** 2026-11-05  
-> **Statut :** Plan de référence proposé ; exécution non démarrée dans ce document  
+> **Version du document :** 0.2
+> **Date :** 2026-11-07
+> **Statut :** Exécution en cours ; état rapproché des preuves, gates MVP encore ouverts
 > **Référence produit :** `PRD.md` v0.2  
 > **Références complémentaires :** `AGENTS.md`, `design.md`, `ADR.md` ; `ARCHITECTURE.md` lorsqu'il existe
 
@@ -37,16 +37,18 @@ Une phase peut contenir des travaux parallèles, mais son jalon est considéré 
 
 ## 2. Vue d'ensemble
 
-| Phase | Livrable principal | Statut initial | Passage requis |
+| Phase | Livrable principal | État constaté | Passage requis |
 | --- | --- | --- | --- |
-| **0 — Contrats** | Spécifications, arbitrages critiques, architecture, cas de référence | TODO | Contrats métier et qualité acceptés |
-| **1 — Socle** | Utilisateurs, portefeuilles, comptes, opérations, permissions | TODO | Données isolées et écritures atomiques |
-| **2 — Moteur financier** | Positions, liquidités, PRU, P&L, cours, FX, historique | TODO | Tests financiers exacts et données datées |
-| **3 — Expérience utilisateur** | Dashboard, actifs, portefeuilles, activité et saisie | TODO | Parcours complets desktop/mobile |
-| **4 — Imports et corrections** | CSV pilotes, prévisualisation, doublons, audit | TODO | Réimport idempotent et correction fiable |
-| **5 — Publication MVP** | Export, Docker, sauvegarde/restauration, sécurité, documentation | TODO | Recette globale du PRD validée |
+| **0 — Contrats** | Spécifications, arbitrages critiques, architecture, cas de référence | BLOCKED | Contrats métier et qualité acceptés |
+| **1 — Socle** | Utilisateurs, portefeuilles, comptes, opérations, permissions | DONE | Données isolées et écritures atomiques |
+| **2 — Moteur financier** | Positions, liquidités, PRU, P&L, cours, FX, historique | IN_PROGRESS | Tests financiers exacts et données datées |
+| **3 — Expérience utilisateur** | Dashboard, actifs, portefeuilles, activité et saisie | IN_PROGRESS | Parcours complets desktop/mobile |
+| **4 — Imports et corrections** | CSV pilotes, prévisualisation, doublons, audit | IN_PROGRESS | Réimport idempotent et correction fiable |
+| **5 — Publication MVP** | Export, Docker, sauvegarde/restauration, sécurité, documentation | IN_PROGRESS | Recette globale du PRD validée |
 | **6 — V1 : pilotage** | DCA, objectifs, benchmarks, alertes, personnalisation | TODO | Fonctions P1 éprouvées sans surcharge |
 | **7 — Research / IA** | Analyse et découverte d'actifs, explications sourcées | TODO | Gouvernance des sources et séparation des responsabilités |
+
+Preuves de rapprochement et écarts : [audit P5.9](docs/validation/P5-9-roadmap-audit.md). Une case cochée ne lève pas les gates des autres lots ni les arbitrages de cotation.
 
 **Chemin critique proposé :** Phase 0 → Phase 1 → Phase 2 → Phase 3 → Phase 4 → Phase 5. Les composants visuels, tests et travaux d'infrastructure indépendants peuvent être préparés en parallèle, sans déclarer prématurément les phases terminées.
 
@@ -59,17 +61,17 @@ Une phase peut contenir des travaux parallèles, mais son jalon est considéré 
 ### Lots
 
 - [ ] **P0.1 — Vérifier les documents :** aligner `PRD.md`, `design.md`, `AGENTS.md`, `ADR.md` et `ARCHITECTURE.md` si présent ; supprimer les contradictions, distinguer décision et hypothèse.
-- [ ] **P0.2 — Définir le langage métier :** portefeuille logique, compte, actif, opération, mouvement de liquidités, position, transaction externe, prix, taux de change, snapshot, correction.
-- [ ] **P0.3 — Arrêter les invariants comptables :** conservation des montants, coûts et frais ; traitement des transferts ; bornes des quantités ; règles d'ordre chronologique ; correction et audit.
-- [ ] **P0.4 — Résoudre Q-02 :** soldes d'ouverture, liquidités insuffisantes, historiques partiels et politique d'affichage des performances incertaines.
-- [ ] **P0.5 — Résoudre Q-03 :** comptabilisation des récompenses de staking et traitement du coût d'acquisition selon une règle explicite.
-- [ ] **P0.6 — Décider le traitement Q-04 :** imports contenant des swaps crypto non supportés ; refuser, mettre en attente ou élargir le périmètre via arbitrage.
+- [x] **P0.2 — Définir le langage métier :** portefeuille logique, compte, actif, opération, mouvement de liquidités, position, transaction externe, prix, taux de change, snapshot, correction.
+- [x] **P0.3 — Arrêter les invariants comptables :** conservation des montants, coûts et frais ; traitement des transferts ; bornes des quantités ; règles d'ordre chronologique ; correction et audit.
+- [x] **P0.4 — Résoudre Q-02 :** soldes d'ouverture, liquidités insuffisantes, historiques partiels et politique d'affichage des performances incertaines.
+- [x] **P0.5 — Résoudre Q-03 :** comptabilisation des récompenses de staking et traitement du coût d'acquisition selon une règle explicite.
+- [x] **P0.6 — Décider le traitement Q-04 :** imports contenant des swaps crypto non supportés ; refuser, mettre en attente ou élargir le périmètre via arbitrage.
 - [ ] **P0.7 — Fixer les actifs pilotes et les licences de cotation (Q-05/Q-06) :** actions/ETF et crypto à couvrir gratuitement, métadonnées de marché, calendrier et fraîcheur des cours, politique de repli manuel.
-- [ ] **P0.8 — Décrire les scénarios de référence :** formaliser T-01 à T-12 du PRD et les données de test attendues (frais, devises, dates, prix absents).
-- [ ] **P0.9 — Définir les contrats de service et le plan de tests :** entrées/sorties métier, erreurs, idempotence, conventions de précision, permissions et migration.
+- [x] **P0.8 — Décrire les scénarios de référence :** formaliser T-01 à T-12 du PRD et les données de test attendues (frais, devises, dates, prix absents).
+- [x] **P0.9 — Définir les contrats de service et le plan de tests :** entrées/sorties métier, erreurs, idempotence, conventions de précision, permissions et migration.
 - [ ] **P0.10 — Maquetter les parcours critiques :** premier lancement, achat, vente, dashboard, détail de position, CSV, erreur de données ; respecter `design.md`.
 - [ ] **P0.11 — Décider l'architecture et les ADR pertinents :** stack exacte, modèle de persistance, authentification, stratégies de collecte de cours et découpage modulaire.
-- [ ] **P0.12 — Préparer le dépôt :** conventions, lints, tests, CI initiale, `.env.example`, données fictives explicites. Aucun secret ni compte de marché réel dans le dépôt.
+- [x] **P0.12 — Préparer le dépôt :** conventions, lints, tests, CI initiale, `.env.example`, données fictives explicites. Aucun secret ni compte de marché réel dans le dépôt.
 
 **Critères de sortie :** Q-02 et Q-03 tranchées ; politique Q-04 explicite ; échantillon d'actifs et source de cours pilote vérifiés ; tests financiers écrits ; parcours d'achat spécifié ; architecture/ADR cohérents. Les autres questions restent tracées avec propriétaires et impact.
 
@@ -101,15 +103,15 @@ Une phase peut contenir des travaux parallèles, mais son jalon est considéré 
 
 ### Lots
 
-- [ ] **P2.1 — Reconstruction des positions :** quantités par compte et actif à toute date ; recomputation après opération antidatée.
-- [ ] **P2.2 — Coût moyen et ventes :** coût d'acquisition restant, frais, PRU, résultat latent et réalisé ; distinction du calcul fiscal.
-- [ ] **P2.3 — Liquidités et épargne :** dépôts/retraits, effets des achats/ventes, Livret A et PEL, intérêts effectivement crédités.
-- [ ] **P2.4 — Staking simple :** mouvements de récompense et valorisation selon politique documentée ; écarter DeFi complexe.
+- [x] **P2.1 — Reconstruction des positions :** quantités par compte et actif à toute date ; recomputation après opération antidatée.
+- [x] **P2.2 — Coût moyen et ventes :** coût d'acquisition restant, frais, PRU, résultat latent et réalisé ; distinction du calcul fiscal.
+- [x] **P2.3 — Liquidités et épargne :** dépôts/retraits, effets des achats/ventes, Livret A et PEL, intérêts effectivement crédités.
+- [x] **P2.4 — Staking simple :** mouvements de récompense et valorisation selon politique documentée ; écarter DeFi complexe.
 - [ ] **P2.5 — Prix de marché :** recherche/association des actifs, prix datés, cache, quotas, fournisseur et statut de fraîcheur ; cours manuel traçable si nécessaire.
-- [ ] **P2.6 — Taux de change :** préservation des devises de transaction, conversions EUR datées, précision décimale et arrondis de présentation.
-- [ ] **P2.7 — Valorisation consolidée :** valeur par actif, compte, portefeuille et globale ; apports externes séparés des achats et transferts.
+- [x] **P2.6 — Taux de change :** préservation des devises de transaction, conversions EUR datées, précision décimale et arrondis de présentation.
+- [x] **P2.7 — Valorisation consolidée :** valeur par actif, compte, portefeuille et globale ; apports externes séparés des achats et transferts.
 - [ ] **P2.8 — Performances :** gains et pertes en montant/pourcentage, variations de cours distinctes du rendement personnel, résultats réalisés/latents.
-- [ ] **P2.9 — Séries temporelles :** positions et prix historiques par date ; historiques incomplets signalés et rendement temporel uniquement lorsque calculable.
+- [x] **P2.9 — Séries temporelles :** positions et prix historiques par date ; historiques incomplets signalés et rendement temporel uniquement lorsque calculable.
 - [ ] **P2.10 — Défaillances :** cours manquants, marchés fermés, prix différés, données incohérentes ; états observables et dégradation maîtrisée.
 
 **Critères de sortie :** T-01 à T-05 et T-07 à T-12 passent ; toutes les valeurs ont une provenance et une date ; pas de performance inventée ; la valeur consolidée exclut les doubles comptes ; incident de fournisseur n'altère pas l'historique.
@@ -122,12 +124,12 @@ Une phase peut contenir des travaux parallèles, mais son jalon est considéré 
 
 ### Lots
 
-- [ ] **P3.1 — Shell responsive :** navigation Accueil, Portefeuilles, Actifs et Activité ; thèmes sombre/clair/auto ; accessibilité et états UI.
-- [ ] **P3.2 — Onboarding :** création d'utilisateur, premier portefeuille, compte, première opération ou import ; empty states explicites.
+- [x] **P3.1 — Shell responsive :** navigation Accueil, Portefeuilles, Actifs et Activité ; thèmes sombre/clair/auto ; accessibilité et états UI.
+- [x] **P3.2 — Onboarding :** création d'utilisateur, premier portefeuille, compte, première opération ou import ; empty states explicites.
 - [ ] **P3.3 — Dashboard global :** valeur, gain/perte, période, courbe, allocation, synthèse des portefeuilles, dix actifs, meilleures/pires performances.
 - [ ] **P3.4 — Portefeuilles/comptes :** liste, regroupements logiques, positions, liquidités, résultats et navigation.
 - [ ] **P3.5 — Détail d'actif :** prix et variation du marché, quantité, PRU, valeur, P&L personnel, historique et dernière cotation.
-- [ ] **P3.6 — Formulaires :** achat par montant total, vente avec disponibilité, dépôt/retrait, transfert, dividende, staking et frais ; retour de validation compréhensible.
+- [x] **P3.6 — Formulaires :** achat par montant total, vente avec disponibilité, dépôt/retrait, transfert, dividende, staking et frais ; retour de validation compréhensible.
 - [ ] **P3.7 — Activité :** liste, filtres, détail, duplication ; correction traçable selon phase 4 si non disponible.
 - [ ] **P3.8 — Information fiable :** indicateurs de données obsolètes, incompletes, différées ; langage accessible, aide contextuelle courte.
 - [ ] **P3.9 — Recette visuelle et E2E :** desktop/mobile, clavier, contraste, mouvement réduit, chargement/erreur/absence de données ; aucun faux état de connexion.

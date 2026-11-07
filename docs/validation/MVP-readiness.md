@@ -1,6 +1,6 @@
 # État de recette MVP — 7 novembre 2026
 
-Cette matrice prépare P5.9 ; elle ne déclare ni la recette globale ni une publication MVP. Les preuves historiques restent datées dans les rapports [C-03–C-09](C-03-C-09.md), [rapprochement](P4-5-reconciliation.md) et [observabilité](P5-5-observability.md). « Vérifié en laboratoire » ne signifie pas vérifié chez l’exploitant.
+L’[audit de roadmap P5.9](P5-9-roadmap-audit.md) détaille les écarts et la preuve de chaque lot. Cette matrice prépare P5.9 ; elle ne déclare ni la recette globale ni une publication MVP. Les preuves historiques restent datées dans les rapports [C-03–C-09](C-03-C-09.md), [rapprochement](P4-5-reconciliation.md) et [observabilité](P5-5-observability.md). « Vérifié en laboratoire » ne signifie pas vérifié chez l’exploitant.
 
 | PRD §12 | État et preuves / réserves |
 | --- | --- |

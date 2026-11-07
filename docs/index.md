@@ -27,6 +27,10 @@ Les imports natifs de courtiers ont un périmètre limité : une variante non do
 
 Les [preuves de validation](validation/C-03-C-09.md) et la [roadmap](../ROADMAP.md) distinguent recette locale, CI hébergée et environnement cible. Les mesures de charge, la recette lecteur d’écran, le matériel ARM64 physique et l’installation/restauration sur la machine cible restent à établir.
 
+## Recette et langage
+
+[Glossaire métier](decisions/glossary.md), [audit de roadmap P5.9](validation/P5-9-roadmap-audit.md) et [matrice des quinze critères MVP](validation/MVP-readiness.md). Les phases futures restent hors du périmètre automatique.
+
 ## Navigation technique
 
 [PRD](../PRD.md) → besoins et règles ; [ADR](../ADR.md) → décisions ; [architecture](../ARCHITECTURE.md) → contrats techniques ; [cartographie](../CODEBASE_GRAPH.md) → fichiers réellement implémentés ; [design](../design.md) → système visuel.
