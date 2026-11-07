@@ -1,15 +1,13 @@
 package ledger
 
 import (
-	"context"
 	_ "embed"
 	"encoding/xml"
 	"errors"
-	"io"
 	"math/big"
 	"net/http"
 	"regexp"
-	"sync"
+	"strconv"
 	"time"
 )
 
@@ -20,53 +18,6 @@ const ecbURL = "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml"
 
 type FXRate struct{ Currency, ReferenceDate, Value string }
 
-// ECBProvider caches only public reference rates, never users' portfolios.
-type ECBProvider struct {
-	Client  *http.Client
-	URL     string
-	mu      sync.Mutex
-	cached  []FXRate
-	fetched time.Time
-}
-
-func (p *ECBProvider) rates(ctx context.Context) ([]FXRate, error) {
-	p.mu.Lock()
-	defer p.mu.Unlock()
-	if time.Since(p.fetched) < 6*time.Hour && len(p.cached) > 0 {
-		return append([]FXRate(nil), p.cached...), nil
-	}
-	endpoint := p.URL
-	if endpoint == "" {
-		endpoint = ecbURL
-	}
-	client := p.Client
-	if client == nil {
-		client = &http.Client{Timeout: 6 * time.Second, CheckRedirect: func(*http.Request, []*http.Request) error { return errors.New("provider_redirect_refused") }}
-	}
-	request, err := http.NewRequestWithContext(ctx, "GET", endpoint, nil)
-	if err != nil {
-		return nil, err
-	}
-	response, err := client.Do(request)
-	if err != nil {
-		return nil, errors.New("ecb_unavailable")
-	}
-	defer response.Body.Close()
-	if response.StatusCode != 200 {
-		return nil, errors.New("ecb_unavailable")
-	}
-	raw, err := io.ReadAll(io.LimitReader(response.Body, (512<<10)+1))
-	if err != nil || len(raw) > 512<<10 {
-		return nil, errors.New("invalid_ecb_response")
-	}
-	out, err := parseECB(raw)
-	if err != nil {
-		return nil, err
-	}
-	p.cached = out
-	p.fetched = time.Now()
-	return append([]FXRate(nil), out...), nil
-}
 func parseECB(raw []byte) ([]FXRate, error) {
 	var envelope struct {
 		Cube struct {
@@ -112,6 +63,9 @@ func (s *Server) refreshFX(w http.ResponseWriter, r *http.Request, owner string)
 	}
 	rates, err := s.ECB.rates(r.Context())
 	if err != nil {
+		if retry := s.ECB.snapshot(time.Now()).RetryAfterSeconds; retry > 0 {
+			w.Header().Set("Retry-After", strconv.FormatInt(retry, 10))
+		}
 		fail(w, 503, "ecb_unavailable_manual_rates_preserved")
 		return
 	}

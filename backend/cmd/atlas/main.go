@@ -9,6 +9,7 @@ import (
 	"database/sql"
 	"errors"
 	"log"
+	"log/slog"
 	"net/http"
 	"net/url"
 	"os"
@@ -19,6 +20,7 @@ import (
 )
 
 func main() {
+	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stderr, nil)))
 	addr := os.Getenv("ATLAS_ADDR")
 	if addr == "" {
 		addr = "127.0.0.1:8080"

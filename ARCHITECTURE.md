@@ -273,4 +273,18 @@ Le frontend consomme réellement ces contrats et Go sert aussi son build statiqu
 
 L’image inclut frontend/API/healthcheck/archive ; Caddy est une terminaison HTTPS optionnelle. Les cookies HTTPS `__Host-` sont distincts du laboratoire HTTP. Des scripts chiffrent les dumps et restaurent vers une base neuve ; les unités quotidiennes restent à configurer/activer sur le serveur cible.
 
-Contrat détaillé : `docs/decisions/C-03-C-09.md`. La cartographie et le rapport de validation précisent les fichiers réels, tests et réserves. Les modules Research/V1, les CSV de courtiers et les sources d’actifs non validées restent des cibles, pas des fonctions connectées.
+Contrat détaillé : `docs/decisions/C-03-C-09.md`. La cartographie et le rapport de validation précisent les fichiers réels, tests et réserves. Les variantes CSV Coinbase/Trade Republic prises en charge sont documentées dans `docs/formats/broker-csv.md` et validées sur fixtures synthétiques, avec aperçu et confirmation atomique. Les modules Research/V1 et les sources de cours d’actifs non validées restent des cibles, pas des fonctions connectées.
+
+
+### Rapprochement P4.5 — 2026-11-06
+
+`ledger/reconciliation.go` lit un relevé Atlas soldes v1, reconstruit les opérations actives à l’instant demandé et compare cash/quantités en rationnels exacts. Lecture SQL repeatable-read sous le propriétaire authentifié ; aucune table, écriture ou migration supplémentaire. La déclaration explicite de complétude des positions permet de signaler les détentions omises sans supposer zéro dans un relevé partiel. Rapport JSON généré à la demande, non persisté. Contrat : `docs/formats/atlas-balances-v1.md` ; preuves : `docs/validation/P4-5-reconciliation.md`.
+
+
+### Observabilité P5.5 — 2026-11-06
+
+Vitalité indépendante de la DB sur `/healthz` ; readiness générique sur `/readyz`, PingContext borné et mutualisé. Compose authentifié utilise la seconde sonde. L’état BCE sépare cache public commun, récupération exclusive hors verrou d’état, backoff après panne et métadonnées de persistance filtrées par propriétaire. Les lectures de statut ne récupèrent pas de données externes. Logs JSON bornés sans identités, paramètres financiers ou erreurs brutes. Aucun schéma, fournisseur d’actifs ou rôle administrateur supplémentaire. Contrat : `docs/operations/observability.md`.
+
+### Profils documentaires P5.7 — 2026-11-07
+
+Deux surcharges optionnelles ne changent pas les valeurs du Compose de base : loopback pour le laboratoire HTTP, et sélection d’une base déjà restaurée pour une reprise dans le même projet. L’ordre des fichiers importe : le profil loopback ne doit pas suivre le profil TLS. Le profil restauration ne crée ni ne supprime de base et ne rétrograde aucun schéma. Les guides publics et les contrôles de rendu figurent dans `docs/index.md` et `CODEBASE_GRAPH.md`.

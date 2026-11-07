@@ -56,6 +56,20 @@ export function resourceError(error: unknown): string {
   if (error instanceof ApiError) {
     if (error.status === 422) {
       const code = error.code || "";
+      const reconciliationErrors: Record<string, string> = {
+        balances_header_required: "Le relevé doit commencer par kind,asset_id,value (CSV Atlas soldes v1).",
+        duplicate_balance_reference: "Le relevé contient plusieurs soldes pour les mêmes liquidités ou le même actif.",
+        invalid_balance_reference: "Chaque ligne doit être cash sans actif, ou position avec un identifiant d’actif.",
+        reconciliation_currency_mismatch: "La devise du relevé doit être celle du compte, sans conversion automatique.",
+        reconciliation_history_invalid: "Le journal ne peut pas être reconstruit à cette date. Vérifiez les opérations et ouvertures.",
+        reconciliation_result_limit: "Trop de positions pour ce rapport. Comparez un relevé partiel plus court.",
+        csv_batch_limit_500: "Le CSV est limité à 500 lignes par lot.",
+        empty_csv: "Le relevé ne contient aucune ligne de solde ou position.",
+        invalid_csv_row: "Une ligne CSV est mal formée. Vérifiez les séparateurs et guillemets.",
+        csv_must_be_utf8: "Le fichier doit être enregistré en UTF-8.",
+        invalid_date: "La date doit être valide et ne peut pas être future.",
+      };
+      if (reconciliationErrors[code]) return reconciliationErrors[code];
       if (code.includes("insufficient_cash"))
         return "Liquidités insuffisantes à une date de l’historique. Ajoutez ou corrigez le dépôt ou le solde d’ouverture explicite.";
       if (code.includes("insufficient_quantity"))
@@ -68,6 +82,8 @@ export function resourceError(error: unknown): string {
         return "Le total ne correspond pas à la quantité, au prix et aux frais.";
       return "Les données ou leur chronologie sont incohérentes. Vérifiez dates, montants, devises et identifiants.";
     }
+    if (error.status === 503 && error.code?.startsWith("ecb_"))
+      return "La BCE est temporairement indisponible. Les taux déjà enregistrés restent inchangés ; consultez l’état BCE avant de réessayer, ou saisissez un taux manuel daté.";
     if (error.status === 401)
       return "Votre session a expiré. Reconnectez-vous.";
     if (error.status === 400)

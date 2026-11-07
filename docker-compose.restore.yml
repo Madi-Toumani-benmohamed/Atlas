@@ -1,0 +1,6 @@
+# Select an already-restored database in the SAME Compose project and DB volume.
+# Does not restore, create, drop, migrate backwards or replace any database.
+services:
+  api:
+    environment:
+      DATABASE_URL: "postgres://atlas:${ATLAS_DATABASE_PASSWORD:?Set ATLAS_DATABASE_PASSWORD}@db:5432/${ATLAS_RESTORE_DATABASE:?Set the existing restored database name}?sslmode=disable"

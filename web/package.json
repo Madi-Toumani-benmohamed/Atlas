@@ -17,7 +17,10 @@
   "test:e2e": "node test/identity.e2e.mjs",
   "test:a11y": "node test/accessibility.mjs",
   "test:portfolio": "node test/portfolio.e2e.mjs",
-  "test:brokers": "node test/broker.e2e.mjs"
+  "test:brokers": "node test/broker.e2e.mjs",
+  "test:reconciliation": "node test/reconciliation.e2e.mjs",
+  "test:readiness": "node test/readiness.e2e.mjs",
+  "test:market-status": "node test/market-status.e2e.mjs"
  },
  "dependencies": {
   "react": "19.3.1",

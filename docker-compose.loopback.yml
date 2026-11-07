@@ -1,0 +1,5 @@
+# Optional HTTP laboratory exposure. Keep after the auth file; do not add to TLS.
+services:
+  api:
+    ports: !override
+      - "127.0.0.1:${ATLAS_PORT:-8080}:8080"

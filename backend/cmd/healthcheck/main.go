@@ -1,4 +1,4 @@
-// Command healthcheck probes process liveness, not database readiness.
+// Command healthcheck probes the configured local liveness/readiness endpoint.
 package main
 
 import (
@@ -8,15 +8,31 @@ import (
 	"time"
 )
 
-func main() {
-	client := &http.Client{Timeout: 3 * time.Second}
-	response, err := client.Get("http://127.0.0.1:8080/healthz")
+func healthy(client *http.Client, endpoint string) bool {
+	response, err := client.Get(endpoint)
 	if err != nil {
-		os.Exit(1)
+		return false
 	}
 	defer response.Body.Close()
 	body, err := io.ReadAll(io.LimitReader(response.Body, 128))
-	if err != nil || response.StatusCode != http.StatusOK || string(body) != "{\"status\":\"ok\"}\n" {
+	return err == nil && response.StatusCode == http.StatusOK && string(body) == "{\"status\":\"ok\"}\n"
+}
+func healthPath(value string) (string, bool) {
+	if value == "" {
+		return "/healthz", true
+	}
+	return value, value == "/healthz" || value == "/readyz"
+}
+func newHealthClient() *http.Client {
+	return &http.Client{Timeout: 3 * time.Second, CheckRedirect: func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }}
+}
+func main() {
+	path, valid := healthPath(os.Getenv("ATLAS_HEALTHCHECK_PATH"))
+	if !valid {
+		os.Exit(1)
+	}
+	client := newHealthClient()
+	if !healthy(client, "http://127.0.0.1:8080"+path) {
 		os.Exit(1)
 	}
 }

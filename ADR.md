@@ -110,14 +110,14 @@ Contrat C-02 : `docs/decisions/C-02.md`. Pas de rôle admin implicite au premier
 - **Conséquences :** le MVP supporte des CSV **explicitement validés** ; PDF ciblés en V1 ; signalement des lignes ambiguës et contrôle utilisateur.
 - **Validation requise :** Q-01 (formats pilotes) et Q-04 (opérations crypto non supportées dans les imports).
 
-## 4. Arbitrages produit non résolus — ne pas transformer en ADR accepté
+## 4. Arbitrages produit — état des décisions
 
-| PRD | Sujet | Blocage |
+| PRD | Sujet | Blocage / état |
 | --- | --- | --- |
-| Q-01 | Exports CSV Coinbase/Trade Republic pilotes | Parser/import |
-| Q-02 | Historique incomplet, soldes d'ouverture, cash négatif | Ledger/positions |
-| Q-03 | Coût et comptabilisation staking | Calculs staking |
-| Q-04 | Swaps et stablecoins présents dans les exports | Imports crypto |
+| Q-01 | Exports CSV Coinbase/Trade Republic pilotes | Choix délégué le 2026-11-06 ; variantes et limites : `docs/formats/broker-csv.md` ; recette sur exports réels encore partielle |
+| Q-02 | Historique incomplet, soldes d'ouverture, cash négatif | Résolu par contrat explicite du 2026-11-06 : `docs/decisions/financial-policy.md` |
+| Q-03 | Coût et comptabilisation staking | Résolu par le même contrat explicite du 2026-11-06 |
+| Q-04 | Swaps et stablecoins présents dans les exports | Swaps refusés, aucune conversion automatique ; contrat du 2026-11-06 |
 | Q-05 | Liste des actifs/places pilotes | Couverture des prix |
 | Q-06 | Fournisseurs et licences de données | Intégrations de marché |
 | Q-07 | Détail de l'épargne | Vues d'épargne |

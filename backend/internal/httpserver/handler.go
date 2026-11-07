@@ -4,10 +4,11 @@ import (
 	"atlas.local/backend/internal/catalog"
 	"atlas.local/backend/internal/identity"
 	"atlas.local/backend/internal/ledger"
+	"context"
 	"net/http"
 )
 
-// Handler exposes process liveness only, not database or product readiness.
+// Handler assembles routes with separate process and database readiness probes.
 func Handler(auth ...*identity.Server) http.Handler {
 	return HandlerWithWeb("", auth...)
 }
@@ -19,7 +20,12 @@ func HandlerWithWeb(webDir string, auth ...*identity.Server) http.Handler {
 		w.Header().Set("Cache-Control", "no-store")
 		w.Write([]byte("{\"status\":\"ok\"}\n"))
 	})
-	if len(auth) > 0 {
+	var ping func(context.Context) error
+	if len(auth) > 0 && auth[0] != nil && auth[0].DB != nil {
+		ping = auth[0].DB.PingContext
+	}
+	mux.Handle("GET /readyz", newReadiness(ping))
+	if len(auth) > 0 && auth[0] != nil {
 		auth[0].RegisterRoutes(mux)
 		(&catalog.Server{DB: auth[0].DB, Auth: auth[0]}).RegisterRoutes(mux)
 		(&ledger.Server{DB: auth[0].DB, Auth: auth[0]}).RegisterRoutes(mux)

@@ -13,7 +13,9 @@ import (
 	"os"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"testing"
+	"time"
 )
 
 func TestJournalIntegration(t *testing.T) {
@@ -267,6 +269,132 @@ func TestJournalIntegration(t *testing.T) {
 	check(w, 200)
 	if err = json.Unmarshal(w.Body.Bytes(), &report); err != nil || report.Valid || report.Rows[0].Error != "resource_not_available" {
 		t.Fatal("broker foreign mapping accepted")
+	}
+
+	// P4.5 is a read-only comparison, including archived references and historical dates.
+	live := summary()
+	var cashRef, quantityRef string
+	for _, cash := range live.Cash {
+		if cash.AccountID == accountIDs[0] {
+			cashRef = cash.Amount.Display
+		}
+	}
+	for _, position := range live.Positions {
+		if position.AccountID == accountIDs[0] && position.AssetID == assetIDs[0] {
+			quantityRef = position.Quantity.Exact
+		}
+	}
+	reconcileIn := reconciliationRequest{Format: "atlas-balances-v1", AccountID: accountIDs[0], Currency: "EUR", AsOf: "2026-01-02T12:00:00Z", CSV: "kind,asset_id,value\ncash,," + cashRef + "\nposition," + assetIDs[0] + "," + quantityRef + "\n"}
+	var beforeOperations, beforeBatches int
+	if err = db.QueryRow("SELECT (SELECT count(*) FROM operations WHERE user_id=$1),(SELECT count(*) FROM import_batches WHERE user_id=$1)", owners[0]).Scan(&beforeOperations, &beforeBatches); err != nil {
+		t.Fatal(err)
+	}
+	w = req("POST", "/api/v1/reconciliations/preview", reconcileIn, 0, "")
+	check(w, 200)
+	var reconciled reconciliationReport
+	if err = json.Unmarshal(w.Body.Bytes(), &reconciled); err != nil || reconciled.Differences != 0 || len(reconciled.Rows) != 2 || !reconciled.CashChecked {
+		t.Fatalf("reconciliation: %s", w.Body.String())
+	}
+	reconcileIn.AsOf = "2019-01-01T00:00:00Z"
+	reconcileIn.CSV = "kind,asset_id,value\ncash,,0\nposition," + assetIDs[0] + ",0\n"
+	w = req("POST", "/api/v1/reconciliations/preview", reconcileIn, 0, "")
+	check(w, 200)
+	if err = json.Unmarshal(w.Body.Bytes(), &reconciled); err != nil || reconciled.Differences != 0 {
+		t.Fatalf("historical reconciliation: %s", w.Body.String())
+	}
+	check(req("PATCH", "/api/v1/portfolios/"+accountIDs[0]+"/accounts/"+accountIDs[0], map[string]bool{"archived": true}, 0, ""), 200)
+	w = req("POST", "/api/v1/reconciliations/preview", reconcileIn, 0, "")
+	check(w, 200)
+	check(req("PATCH", "/api/v1/portfolios/"+accountIDs[0]+"/accounts/"+accountIDs[0], map[string]bool{"archived": false}, 0, ""), 200)
+	reconcileIn.AccountID = accountIDs[1]
+	check(req("POST", "/api/v1/reconciliations/preview", reconcileIn, 0, ""), 404)
+	reconcileIn.AccountID = accountIDs[0]
+	reconcileIn.CSV = "kind,asset_id,value\nposition," + assetIDs[1] + ",0\n"
+	check(req("POST", "/api/v1/reconciliations/preview", reconcileIn, 0, ""), 404)
+	reconcileIn.CSV = "kind,asset_id,value\ncash,,0\n"
+	reconcileIn.Currency = "USD"
+	check(req("POST", "/api/v1/reconciliations/preview", reconcileIn, 0, ""), 422)
+	reconcileIn.Currency = "EUR"
+	reconcileIn.AsOf = "2999-01-01T00:00:00Z"
+	check(req("POST", "/api/v1/reconciliations/preview", reconcileIn, 0, ""), 422)
+	reconcileIn.AsOf = "2019-01-01T00:00:00Z"
+	check(req("POST", "/api/v1/reconciliations/preview", reconcileIn, -1, ""), 401)
+	check(req("POST", "/api/v1/reconciliations/preview", map[string]string{"format": "atlas-balances-v1", "unexpected": "field"}, 0, ""), 400)
+	var afterOperations, afterBatches int
+	if err = db.QueryRow("SELECT (SELECT count(*) FROM operations WHERE user_id=$1),(SELECT count(*) FROM import_batches WHERE user_id=$1)", owners[0]).Scan(&afterOperations, &afterBatches); err != nil {
+		t.Fatal(err)
+	}
+	if beforeOperations != afterOperations || beforeBatches != afterBatches {
+		t.Fatal("reconciliation wrote operations/import batches")
+	}
+
+	// Operational status never fetches market data and exposes only this owner's persistence.
+	var providerCalls atomic.Int32
+	var providerHTTP atomic.Int32
+	providerHTTP.Store(429)
+	providerServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		providerCalls.Add(1)
+		if providerHTTP.Load() != 200 {
+			w.Header().Set("Retry-After", "120")
+			w.WriteHeader(int(providerHTTP.Load()))
+			w.Write([]byte("private upstream body"))
+			return
+		}
+		w.Write([]byte(ecbFixture))
+	}))
+	defer providerServer.Close()
+	s.ECB = &ECBProvider{URL: providerServer.URL, Client: providerServer.Client()}
+	check(req("GET", "/api/v1/market/status", nil, -1, ""), 401)
+	w = req("GET", "/api/v1/market/status", nil, 0, "")
+	check(w, 200)
+	if providerCalls.Load() != 0 || !strings.Contains(w.Body.String(), "never_fetched") {
+		t.Fatal("status contacted provider")
+	}
+	beforePrices := 0
+	if err = db.QueryRow("SELECT count(*) FROM price_observations WHERE user_id=$1", owners[0]).Scan(&beforePrices); err != nil {
+		t.Fatal(err)
+	}
+	w = req("POST", "/api/v1/market/fx/refresh", map[string]string{}, 0, "")
+	check(w, 503)
+	if w.Header().Get("Retry-After") == "" || strings.Contains(w.Body.String(), "private upstream") {
+		t.Fatal("missing retry hint or leaked provider error")
+	}
+	afterPrices := 0
+	if err = db.QueryRow("SELECT count(*) FROM price_observations WHERE user_id=$1", owners[0]).Scan(&afterPrices); err != nil {
+		t.Fatal(err)
+	}
+	if beforePrices != afterPrices {
+		t.Fatal("provider failure changed stored observations")
+	}
+	w = req("POST", "/api/v1/market/fx/refresh", map[string]string{}, 0, "")
+	check(w, 503)
+	if providerCalls.Load() != 1 {
+		t.Fatal("failure backoff did not protect provider quota")
+	}
+	s.ECB.mu.Lock()
+	s.ECB.nextAllowed = time.Time{}
+	s.ECB.mu.Unlock()
+	providerHTTP.Store(200)
+	check(req("POST", "/api/v1/market/fx/refresh", map[string]string{}, 0, ""), 200)
+	var operational struct {
+		Provider        providerSnapshot `json:"provider"`
+		Synchronization struct {
+			Last      *time.Time `json:"last_persisted_at"`
+			Reference string     `json:"reference_date"`
+		} `json:"synchronization"`
+	}
+	w = req("GET", "/api/v1/market/status", nil, 0, "")
+	check(w, 200)
+	if err = json.Unmarshal(w.Body.Bytes(), &operational); err != nil || operational.Provider.State != "cached" || operational.Synchronization.Last == nil || operational.Synchronization.Reference != "2020-01-02" {
+		t.Fatalf("own sync missing: %s", w.Body.String())
+	}
+	w = req("GET", "/api/v1/market/status", nil, 1, "")
+	check(w, 200)
+	if err = json.Unmarshal(w.Body.Bytes(), &operational); err != nil || operational.Synchronization.Last != nil || operational.Synchronization.Reference != "" || strings.Contains(w.Body.String(), owners[0]) {
+		t.Fatalf("foreign sync leaked: %s", w.Body.String())
+	}
+	if providerCalls.Load() != 2 {
+		t.Fatal("status bypassed provider cache")
 	}
 
 }

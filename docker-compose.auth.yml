@@ -5,6 +5,7 @@ services:
       DATABASE_URL: "postgres://atlas:${ATLAS_DATABASE_PASSWORD:?Set ATLAS_DATABASE_PASSWORD}@db:5432/atlas?sslmode=disable"
       ATLAS_ORIGIN: "${ATLAS_ORIGIN:?Set ATLAS_ORIGIN}"
       ATLAS_INSECURE_HTTP: "${ATLAS_INSECURE_HTTP:-false}"
+      ATLAS_HEALTHCHECK_PATH: /readyz
       ATLAS_REGISTRATION: "${ATLAS_REGISTRATION:-false}"
     depends_on:
       db:
