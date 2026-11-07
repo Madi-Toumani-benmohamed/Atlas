@@ -51,3 +51,41 @@ func TestAtomicOutputsAndKeys(t *testing.T) {
 		t.Fatal("unauthenticated plaintext written")
 	}
 }
+
+func TestVerifyNeverWritesPlaintext(t *testing.T) {
+	dir := t.TempDir()
+	keyPath := filepath.Join(dir, "key")
+	key := bytes.Repeat([]byte{7}, 32)
+	if err := os.WriteFile(keyPath, key, 0600); err != nil {
+		t.Fatal(err)
+	}
+	sealed, err := transform("encrypt", key, []byte("synthetic private dump"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err = run([]string{"verify", "-key-file", keyPath}, bytes.NewReader(sealed)); err != nil {
+		t.Fatal(err)
+	}
+	files, err := os.ReadDir(dir)
+	if err != nil || len(files) != 1 {
+		t.Fatal("verify created an output file")
+	}
+	out := filepath.Join(dir, "plaintext")
+	if err = run([]string{"verify", "-key-file", keyPath, "-out", out}, bytes.NewReader(sealed)); err == nil {
+		t.Fatal("verify accepted output")
+	}
+	if _, err = os.Stat(out); !os.IsNotExist(err) {
+		t.Fatal("verify wrote plaintext")
+	}
+	for _, bad := range [][]byte{sealed[:len(sealed)-1], append(append([]byte{}, sealed...), 0), []byte("invalid archive")} {
+		if err = run([]string{"verify", "-key-file", keyPath}, bytes.NewReader(bad)); err == nil {
+			t.Fatal("verify accepted altered data")
+		}
+	}
+	if err = os.WriteFile(keyPath, bytes.Repeat([]byte{8}, 32), 0600); err != nil {
+		t.Fatal(err)
+	}
+	if err = run([]string{"verify", "-key-file", keyPath}, bytes.NewReader(sealed)); err == nil {
+		t.Fatal("verify accepted wrong key")
+	}
+}

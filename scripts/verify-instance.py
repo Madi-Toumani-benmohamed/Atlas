@@ -179,6 +179,8 @@ class Lab:
         backup = Path(self.run(['bash', 'scripts/backup.sh']).decode().strip())
         require(backup.stat().st_mode & 0o777 == 0o600, 'backup_mode')
         require(Path(self.env['ATLAS_BACKUP_KEY_FILE']).stat().st_mode & 0o777 == 0o600, 'key_mode')
+        self.env['ATLAS_BACKUP_MAX_AGE_SECONDS'] = '3600'  # Synthetic CI policy, not a product SLO.
+        self.run(['bash', 'scripts/check-backup.sh', str(backup)])
         self.env['ATLAS_RESTORE_DATABASE'] = 'atlas_restore_verified'
         self.run(['bash', 'scripts/restore.sh', str(backup)])
         # Existing targets must never be overwritten.
@@ -188,6 +190,8 @@ class Lab:
         raw[-1] ^= 1
         tampered.write_bytes(raw)
         tampered.chmod(0o600)
+        self.run(['bash', 'scripts/check-backup.sh', str(tampered)], expected=None)
+        print('PASS: ciphertext verification, chosen file-age policy and tamper refusal', flush=True)
         self.env['ATLAS_RESTORE_DATABASE'] = 'atlas_restore_tampered'
         self.run(['bash', 'scripts/restore.sh', str(tampered)], expected=None)
         require(self.sql("SELECT count(*) FROM pg_database WHERE datname='atlas_restore_tampered'") == '0',

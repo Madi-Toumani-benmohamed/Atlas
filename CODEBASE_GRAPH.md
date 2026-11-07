@@ -50,3 +50,7 @@ Contrats : `docs/decisions/C-03-C-09.md`, `docs/decisions/financial-policy.md`. 
 ## Revue de sécurité P5.4 — 2026-11-07
 
 `httpserver/web.go` ouvre les fichiers réguliers du build via `os.Root`, refuse les liens et fichiers cachés/spéciaux, conserve les protections HTTP et évite le double accès Stat/FileServer. `web_test.go` couvre divulgation via liens, refus sans index et HEAD/Range. L’initialisation `01-app-role.sh` lit le secret avec psql `\getenv`, sans valeur en argv ; `scripts/tests/test_app_role.py` vérifie ce contrat. La revue transversale est dans `docs/validation/P5-4-security.md` ; validation hébergée sur le commit `1eb226fc`, sept jobs réussis (run `42388263087`).
+
+## Vérification de sauvegarde P5.3
+
+`backend/cmd/archive` ajoute `verify`, sans fichier de sortie ; `backup.sh` authentifie le fichier avant publication. `scripts/check-backup.sh` contrôle permissions et âge mtime selon un seuil opérateur, puis GCM. `scripts/tests/test_backup_check.py` couvre la politique sans prétendre simuler une restauration. `verify-instance.py` exerce l’outil réel en CI avant la reprise. Guide et état : `docs/validation/P5-3-backup-checks.md`.
