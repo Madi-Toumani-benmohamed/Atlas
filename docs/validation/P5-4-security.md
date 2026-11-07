@@ -48,3 +48,5 @@ P5.4 clôturé pour ce périmètre de revue interne. Les réserves d’exploitat
 ## Réserves d’exploitation
 
 P5.3, P5.9 et P5.10 gardent leurs gates : serveur cible, sauvegarde quotidienne activée/copie hors machine, recette produit globale et publication stable. Les alertes de dépendances de développement, la recette lecteur d’écran et la charge restent documentées. Aucun déploiement distant, tag, timer système ou suppression de données n’est effectué par ce lot. Les nouvelles protections n’ajoutent aucun fournisseur ni permission d’accès aux portefeuilles.
+
+État des alertes de développement : les chiffres ci-dessus sont ceux de la revue initiale. La [remédiation dédiée](P5-4-development-dependencies.md) ajoute un override ciblé et un audit du graphe complet ; consulter son état de validation avant d’interpréter la réserve historique.
