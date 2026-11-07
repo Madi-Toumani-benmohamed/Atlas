@@ -20,4 +20,4 @@ L’[audit de roadmap P5.9](P5-9-roadmap-audit.md) détaille les écarts et la p
 | 14 — Coûts et connexions réelles | Pas d’offre payante indispensable dans l’implémentation ; seul connecteur marché actif : FX BCE. [Licences runtime et notices embarquées vérifiées](../licenses/README.md) ; couverture/droits de futurs flux à instruire avant ajout. |
 | 15 — Limites et décisions | Guides et rapports publics disponibles ; [couverture marché](../decisions/market-coverage.md), décisions et réserves conservées. |
 
-Les lots P5.3/P5.9/P5.10 restent ouverts dans la roadmap. Les guides ne remplacent pas une installation, une restauration, un audit, un choix de licence ou un tag de version. Aucun service ni timer activé sur un serveur cible par ce lot.
+Les lots P5.3/P5.9/P5.10 restent ouverts dans la roadmap. Les guides ne remplacent pas une installation, une restauration, un audit, un choix de licence ou un tag de version. Aucun service ni timer activé sur un serveur cible par ce lot. Les [mesures synthétiques du rejeu](P5-9-replay-benchmarks.md) sont disponibles ; elles ne valident pas la fluidité du dashboard sur la machine de référence.

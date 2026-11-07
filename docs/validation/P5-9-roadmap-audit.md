@@ -27,8 +27,8 @@ La mise à jour de cases reflète l’état observé ; elle ne change pas le PRD
 
 | Lots / exigences | Écart concret et suite |
 | --- | --- |
-| P0.1/P0.11 | Le registre garde ADR-0006/0007/0009 en `proposed` alors que des mécanismes correspondants existent et sont décrits dans les contrats. Cet audit ne transforme pas le code en approbation : statuts à réconcilier explicitement ; stack/auth ADR-0004/0005/0008 acceptés conservés |
-| P0.7/P2.5/F-018 | Aucun flux automatique actions/ETF/crypto validé ; seuls manuel et FX BCE actifs. Q-05 actifs/places et Q-06 couverture/licence restent bloquants |
+| P0.1/P0.11 | ADR-0006/0009 ont été explicitement acceptés par le responsable produit le 7 novembre 2026 et leur statut est désormais aligné. ADR-0007 reste proposé pour les sources de marché ; stack/auth ADR-0004/0005/0008 acceptés conservés |
+| P0.7/P2.5/F-018 | Aucun flux automatique actions/ETF/crypto validé ; seuls manuel et FX BCE actifs. BTC, ETH et un ETF S&P 500 non encore identifié sont demandés ; fonds/place exacts et Q-06 couverture/licence restent bloquants |
 | P0.10 | Parcours implémentés et inspectés historiquement ; les arbitrages UX encore ouverts ne sont pas déclarés résolus par l’existence du code |
 | P2.8 | Résultats en montant et variations de cours disponibles ; ratio personnel universel ou rendement temporel non inventé. Mesures/présentation restantes à cadrer selon leur sens financier |
 | P2.10/P3.8 | États absent/ancien/partiel et panne BCE éprouvés ; calendrier de marché et cours différés non revendiqués pour des fournisseurs d’actifs non connectés |

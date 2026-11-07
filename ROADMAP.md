@@ -66,7 +66,7 @@ Preuves de rapprochement et écarts : [audit P5.9](docs/validation/P5-9-roadmap-
 - [x] **P0.4 — Résoudre Q-02 :** soldes d'ouverture, liquidités insuffisantes, historiques partiels et politique d'affichage des performances incertaines.
 - [x] **P0.5 — Résoudre Q-03 :** comptabilisation des récompenses de staking et traitement du coût d'acquisition selon une règle explicite.
 - [x] **P0.6 — Décider le traitement Q-04 :** imports contenant des swaps crypto non supportés ; refuser, mettre en attente ou élargir le périmètre via arbitrage.
-- [ ] **P0.7 — Fixer les actifs pilotes et les licences de cotation (Q-05/Q-06) :** actions/ETF et crypto à couvrir gratuitement, métadonnées de marché, calendrier et fraîcheur des cours, politique de repli manuel.
+- [ ] **P0.7 — Fixer les actifs pilotes et les licences de cotation (Q-05/Q-06) :** BTC/ETH et un ETF S&P 500 retenus le 2026-11-07 ; ETF/place exacts, sources et droits encore à vérifier. Pas de couverture automatique présumée.
 - [x] **P0.8 — Décrire les scénarios de référence :** formaliser T-01 à T-12 du PRD et les données de test attendues (frais, devises, dates, prix absents).
 - [x] **P0.9 — Définir les contrats de service et le plan de tests :** entrées/sorties métier, erreurs, idempotence, conventions de précision, permissions et migration.
 - [ ] **P0.10 — Maquetter les parcours critiques :** premier lancement, achat, vente, dashboard, détail de position, CSV, erreur de données ; respecter `design.md`.

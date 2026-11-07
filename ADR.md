@@ -24,10 +24,10 @@ Les orientations expressément choisies par le responsable produit dans le cadra
 | ADR-0003 | Isolation multi-utilisateur et moindre privilège | `accepted` | MVP | PRD F-001/F-002, US-009 |
 | ADR-0004 | Monolithe modulaire plutôt que microservices | `accepted` | Stack | Phase 0 |
 | ADR-0005 | React/TypeScript, Go, PostgreSQL | `accepted` | Stack | Phase 0 |
-| ADR-0006 | Journal de mouvements, nombres décimaux exacts, calculs déterministes | `proposed` | Modèle technique | PRD §7, NFR-01/02 |
+| ADR-0006 | Journal de mouvements, nombres décimaux exacts, calculs déterministes | `accepted` | Modèle technique | PRD §7, NFR-01/02 |
 | ADR-0007 | Adaptateurs de marché interchangeables et cache traçable | `proposed` | Intégration | PRD F-018/F-019, Q-05/Q-06 |
 | ADR-0008 | Authentification locale sécurisée et séparation admin/finance | `accepted` | Sécurité | PRD §9 |
-| ADR-0009 | Import en deux temps, rapprochement et idempotence | `proposed` | Imports | PRD F-011/F-012 |
+| ADR-0009 | Import en deux temps, rapprochement et idempotence | `accepted` | Imports | PRD F-011/F-012 |
 
 ## 3. Fiches synthétiques des décisions
 
@@ -77,11 +77,11 @@ Les orientations expressément choisies par le responsable produit dans le cadra
 
 ### ADR-0006 — Mouvements et précision financière
 
-- **Statut :** `proposed`.
-- **Proposition :** modéliser les événements en `transactions` et mouvements associés ; conserver unité, devise, frais, horodatage et origine ; utiliser des décimaux exacts pour les quantités et montants. Interdire les flottants binaires pour les règles monétaires.
+- **Statut :** `accepted` — 2026-11-07, validation explicite du responsable produit dans la conversation : « Valider ces deux ADR ».
+- **Décision :** modéliser les événements en `transactions` et mouvements associés ; conserver unité, devise, frais, horodatage et origine ; utiliser des décimaux exacts pour les quantités et montants. Interdire les flottants binaires pour les règles monétaires.
 - **Alternatives :** table de transactions aplatie et arithmétique flottante — plus rapide initialement mais moins sûre pour les conversions, transferts et récompenses.
 - **Conséquences :** invariants de conservation, contrôles d'ordre des événements, audit et tests de précision. Ce modèle n'impose pas à lui seul une comptabilité en partie double parfaite pour tous les actifs.
-- **Validation requise :** Q-02 (cash initial, négatifs) et Q-03 (staking) tranchées, puis contrats de mouvements et de coût de revient revus. La méthode CMP est proposée par le PRD, pas une loi fiscale générale.
+- **Vérifications associées :** Q-02 (cash initial, négatifs) et Q-03 (staking) tranchées, puis contrats de mouvements et de coût de revient revus. La méthode CMP est proposée par le PRD, pas une loi fiscale générale.
 
 ### ADR-0007 — Cotations et taux de change via adaptateurs
 
@@ -104,11 +104,11 @@ Contrat C-02 : `docs/decisions/C-02.md`. Pas de rôle admin implicite au premier
 
 ### ADR-0009 — Pipeline d'import vérifiable
 
-- **Statut :** `proposed`.
-- **Proposition :** `upload → parse → normalize → preview → deduplicate → confirm → commit`, sans écriture métier à l'étape de prévisualisation ; lot traçable et identifiants d'import conservés.
+- **Statut :** `accepted` — 2026-11-07, validation explicite du responsable produit dans la conversation : « Valider ces deux ADR ».
+- **Décision :** `upload → parse → normalize → preview → deduplicate → confirm → commit`, sans écriture métier à l'étape de prévisualisation ; lot traçable et identifiants d'import conservés.
 - **Alternatives :** import automatique aveugle (risque de doubles opérations), import PDF générique sans vérification (trop fragile).
 - **Conséquences :** le MVP supporte des CSV **explicitement validés** ; PDF ciblés en V1 ; signalement des lignes ambiguës et contrôle utilisateur.
-- **Validation requise :** Q-01 (formats pilotes) et Q-04 (opérations crypto non supportées dans les imports).
+- **Vérifications associées :** Q-01 (formats pilotes) et Q-04 (opérations crypto non supportées dans les imports).
 
 ## 4. Arbitrages produit — état des décisions
 
@@ -118,7 +118,7 @@ Contrat C-02 : `docs/decisions/C-02.md`. Pas de rôle admin implicite au premier
 | Q-02 | Historique incomplet, soldes d'ouverture, cash négatif | Résolu par contrat explicite du 2026-11-06 : `docs/decisions/financial-policy.md` |
 | Q-03 | Coût et comptabilisation staking | Résolu par le même contrat explicite du 2026-11-06 |
 | Q-04 | Swaps et stablecoins présents dans les exports | Swaps refusés, aucune conversion automatique ; contrat du 2026-11-06 |
-| Q-05 | Liste des actifs/places pilotes | Couverture des prix |
+| Q-05 | Liste des actifs/places pilotes | BTC et ETH retenus le 2026-11-07 ; ETF S&P 500 retenu en principe, instrument et place à préciser |
 | Q-06 | Fournisseurs et licences de données | Intégrations de marché |
 | Q-07 | Détail de l'épargne | Vues d'épargne |
 | Q-08 | Période par défaut du dashboard | UX |
@@ -134,3 +134,9 @@ Contrat C-02 : `docs/decisions/C-02.md`. Pas de rôle admin implicite au premier
 4. Si l'architecture évolue, mettre à jour `ARCHITECTURE.md` et `CODEBASE_GRAPH.md` après vérification du code.
 5. Lorsqu'un ADR accepté est remplacé, créer un nouveau dossier `docs/adr/NNNN-slug.md`, référencer le remplaçant et passer l'ancien à `superseded` ; ne pas réécrire son histoire.
 6. Le présent registre contient des **fiches synthétiques initiales** pour éviter des liens vers des fichiers inexistants. Lors de la première refonte de la gouvernance des ADR, ces fiches pourront être extraites dans `docs/adr/` sans changer leur numéro ni leur statut.
+
+## Validation du 7 novembre 2026
+
+Le responsable produit accepte explicitement ADR-0006 et ADR-0009. Les règles économiques restent celles de `docs/decisions/financial-policy.md` ; cette validation n’introduit aucune migration ni règle fiscale. L’implémentation des nombres décimaux/rationnels et du pipeline d’import est décrite dans `docs/decisions/C-03-C-09.md`. ADR-0007 reste proposé : choix et droits de sources de cotation encore à établir.
+
+L’acceptation du pipeline d’import ne certifie pas toutes les variantes de courtiers : les formats nommés gardent leurs limites et leur qualification sur des exports réels, conformément à P4.1.
