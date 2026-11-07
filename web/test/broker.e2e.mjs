@@ -1,3 +1,4 @@
+import { inspectExport } from "./export-reader.mjs";
 import { chromium } from "playwright";
 import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
@@ -58,5 +59,13 @@ try {
  await page.getByRole("heading",{name:"Crypto synthétique",exact:true}).waitFor();
  assert.equal(await page.getByRole("heading",{name:"Crypto synthétique",exact:true}).count(),1);
  assert.equal(await page.getByRole("heading",{name:"Crypto synthétique · Courtier EUR synthétique",exact:true}).count(),0);
+ const exported = await context.request.get(`${origin}/api/v1/financial-export`);
+ assert.equal(exported.status(),200);
+ const inspection = await inspectExport(await exported.text());
+ assert.equal(inspection.counts.accounts,2);
+ assert.equal(inspection.counts.assets,2);
+ assert.equal(inspection.active_operations,4);
+ assert.ok(inspection.counts.imports >= 2);
+ assert.equal(inspection.active_journal.find(op=>op.kind==="transfer").exact_numbers.quantity,"1");
  await context.close();console.log("PASS: broker CSV browser previews, explicit mapping, atomic confirmation, exact cash/quantities, withholding blocks lot; one consolidated asset across two accounts.");
 } finally {await browser.close();}

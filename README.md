@@ -146,3 +146,5 @@ Références : [PRD](PRD.md), [roadmap](ROADMAP.md), [architecture](ARCHITECTURE
 La suite `npm run test:readiness` nécessite une **instance de recette dédiée**, `ATLAS_E2E_API_ORIGIN`, `ATLAS_E2E_HEALTHCHECK` et `ATLAS_E2E_DATABASE_CONTAINER` : elle arrête puis redémarre ce conteneur DB pour prouver la reprise. Ne jamais la pointer sur une instance de production.
 
 Recette : [état des quinze critères MVP](docs/validation/MVP-readiness.md) et [validation documentaire P5.7](docs/validation/P5-7-public-docs.md).
+
+Lecture externe sans Atlas : [guide du lecteur Python hors ligne](docs/usage/read-export.md) et [preuves P5.1](docs/validation/P5-1-export-reader.md).

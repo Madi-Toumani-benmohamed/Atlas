@@ -53,3 +53,7 @@ Les rapports de rapprochement sont téléchargés séparément et non persistés
 Le plafond de 32 Mio du catalogue concerne ces seules métadonnées ; il ne signifie pas que tout l’export financier est plafonné à 32 Mio ou diffusé en streaming. Un historique très volumineux exige une recette de taille/temps adaptée ; aucune garantie de charge universelle n’est annoncée.
 
 Pour restaurer **l’instance** avec utilisateurs et sessions, utiliser [la sauvegarde chiffrée PostgreSQL](../operations/backup-restore.md), pas ce JSON. Les droits de réutilisation de cours tiers restent distincts de la licence du code ; conserver les attributions.
+
+## Lecture externe vérifiée
+
+Un [lecteur hors ligne Python indépendant](../usage/read-export.md) inspecte les ressources, le journal/audit et les nombres exacts sans Atlas. Il ne réimporte rien et ne remplace pas le fichier original ; preuves dans [P5.1](../validation/P5-1-export-reader.md).

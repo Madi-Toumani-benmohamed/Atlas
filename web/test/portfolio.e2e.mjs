@@ -1,3 +1,4 @@
+import { inspectExport } from "./export-reader.mjs";
 import { chromium } from "playwright";
 import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
@@ -192,6 +193,17 @@ try {
   assert.equal(exported.operations.length, 4);
   assert.ok(!raw.includes("password_hash"));
   assert.ok(!raw.includes("token_hash"));
+  const inspection = await inspectExport(raw);
+  assert.equal(inspection.counts.operations, 4);
+  assert.equal(inspection.active_operations, 3);
+  assert.equal(inspection.inactive_operations, 1);
+  assert.equal(inspection.corrections, 1);
+  const externalBuy = inspection.active_journal.find((op) => op.kind === "buy");
+  assert.equal(externalBuy.exact_numbers.amount, "450");
+  assert.equal(externalBuy.exact_numbers.price, "90");
+  // A buy entered by total carries amount/price; the reader must not invent quantity.
+  assert.equal(externalBuy.exact_numbers.quantity, undefined);
+  assert.equal(inspection.counts.prices, 1);
   await page.reload();
   await page.getByRole("button", { name: "Accueil", exact: true }).click();
   await page

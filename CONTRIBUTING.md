@@ -40,6 +40,7 @@ Depuis la racine du dépôt :
 
 ```sh
 python3 scripts/check-docs.py
+python3 -B -m unittest discover -s scripts/tests -v
 cd backend
 gofmt -l .
 go vet ./...

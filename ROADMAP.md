@@ -161,7 +161,7 @@ Une phase peut contenir des travaux parallèles, mais son jalon est considéré 
 
 ### Lots
 
-- [ ] **P5.1 — Export complet :** portefeuilles, comptes et opérations dans des formats ouverts/documentés ; vérification de lisibilité externe.
+- [x] **P5.1 — Export complet :** portefeuilles, comptes et opérations dans des formats ouverts/documentés ; lecture externe indépendante vérifiée. [Preuves P5.1](docs/validation/P5-1-export-reader.md).
 - [ ] **P5.2 — Docker Compose :** installation vierge Linux, configuration d'environnement, stockage persistant, lancement et mises à jour documentées.
 - [ ] **P5.3 — Sauvegardes :** procédure quotidienne, sauvegardes chiffrées et exercice de restauration réel ; pas d'affirmation de succès sans vérification.
 - [ ] **P5.4 — Sécurité :** sessions, contrôles d'accès, secrets, validation, dépendances, journalisation et protections d'exposition distante.
