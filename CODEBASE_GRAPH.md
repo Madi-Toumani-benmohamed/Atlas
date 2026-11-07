@@ -25,3 +25,11 @@
 Flux : navigateur → routes même origine → session/propriétaire → catalog/ledger → PostgreSQL. L’écriture financière sérialise le propriétaire puis verrouille les ressources et rejoue l’historique avant commit. Les prix restent des observations datées, pas la source des positions. La BCE reçoit uniquement une requête publique fixe, sans portefeuille, quantité ou identité. Exports et rapports d’import sont filtrés par le même propriétaire.
 
 Contrats : `docs/decisions/C-03-C-09.md`, `docs/decisions/financial-policy.md`. Formats/ops : `docs/formats/atlas-csv-v1.md`, `docs/formats/broker-csv.md`, `docs/operations/backup-restore.md`. Commandes : `README.md`. Preuves actuelles : `docs/validation/C-03-C-09.md` ; anciens rapports C-00/C-01/C-02 conservés comme historique.
+
+## Documentation P5.7 — 2026-11-07
+
+- `docs/index.md`, `docs/usage/`, `docs/operations/installation.md` et `upgrades.md` : parcours publics utilisateur/exploitant ; `docs/formats/atlas-portfolio-v1.md` : lecture des exports existants.
+- `CONTRIBUTING.md`, `SECURITY.md`, `.github/PULL_REQUEST_TEMPLATE.md` : contribution et signalement privé sans contact ou SLA inventé.
+- `scripts/check-docs.py` : liens locaux Markdown hors fences ; `scripts/check-compose-docs.py` : rendu des profils documentés sans démarrer de service. Nouveau job documentation, portant le workflow à six jobs avec les deux builds Docker. Validation hébergée de ce changement encore à effectuer.
+- `docker-compose.loopback.yml` : laboratoire local facultatif ; `docker-compose.restore.yml` : DSN vers une base existante explicitement nommée, même projet/volume. Aucun défaut du Compose de base modifié.
+- `docs/validation/MVP-readiness.md` : preuves et réserves des quinze critères ; aucune publication MVP déclarée.

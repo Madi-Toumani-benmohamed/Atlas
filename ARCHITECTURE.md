@@ -284,3 +284,7 @@ Contrat détaillé : `docs/decisions/C-03-C-09.md`. La cartographie et le rappor
 ### Observabilité P5.5 — 2026-11-06
 
 Vitalité indépendante de la DB sur `/healthz` ; readiness générique sur `/readyz`, PingContext borné et mutualisé. Compose authentifié utilise la seconde sonde. L’état BCE sépare cache public commun, récupération exclusive hors verrou d’état, backoff après panne et métadonnées de persistance filtrées par propriétaire. Les lectures de statut ne récupèrent pas de données externes. Logs JSON bornés sans identités, paramètres financiers ou erreurs brutes. Aucun schéma, fournisseur d’actifs ou rôle administrateur supplémentaire. Contrat : `docs/operations/observability.md`.
+
+### Profils documentaires P5.7 — 2026-11-07
+
+Deux surcharges optionnelles ne changent pas les valeurs du Compose de base : loopback pour le laboratoire HTTP, et sélection d’une base déjà restaurée pour une reprise dans le même projet. L’ordre des fichiers importe : le profil loopback ne doit pas suivre le profil TLS. Le profil restauration ne crée ni ne supprime de base et ne rétrograde aucun schéma. Les guides publics et les contrôles de rendu figurent dans `docs/index.md` et `CODEBASE_GRAPH.md`.

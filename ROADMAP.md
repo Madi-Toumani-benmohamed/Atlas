@@ -167,7 +167,7 @@ Une phase peut contenir des travaux parallèles, mais son jalon est considéré 
 - [ ] **P5.4 — Sécurité :** sessions, contrôles d'accès, secrets, validation, dépendances, journalisation et protections d'exposition distante.
 - [x] **P5.5 — Observabilité minimale :** santé applicative, disponibilité DB, erreurs fournisseurs, quotas, synchronisation ; pas de fuite d'informations financières.
 - [x] **P5.6 — CI et reproductibilité :** lint, typage, unitaires, intégration, E2E, builds, migrations et checks de sécurité.
-- [ ] **P5.7 — Documentation publique :** README, installation, configuration, utilisateurs, limites d'actifs couverts, sauvegarde/restauration, export et contribution.
+- [x] **P5.7 — Documentation publique :** README, installation, configuration, utilisateurs, limites d'actifs couverts, sauvegarde/restauration, export et contribution. Preuves : [rapport P5.7](docs/validation/P5-7-public-docs.md) ; réserves de recette conservées.
 - [ ] **P5.8 — Licence open source :** choisir une licence compatible avec les dépendances et les conditions des fournisseurs ; préciser que les flux de marché ne sont pas nécessairement redistribuables.
 - [ ] **P5.9 — Recette globale :** cocher les 15 critères du PRD §12, preuves et écarts connus à l'appui.
 - [ ] **P5.10 — Publication :** version initiale taguée, notes de version et procédure de mise à jour/réversibilité.
