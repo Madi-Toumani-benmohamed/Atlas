@@ -397,4 +397,81 @@ func TestJournalIntegration(t *testing.T) {
 		t.Fatal("status bypassed provider cache")
 	}
 
+	t.Run("canonical quantity returned by API can be fully sold", func(t *testing.T) {
+		check := func(response *httptest.ResponseRecorder, status int) {
+			t.Helper()
+			if response.Code != status {
+				t.Fatalf("API status %d, expected %d: %s", response.Code, status, response.Body.String())
+			}
+			if response.Header().Get("Cache-Control") != "no-store" {
+				t.Fatal("cacheable private data")
+			}
+		}
+		accountID := token()
+		if _, err := db.Exec("INSERT INTO accounts(id,user_id,portfolio_id,name,kind,currency) VALUES($1,$2,$3,'Synthetic canonical quantity','brokerage','EUR')", accountID, owners[0], accountIDs[0]); err != nil {
+			t.Fatal(err)
+		}
+		const capital = "1000000000000000000"
+		const price = "0.000000000000000001"
+		check(req("POST", "/api/v1/operations", Event{Kind: "deposit", AccountID: accountID, Amount: capital, At: "2020-01-01T00:00:00Z"}, 0, token()), 201)
+		check(req("POST", "/api/v1/operations", Event{Kind: "buy", AccountID: accountID, AssetID: assetIDs[0], Amount: capital, Price: price, At: "2020-01-02T00:00:00Z"}, 0, token()), 201)
+		response := req("GET", "/api/v1/summary", nil, 0, "")
+		check(response, 200)
+		var result Summary
+		if err := json.Unmarshal(response.Body.Bytes(), &result); err != nil {
+			t.Fatal(err)
+		}
+		quantity := ""
+		for _, position := range result.Positions {
+			if position.AccountID == accountID && position.AssetID == assetIDs[0] {
+				quantity = position.Quantity.Exact
+			}
+		}
+		if quantity != "1"+strings.Repeat("0", 36) {
+			t.Fatal("API did not return the expected canonical quantity")
+		}
+		sell := Event{Kind: "sell", AccountID: accountID, AssetID: assetIDs[0], Quantity: quantity, Price: price, At: "2020-01-03T00:00:00Z"}
+		check(req("POST", "/api/v1/operations", sell, 1, token()), 404)
+		sellKey := token()
+		check(req("POST", "/api/v1/operations", sell, 0, sellKey), 201)
+		check(req("POST", "/api/v1/operations", sell, 0, sellKey), 200)
+		response = req("GET", "/api/v1/summary", nil, 0, "")
+		check(response, 200)
+		if err := json.Unmarshal(response.Body.Bytes(), &result); err != nil {
+			t.Fatal(err)
+		}
+		cashFound := false
+		for _, cash := range result.Cash {
+			if cash.AccountID == accountID {
+				cashFound = true
+				if cash.Amount.Exact != capital {
+					t.Fatal("exact capital not restored")
+				}
+			}
+		}
+		if !cashFound {
+			t.Fatal("cash account missing")
+		}
+		response = req("GET", "/api/v1/financial-export", nil, 0, "")
+		check(response, 200)
+		var exported struct {
+			Operations []Operation `json:"operations"`
+		}
+		if err := json.Unmarshal(response.Body.Bytes(), &exported); err != nil {
+			t.Fatal(err)
+		}
+		count := 0
+		for _, operation := range exported.Operations {
+			if operation.AccountID == accountID {
+				count++
+				if operation.Kind == "sell" && operation.Quantity != quantity {
+					t.Fatal("stored quantity changed")
+				}
+			}
+		}
+		if count != 3 {
+			t.Fatal("sale retry duplicated an operation")
+		}
+	})
+
 }
