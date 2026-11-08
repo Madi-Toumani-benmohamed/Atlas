@@ -4,6 +4,7 @@ import { all, api, resourceError } from "./api";
 import type { Account, Asset, Portfolio } from "./api";
 import { ApiError } from "./auth";
 import { Finance } from "./Finance";
+import { AccountHoldings } from "./AccountHoldings";
 import type { Summary } from "./Finance";
 import type { User } from "./auth";
 
@@ -461,18 +462,7 @@ export function Workspace({ user, logout, feedback, expired }: Props) {
                             <summary>
                               Positions et résultats de ce compte
                             </summary>
-                            {catalogSummary.positions
-                              .filter((p) => p.account_id === a.id)
-                              .map((p) => (
-                                <p key={p.asset_id}>
-                                  {p.name} ·{" "}
-                                  {p.quantity.display.replace(".", ",")} unités
-                                  · {money(p.value_eur)} · Résultat latent :{" "}
-                                  {p.unrealized?.display.replace(".", ",") ||
-                                    "Non calculable"}{" "}
-                                  {p.currency}
-                                </p>
-                              ))}
+                            <AccountHoldings account={a} assets={assets} summary={catalogSummary} />
                           </details>
                         )}
                         <p>

@@ -574,3 +574,8 @@ a {
   border-top: 1px solid var(--border);
   overflow-wrap: anywhere;
 }
+
+.resource-list h5 {
+  font-size: 1rem;
+  margin: 0 0 12px;
+}
