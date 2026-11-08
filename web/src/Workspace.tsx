@@ -3,6 +3,7 @@ import type { FormEvent, ReactNode } from "react";
 import { all, api, resourceError } from "./api";
 import type { Account, Asset, Portfolio } from "./api";
 import { ApiError } from "./auth";
+import type { AssetChanges } from "./AssetDetails";
 import { AssetMarketDetails, AssetPositions } from "./AssetDetails";
 import type { QuoteObservation } from "./QuoteHistory";
 import { Finance } from "./Finance";
@@ -78,6 +79,7 @@ export function Workspace({ user, logout, feedback, expired }: Props) {
   const [catalogPrices,setCatalogPrices]=useState<QuoteObservation[]|null>(null);
   const [pricesLoading,setPricesLoading]=useState(false),[pricesError,setPricesError]=useState("");
   const [pricesRevision,setPricesRevision]=useState(0);
+  const [catalogChanges,setCatalogChanges]=useState<AssetChanges|null>(null),[pricesAsOf,setPricesAsOf]=useState<string|undefined>(undefined);
   const [kind, setKind] = useState("brokerage");
   const [assetKind, setAssetKind] = useState("stock");
   const title = useRef<HTMLHeadingElement>(null);
@@ -177,10 +179,10 @@ export function Workspace({ user, logout, feedback, expired }: Props) {
   useEffect(()=>{
     if(tab!=="assets") return;
     let active=true;
-    setCatalogPrices(null);setPricesError("");setPricesLoading(true);
-    api<{items:QuoteObservation[]}>("prices").then(result=>{
+    setCatalogPrices(null);setCatalogChanges(null);setPricesAsOf(undefined);setPricesError("");setPricesLoading(true);
+    api<{items:QuoteObservation[];as_of?:string;asset_market_changes_percent?:AssetChanges}>("prices").then(result=>{
       if(!Array.isArray(result.items)) throw Error("Invalid price response");
-      if(active)setCatalogPrices(result.items);
+      if(active){setCatalogPrices(result.items);setCatalogChanges(result.asset_market_changes_percent||null);setPricesAsOf(result.as_of);}
     }).catch(err=>{
       if(active){setPricesError(resourceError(err));if(err instanceof ApiError&&err.status===401)expired();}
     }).finally(()=>{if(active)setPricesLoading(false);});
@@ -610,7 +612,7 @@ export function Workspace({ user, logout, feedback, expired }: Props) {
                     {a.namespace} · {a.reference} · {a.currency}
                   </p>
                   {catalogSummary && <AssetPositions assetId={a.id} summary={catalogSummary}/>}
-                  {catalogPrices!==null && <AssetMarketDetails asset={a} observations={catalogPrices} asOf={catalogSummary?.at}/>}
+                  {catalogPrices!==null && <AssetMarketDetails asset={a} observations={catalogPrices} asOf={pricesAsOf||catalogSummary?.at} changes={catalogChanges?.[a.id]}/>}
                   <NameEditor
                     item={a}
                     disabled={busy}

@@ -10,7 +10,7 @@ Les positions du catalogue conservent les valeurs serveur par compte : quantité
 
 Une lecture privée `/prices` est partagée par toutes les fiches pendant la visite de l’onglet, indépendamment de la synthèse. Chargement, échec et rechargement sont distingués d’un historique réellement vide. Une panne de lecture des observations n’efface pas les positions disponibles ni la saisie en cours ; aucun prix zéro de substitution. Une réponse tardive après changement d’onglet n’est pas appliquée. Le bouton recharge les observations privées, pas un fournisseur externe.
 
-Aucune API, dépendance, migration, conversion, méthode de performance ou source de marché ajoutée. Les catégories d’actifs de test restent synthétiques et ne constituent pas une sélection de l’ETF pilote S&P 500. Les variations pour des actifs sans position et le détail complet P3.5 ne sont pas déclarés terminés.
+Aucune API, dépendance, migration, conversion, méthode de performance ou source de marché ajoutée. Les catégories d’actifs de test restent synthétiques et ne constituent pas une sélection de l’ETF pilote S&P 500. Les [variations pour des actifs sans position](P3-5-catalogue-changes.md) ont leur contrat et leur validation séparés. Le détail complet P3.5 n’est pas déclaré terminé.
 
 Retour arrière : rétablir le rendu de positions précédent et retirer la lecture/catalogue ; aucune donnée à convertir. Les panneaux ont des cibles de 44 px et un espacement, y compris repliés.
 

@@ -139,6 +139,8 @@ Contrat implémenté au 8 novembre 2026 : les séries privées utilisent `GET /a
 
 La synthèse ajoute `portfolio_allocations_eur` : catégories de valeurs connues, total éventuellement absent et qualité propre au portefeuille. Les portefeuilles propriétaires sans compte sont inclus dans le snapshot et valorisés à zéro. [Contrat de répartition](docs/validation/P3-4-portfolio-allocation.md).
 
+Les observations privées `/api/v1/prices` ajoutent leur instant `as_of` et les variations calendaires exactes par actif (`asset_market_changes_percent`), sans détention nécessaire ni conversion de devises. La même règle sert aux positions et au catalogue. [Contrat et limites](docs/validation/P3-5-catalogue-changes.md).
+
 ## 7. Flux structurants
 
 ### 7.1 Achat manuel

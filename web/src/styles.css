@@ -608,3 +608,12 @@ a {
   border-top: 1px solid var(--border);
   overflow-wrap: anywhere;
 }
+
+.asset-exact {
+  margin: 16px 0;
+}
+.asset-exact > summary {
+  min-height: 44px;
+  padding: 10px 0;
+  cursor: pointer;
+}
