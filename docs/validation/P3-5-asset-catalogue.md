@@ -21,3 +21,5 @@ Local : lint, TypeScript/Vite, tests npm et diff réussis. Prévisualisation à 
 `npm run test:asset-catalogue` dans Quality utilise API/PostgreSQL réels : achat au total donnant `1/3`, approximation marquée et fraction consultable ; sept cours d’un actif, même symbole d’un autre instrument exclu, taux FX exclu ; actif non détenu coté en USD avec 18 décimales, actif sans cours, ordre/historique progressif et dates antérieures. Douze scans axe et cibles tactiles contrôlés.
 
 Une réponse 503 est explicitement simulée uniquement pour la lecture des observations : positions et métadonnées restent sur l’API réelle. Le test vérifie message d’erreur, absence de faux cours vide, brouillon conservé et reprise. Il ne prétend pas provoquer une panne PostgreSQL. Parcours réel requis avant fusion ; aucun succès SQL local revendiqué.
+
+Validation finale : [Quality 42476634903](https://github.com/Madi-Toumani-benmohamed/Atlas/actions/runs/42476634903), commit `f1153c5f`, sept jobs réussis. Marqueur E2E des cours détenus/non détenus, fraction, reprise après erreur et douze scans axe confirmé ; PR #18 fusionnée.
