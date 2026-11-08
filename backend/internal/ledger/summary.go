@@ -106,7 +106,8 @@ func (s *Server) prices(w http.ResponseWriter, r *http.Request, owner string) {
 		dbFail(w, err)
 		return
 	}
-	reply(w, 200, map[string]any{"items": p})
+	at := time.Now().UTC()
+	reply(w, 200, map[string]any{"items": p, "as_of": at, "asset_market_changes_percent": changesForPrices(p, at)})
 }
 func (s *Server) data(ctx context.Context, owner string) (*Data, error) {
 	tx, err := s.DB.BeginTx(ctx, &sql.TxOptions{Isolation: sql.LevelRepeatableRead, ReadOnly: true})
@@ -350,14 +351,7 @@ func (d *Data) calculate(at time.Time) (Summary, error) {
 						view.Unrealized = valptr(sub(div(euros, fx), p.Cost), 2)
 					}
 				}
-				for period, oldAt := range map[string]time.Time{"day": at.AddDate(0, 0, -1), "week": at.AddDate(0, 0, -7), "month": monthBefore(at), "year": yearBefore(at)} {
-					old := d.quote(assetID, "", oldAt)
-					view.MarketChanges[period] = nil
-					if old != nil && old.Currency == quote.Currency && quote.referenceDay() == at.UTC().Format("2006-01-02") && old.referenceDay() == oldAt.UTC().Format("2006-01-02") {
-						previous, _ := number(old.Amount)
-						view.MarketChanges[period] = valptr(mul(sub(div(amount, previous), big.NewRat(1, 1)), big.NewRat(100, 1)), 2)
-					}
-				}
+				view.MarketChanges = d.marketChanges(assetID, quote, at)
 			}
 			out.Positions = append(out.Positions, view)
 		}

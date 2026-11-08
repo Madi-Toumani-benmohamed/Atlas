@@ -551,4 +551,34 @@ func TestJournalIntegration(t *testing.T) {
 		}
 	})
 
+	t.Run("price change metadata remains private and excludes FX", func(t *testing.T) {
+		for owner := 0; owner < 2; owner++ {
+			response := req("GET", "/api/v1/prices", nil, owner, "")
+			if response.Code != 200 || response.Header().Get("Cache-Control") != "no-store" {
+				t.Fatal("price metadata is not private")
+			}
+			var body struct {
+				At      time.Time                    `json:"as_of"`
+				Changes map[string]map[string]*Value `json:"asset_market_changes_percent"`
+			}
+			if err := json.Unmarshal(response.Body.Bytes(), &body); err != nil {
+				t.Fatal(err)
+			}
+			if body.At.IsZero() || !strings.HasSuffix(body.At.Format(time.RFC3339Nano), "Z") {
+				t.Fatal("missing UTC calculation time")
+			}
+			if _, exists := body.Changes[assetIDs[1-owner]]; exists {
+				t.Fatal("foreign asset metadata exposed")
+			}
+			if _, exists := body.Changes[""]; exists {
+				t.Fatal("FX treated as an asset")
+			}
+			if owner == 0 {
+				if _, exists := body.Changes[assetIDs[0]]; !exists {
+					t.Fatal("owned quote metadata missing")
+				}
+			}
+		}
+	})
+
 }

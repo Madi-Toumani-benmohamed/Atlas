@@ -72,3 +72,5 @@ Contrats : `docs/decisions/C-03-C-09.md`, `docs/decisions/financial-policy.md`. 
 `AssetDetails.tsx` dans Workspace : positions par compte avec approximation/exact séparés, cours et historique de catalogue sans obligation de détention. Lecture privée des observations distincte de la synthèse, chargement/échec/reprise propres ; E2E dédié avec deux instruments de même symbole, fraction et panne de lecture simulée.
 
 `SaleAvailability.tsx` : lecture de la quantité à la date saisie via la synthèse existante, reprise explicite de la valeur exacte sans écriture, périmètre date/compte/actif et réponses tardives contrôlés. E2E dédié : fraction vendue totalement, dates, délais/échecs de lecture et brouillon conservé.
+
+`price_changes.go` : comparaison exacte commune positions/catalogue, dates et devises compatibles ; métadonnées privées additionnelles de `/prices`, groupées par actif sans détention. `AssetDetails.tsx` expose pourcentages et fractions exactes ; tests purs, SQL et E2E dédiés.
