@@ -25,3 +25,5 @@ Local : tests Go de variations et scénarios financiers/valorisations/périmètr
 Tests numériques : `110/100−1` → 10 %, semaine 25 %, mois 100 %, année 150 % ; `4/3−1` → `100/3 %` exact ; `3/4−1` → −25 % ; cours inchangé → zéro connu ; devise différente, date absente, cours ancien ou aucune observation → indisponible ; FX/identités exclus. Fin de mois bissextile et défense contre un dénominateur zéro couverts.
 
 SQL/API : nouvelles métadonnées non cachables, instant UTC et absence d’actif étranger/FX. `npm run test:catalogue-changes` utilise API/PostgreSQL réels, aucune position : observations synthétiques alignées sur la date serveur, quatre périodes, fraction exacte et arrondie, devise incompatible, cours ancien, vrai zéro, même symbole sans mélange, autre utilisateur et douze scans axe/responsive. Parcours réel requis avant fusion ; aucun succès SQL local revendiqué.
+
+Preuve CI : [PR20, run 42479671449](https://github.com/Madi-Toumani-benmohamed/Atlas/actions/runs/42479671449), sept jobs réussis ; fusion main `05ae956c5eab7d9d2e13dd0bf97323fd92c6e14a`, [run main 42480383165](https://github.com/Madi-Toumani-benmohamed/Atlas/actions/runs/42480383165) réussi.

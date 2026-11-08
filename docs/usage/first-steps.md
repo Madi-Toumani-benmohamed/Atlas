@@ -28,6 +28,8 @@ Sur **Accueil**, distinguer le résultat personnel de la variation du cours du m
 
 Dans **Actifs**, « Cours et historique de cet actif » expose les observations même sans détention. Les variations jour/semaine/mois/année comparent des observations à dates couvertes dans la même devise, même sans position. Elles restent non calculables si la date ou la devise ne permet pas cette comparaison. La devise du cours reste celle de la source ; les positions par compte distinguent arrondi (`≈`) et valeurs exactes. Un échec de lecture des cours ne devient pas un prix zéro.
 
+Dans le graphique des observations de cours, choisir une devise puis une période explicite d’au plus 366 jours. Les points représentent uniquement les cours enregistrés, sans interpolation ni conversion ; les dates, prix exacts et sources sont également listés. Changer de période efface le tracé précédent. Ce graphique ne représente pas le rendement de votre position.
+
 Dans **Portefeuilles**, consulter la répartition des valeurs connues et l’évolution de valeur du portefeuille sélectionné. Cours/FX manquants ou anciens restent signalés. Les transferts et apports changent cette courbe : ce n’est pas un rendement personnel. Un portefeuille sans compte a une vraie valeur zéro ; un total inconnu reste non calculable.
 
 Choisir explicitement les bornes de l’historique, au plus 366 jours par demande. Les positions de chaque date sont utilisées ; un manque de données interrompt la série. L’historique ne réécrit pas le passé avec les seules positions d’aujourd’hui.

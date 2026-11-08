@@ -162,6 +162,7 @@ jobs:
           npm run test:asset-catalogue
           npm run test:sale-availability
           npm run test:catalogue-changes
+          npm run test:asset-price-chart
           npm run test:a11y
           npm run test:readiness
 
