@@ -68,3 +68,5 @@ Contrats : `docs/decisions/C-03-C-09.md`, `docs/decisions/financial-policy.md`. 
 `summary.go` / `timeline_test.go` : filtre optionnel propriétaire de série de valeur, après rejeu global et avec qualité limitée au portefeuille ; `PortfolioHistory.tsx` réutilise le graphique sans calcul financier client. Tests purs, API SQL et E2E transferts entre portefeuilles/absence de cotation/accès étrangers.
 
 `allocation.go` / `PortfolioAllocation.tsx` : répartition exacte par portefeuille à partir des valorisations dérivées, total absent et sous-total connu distincts, qualité limitée au périmètre ; snapshot incluant les portefeuilles propriétaires vides. Tests purs, SQL et E2E dédiés.
+
+`AssetDetails.tsx` dans Workspace : positions par compte avec approximation/exact séparés, cours et historique de catalogue sans obligation de détention. Lecture privée des observations distincte de la synthèse, chargement/échec/reprise propres ; E2E dédié avec deux instruments de même symbole, fraction et panne de lecture simulée.
