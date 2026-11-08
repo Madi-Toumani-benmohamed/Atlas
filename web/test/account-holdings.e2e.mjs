@@ -1,3 +1,4 @@
+import { syntheticSession } from "./synthetic-session.mjs";
 import { chromium } from "playwright";
 import AxeBuilder from "@axe-core/playwright";
 import assert from "node:assert/strict";
@@ -18,9 +19,7 @@ try {
     assert.equal(response.status(), status, `${path}: ${await response.text()}`);
     return response.json();
   }
-  const credentials = { email: `accounts-${randomUUID()}@example.test`, password: `Synthetic-${randomUUID()}` };
-  await post("auth/register", credentials, 202);
-  await post("auth/login", credentials, 200);
+  await syntheticSession(context, origin, "portfolio-fixture");
   const portfolio = await post("portfolios", { name: "Synthetic first portfolio" });
   const otherPortfolio = await post("portfolios", { name: "Synthetic other portfolio" });
   const account = await post(`portfolios/${portfolio.id}/accounts`, { name: "Synthetic EUR account", kind: "brokerage", currency: "EUR" });
