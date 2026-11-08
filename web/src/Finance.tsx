@@ -6,6 +6,7 @@ import { ApiError } from "./auth";
 import { MarketStatus } from "./MarketStatus";
 import { Reconciliation } from "./Reconciliation";
 import { HistoryChart } from "./HistoryChart";
+import { PurchasePreview } from "./PurchasePreview";
 import { QuoteHistory } from "./QuoteHistory";
 import type { HistoryPoint } from "./HistoryChart";
 
@@ -949,6 +950,9 @@ export function Finance({
                     Les ouvertures sont explicites. Aucun découvert, aucune
                     vente à découvert ni aucun swap automatique.
                   </p>
+                  {kind === "buy" && !voiding && (
+                    <PurchasePreview byTotal={byTotal} accounts={activeAccounts} assets={assets} />
+                  )}
                   <button className="primary full" disabled={busy}>
                     {editing
                       ? voiding

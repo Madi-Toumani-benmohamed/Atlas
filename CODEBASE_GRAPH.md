@@ -58,3 +58,5 @@ Contrats : `docs/decisions/C-03-C-09.md`, `docs/decisions/financial-policy.md`. 
 `web/test/keyboard.e2e.mjs` ajoute la recette API/DB réelle sans souris : onboarding, duplication avec confirmation et retrait rejeté/réparé, noms longs, focus visible, six scans axe et préférence de mouvement réduit. `docs/validation/P5-9-roadmap-audit.md` rapproche les lots historiques sans lever les gates MVP.
 
 `backend/internal/ledger/benchmark_test.go` mesure six profils synthétiques exacts (ordre chronologique/inversé, 201–10001 événements), sans SQL/API ni SLO. Le job backend conserve ces mesures ; protocole et valeurs locales dans `docs/validation/P5-9-replay-benchmarks.md`.
+
+`PurchasePreview.tsx` / `purchase-preview.ts` : récapitulatif d’achat non persistant, fractions BigInt selon les formules approuvées ; le backend reste seul validateur des liquidités et de l’historique. Tests numériques et E2E dédiés dans `web/test/`.
