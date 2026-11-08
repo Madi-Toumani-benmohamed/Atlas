@@ -64,3 +64,5 @@ Contrats : `docs/decisions/C-03-C-09.md`, `docs/decisions/financial-policy.md`. 
 `AccountHoldings.tsx` : détail dans Workspace des liquidités et positions par identifiant de compte, valeurs serveur et provenance des observations ; aucun recalcul financier client. `account-holdings.e2e.mjs` vérifie comptes multi-devises, actif commun, coût/FX inconnus et navigation entre portefeuilles.
 
 `AssetOperations.tsx` : historique source des opérations déjà chargées, filtré par actif et en ordre d’enregistrement ; statuts actif/remplacé, comptes et motifs conservés, sans recalcul ni requête supplémentaire. E2E dédié avec correction antidatée et deux comptes.
+
+`summary.go` / `timeline_test.go` : filtre optionnel propriétaire de série de valeur, après rejeu global et avec qualité limitée au portefeuille ; `PortfolioHistory.tsx` réutilise le graphique sans calcul financier client. Tests purs, API SQL et E2E transferts entre portefeuilles/absence de cotation/accès étrangers.

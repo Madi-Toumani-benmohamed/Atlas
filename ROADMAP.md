@@ -127,7 +127,7 @@ Preuves de rapprochement et écarts : [audit P5.9](docs/validation/P5-9-roadmap-
 - [x] **P3.1 — Shell responsive :** navigation Accueil, Portefeuilles, Actifs et Activité ; thèmes sombre/clair/auto ; accessibilité et états UI.
 - [x] **P3.2 — Onboarding :** création d'utilisateur, premier portefeuille, compte, première opération ou import ; empty states explicites.
 - [ ] **P3.3 — Dashboard global :** valeur, gain/perte, période, courbe, allocation, synthèse des portefeuilles, dix actifs, meilleures/pires performances.
-- [ ] **P3.4 — Portefeuilles/comptes :** liste, regroupements logiques, positions, liquidités, résultats et navigation. [Détail des comptes](docs/validation/P3-4-account-holdings.md) enrichi ; vues d’évolution/répartition propres au portefeuille encore ouvertes.
+- [ ] **P3.4 — Portefeuilles/comptes :** liste, regroupements logiques, positions, liquidités, résultats et navigation. [Détail des comptes](docs/validation/P3-4-account-holdings.md) et [évolution de la valeur par portefeuille](docs/validation/P3-4-portfolio-history.md) disponibles ; répartition et qualification complète encore ouvertes.
 - [ ] **P3.5 — Détail d'actif :** prix et variation du marché, quantité, PRU, valeur, P&L personnel, historique et dernière cotation. Tranches [observations de cours enregistrées](docs/validation/P3-5-quote-history.md) et [historique source des opérations](docs/validation/P3-5-asset-operations.md) disponibles ; détail complet encore ouvert.
 - [x] **P3.6 — Formulaires :** achat par montant total, vente avec disponibilité, dépôt/retrait, transfert, dividende, staking et frais ; retour de validation compréhensible.
 - [x] **P3.7 — Activité :** liste, filtres, détail, duplication ; correction traçable selon phase 4 si non disponible.

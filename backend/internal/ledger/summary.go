@@ -468,6 +468,50 @@ func (s *Server) summary(w http.ResponseWriter, r *http.Request, owner string) {
 	}
 	reply(w, 200, out)
 }
+
+type TimelinePoint struct {
+	At              time.Time `json:"at"`
+	Value           *Value    `json:"value_eur"`
+	Missing         bool      `json:"missing"`
+	OldObservations bool      `json:"uses_prior_date_observations"`
+}
+
+// Select a valuation after replaying all owned accounts, including cross-portfolio transfers.
+// This is not a performance calculation or a classification of perimeter flows.
+func timelinePoint(summary Summary, portfolio string) TimelinePoint {
+	point := TimelinePoint{At: summary.At, Value: summary.Total, Missing: summary.Missing, OldObservations: summary.OldObservations}
+	if portfolio == "" {
+		return point
+	}
+	point.Value = summary.PortfolioValues[portfolio]
+	if _, exists := summary.PortfolioValues[portfolio]; !exists {
+		// Ownership is checked by the caller. A portfolio with no accounts has zero recorded value.
+		point.Value = valptr(zero(), 2)
+	}
+	point.Missing = point.Value == nil
+	point.OldObservations = false
+	old := func(p *Price) bool { return p != nil && p.referenceDay() != summary.At.UTC().Format("2006-01-02") }
+	for _, cash := range summary.Cash {
+		if cash.PortfolioID == portfolio && old(cash.FX) {
+			point.OldObservations = true
+		}
+	}
+	for _, position := range summary.Positions {
+		if position.PortfolioID != portfolio {
+			continue
+		}
+		if old(position.Quote) {
+			point.OldObservations = true
+		}
+		for _, fx := range position.FX {
+			if old(fx) {
+				point.OldObservations = true
+			}
+		}
+	}
+	return point
+}
+
 func (s *Server) timeline(w http.ResponseWriter, r *http.Request, owner string) {
 	from, err := time.Parse(time.RFC3339Nano, r.URL.Query().Get("from"))
 	if err != nil {
@@ -479,27 +523,33 @@ func (s *Server) timeline(w http.ResponseWriter, r *http.Request, owner string) 
 		fail(w, 400, "range_must_fit_one_year")
 		return
 	}
+	portfolio := r.URL.Query().Get("portfolio_id")
+	if portfolio != "" {
+		var owned bool
+		if err := s.DB.QueryRowContext(r.Context(), "SELECT EXISTS(SELECT 1 FROM portfolios WHERE id=$1 AND user_id=$2)", portfolio, owner).Scan(&owned); err != nil {
+			dbFail(w, err)
+			return
+		}
+		if !owned {
+			fail(w, 404, "not_found")
+			return
+		}
+	}
 	d, err := s.data(r.Context(), owner)
 	if err != nil {
 		dbFail(w, err)
 		return
 	}
-	type Point struct {
-		At              time.Time `json:"at"`
-		Value           *Value    `json:"value_eur"`
-		Missing         bool      `json:"missing"`
-		OldObservations bool      `json:"uses_prior_date_observations"`
-	}
-	out := []Point{}
+	out := []TimelinePoint{}
 	for at := from; !at.After(to); at = at.Add(24 * time.Hour) {
 		summary, err := d.calculate(at)
 		if err != nil {
 			fail(w, 422, err.Error())
 			return
 		}
-		out = append(out, Point{At: at, Value: summary.Total, Missing: summary.Missing, OldObservations: summary.OldObservations})
+		out = append(out, timelinePoint(summary, portfolio))
 	}
-	reply(w, 200, map[string]any{"items": out, "resolution": "daily", "timezone": "UTC", "interpolation": false})
+	reply(w, 200, map[string]any{"items": out, "resolution": "daily", "timezone": "UTC", "interpolation": false, "portfolio_id": portfolio, "metric": "valuation"})
 }
 func (s *Server) export(w http.ResponseWriter, r *http.Request, owner string) {
 	tx, err := s.DB.BeginTx(r.Context(), &sql.TxOptions{Isolation: sql.LevelRepeatableRead, ReadOnly: true})
