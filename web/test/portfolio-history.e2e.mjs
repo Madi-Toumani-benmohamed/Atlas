@@ -45,6 +45,12 @@ try {
   };
   assert.deepEqual((await getSeries(portfolio.id)).map(p=>p.value_eur?.exact),["100","60","60","60"]);
   assert.ok((await getSeries(portfolio.id)).every(p=>!p.missing&&!p.uses_prior_date_observations));
+  const offsetResponse = await context.request.get(`${origin}/api/v1/history?${new URLSearchParams({portfolio_id:portfolio.id,from:"2020-01-01T14:00:00.123456789+02:00",to:"2020-01-04T14:00:00.123456789+02:00"})}`);
+  assert.equal(offsetResponse.status(),200);
+  const offsetHistory = await offsetResponse.json();
+  assert.equal(offsetHistory.timezone,"UTC");
+  assert.equal(offsetHistory.items[0].at,"2020-01-01T12:00:00.123456789Z");
+  assert.deepEqual(offsetHistory.items.map(p=>p.value_eur?.exact),["100","60","60","60"]);
   assert.deepEqual((await getSeries(target.id)).map(p=>p.value_eur?.exact),["0","40","40","40"]);
   assert.deepEqual((await getSeries(empty.id)).map(p=>p.value_eur?.exact),["0","0","0","0"]);
   const partialPoints = await getSeries(partial.id);

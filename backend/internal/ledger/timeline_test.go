@@ -79,3 +79,20 @@ func TestPortfolioTimelineQualityBelongsToSelectedScope(t *testing.T) {
 		})
 	}
 }
+
+func TestTimelinePointsUseDeclaredUTCTimezone(t *testing.T) {
+	at, err := time.Parse(time.RFC3339Nano, "2020-01-01T14:00:00.123456789+02:00")
+	if err != nil {
+		t.Fatal(err)
+	}
+	summary := Summary{At: at, PortfolioValues: map[string]*Value{"selected": valptr(big.NewRat(1, 1), 2)}}
+	for _, scope := range []string{"", "selected"} {
+		point := timelinePoint(summary, scope)
+		if !point.At.Equal(at) {
+			t.Fatal("normalization changed the valuation instant")
+		}
+		if got := point.At.Format(time.RFC3339Nano); got != "2020-01-01T12:00:00.123456789Z" {
+			t.Fatalf("timezone UTC advertised but point encoded as %s", got)
+		}
+	}
+}

@@ -25,3 +25,9 @@ Test API/PostgreSQL ajouté : portefeuille propriétaire vide et archivé access
 `npm run test:portfolio-history` dans Quality vérifie sur API/PostgreSQL réels : séries A `[100,60,60,60]`, B `[0,40,40,40]`, portefeuille vide `[0,0,0,0]`, portefeuille avec cotation manquante puis connue `[absent,absent,5,5]`, et global `[absent,absent,105,105]`. Vérifie accès croisés, cours ancien exclu du mauvais périmètre, navigation sans ancienne série, erreur de plage avec brouillon conservé et six scans axe/responsive. Parcours réel requis avant fusion.
 
 P3.4 reste ouvert pour les exigences de répartition/présentation encore non qualifiées ; cette série de valeur ne résout pas P2.8, Q-06, Q-08, ni la recette matérielle NFR-12.
+
+## Canonisation UTC — contrôle complémentaire
+
+Le test local d’une date `2020-01-01T14:00:00.123456789+02:00` a reproduit un écart de représentation : le champ annonçait UTC, mais conservait le décalage fourni. Les points sont maintenant encodés avec `At.UTC()` : `2020-01-01T12:00:00.123456789Z`. Même instant, mêmes valeurs et précision nanoseconde, pour global et portefeuille. Tests pur, SQL/API et E2E étendus à une requête décalée ; aucun nouvel arrondi, changement de pas ou de date économique. Les clients doivent comparer des instants et non exiger la reprise textuelle du fuseau envoyé.
+
+Lot principal validé dans [Quality 42468464967](https://github.com/Madi-Toumani-benmohamed/Atlas/actions/runs/42468464967), commit `342b6577`, sept jobs réussis, marqueur des séries/périmètres/accès et six scans axe confirmé ; PR #15 fusionnée. Le contrôle complémentaire UTC suit une validation séparée.

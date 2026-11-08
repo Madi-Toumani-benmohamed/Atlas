@@ -479,6 +479,20 @@ func TestJournalIntegration(t *testing.T) {
 		if _, err := db.Exec("INSERT INTO portfolios(id,user_id,name,archived) VALUES($1,$2,'Synthetic empty historical portfolio',true)", portfolio, owners[0]); err != nil {
 			t.Fatal(err)
 		}
+		offset := req("GET", "/api/v1/history?from=2020-01-01T14:00:00.123456789%2B02:00&to=2020-01-02T14:00:00.123456789%2B02:00&portfolio_id="+portfolio, nil, 0, "")
+		if offset.Code != 200 {
+			t.Fatalf("offset history: %d", offset.Code)
+		}
+		var offsetBody struct {
+			Items    []TimelinePoint `json:"items"`
+			Timezone string          `json:"timezone"`
+		}
+		if err := json.Unmarshal(offset.Body.Bytes(), &offsetBody); err != nil {
+			t.Fatal(err)
+		}
+		if offsetBody.Timezone != "UTC" || len(offsetBody.Items) != 2 || offsetBody.Items[0].At.Format(time.RFC3339Nano) != "2020-01-01T12:00:00.123456789Z" {
+			t.Fatal("history failed UTC/nanosecond contract")
+		}
 		path := "/api/v1/history?from=2020-01-01T12:00:00Z&to=2020-01-02T12:00:00Z&portfolio_id="
 		for _, tc := range []struct {
 			id          string

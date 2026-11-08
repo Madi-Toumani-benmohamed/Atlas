@@ -479,7 +479,7 @@ type TimelinePoint struct {
 // Select a valuation after replaying all owned accounts, including cross-portfolio transfers.
 // This is not a performance calculation or a classification of perimeter flows.
 func timelinePoint(summary Summary, portfolio string) TimelinePoint {
-	point := TimelinePoint{At: summary.At, Value: summary.Total, Missing: summary.Missing, OldObservations: summary.OldObservations}
+	point := TimelinePoint{At: summary.At.UTC(), Value: summary.Total, Missing: summary.Missing, OldObservations: summary.OldObservations}
 	if portfolio == "" {
 		return point
 	}
