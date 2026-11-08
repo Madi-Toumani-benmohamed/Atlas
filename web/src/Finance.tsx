@@ -6,6 +6,7 @@ import { ApiError } from "./auth";
 import { MarketStatus } from "./MarketStatus";
 import { Reconciliation } from "./Reconciliation";
 import { HistoryChart } from "./HistoryChart";
+import { SaleAvailability } from "./SaleAvailability";
 import { AssetOperations } from "./AssetOperations";
 import { PurchasePreview } from "./PurchasePreview";
 import { QuoteHistory } from "./QuoteHistory";
@@ -962,6 +963,7 @@ export function Finance({
                   {kind === "buy" && !voiding && (
                     <PurchasePreview byTotal={byTotal} accounts={activeAccounts} assets={assets} />
                   )}
+                  {kind === "sell" && !editing && <SaleAvailability disabled={busy} expired={expired}/>}
                   <button className="primary full" disabled={busy}>
                     {editing
                       ? voiding

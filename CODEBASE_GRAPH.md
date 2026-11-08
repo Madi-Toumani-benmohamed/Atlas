@@ -70,3 +70,5 @@ Contrats : `docs/decisions/C-03-C-09.md`, `docs/decisions/financial-policy.md`. 
 `allocation.go` / `PortfolioAllocation.tsx` : répartition exacte par portefeuille à partir des valorisations dérivées, total absent et sous-total connu distincts, qualité limitée au périmètre ; snapshot incluant les portefeuilles propriétaires vides. Tests purs, SQL et E2E dédiés.
 
 `AssetDetails.tsx` dans Workspace : positions par compte avec approximation/exact séparés, cours et historique de catalogue sans obligation de détention. Lecture privée des observations distincte de la synthèse, chargement/échec/reprise propres ; E2E dédié avec deux instruments de même symbole, fraction et panne de lecture simulée.
+
+`SaleAvailability.tsx` : lecture de la quantité à la date saisie via la synthèse existante, reprise explicite de la valeur exacte sans écriture, périmètre date/compte/actif et réponses tardives contrôlés. E2E dédié : fraction vendue totalement, dates, délais/échecs de lecture et brouillon conservé.

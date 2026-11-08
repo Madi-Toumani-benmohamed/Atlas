@@ -14,6 +14,8 @@ Dans **Actifs**, déclarer les instruments nécessaires. Pour une action/ETF, re
 
 Dans **Activité**, enregistrer le dépôt réellement reçu ou une ouverture déclarée avant un achat si nécessaire. Ne pas inventer un dépôt pour forcer l’acceptation d’un historique. Un achat peut utiliser un montant total frais inclus et un prix ; Atlas calcule la quantité exactement. Les ventes exigent la quantité détenue à leur date, même si une opération plus récente donne aujourd’hui un solde suffisant.
 
+Avant confirmation d’un achat, le récapitulatif montre quantité, prix, frais et total dans la devise du compte. Pour une nouvelle vente, « Vérifier la quantité à cette date » lit les titres détenus après les opérations déjà enregistrées à cet instant. « Utiliser la quantité exacte » reprend la fraction du serveur dans le champ, sans enregistrer de vente. Ce contrôle ne réserve pas les titres ; la confirmation peut encore refuser un historique incohérent.
+
 Une ouverture explicite permet de reprendre un historique partiel. Elle ne transforme pas cette reprise en historique complet : résultat global ou coût de position peuvent rester non calculables. Les [règles financières](../decisions/financial-policy.md) sont économiques, pas fiscales.
 
 Pour un transfert entre vos comptes, choisir la contrepartie au lieu de créer un dépôt externe qui doublerait les apports. Un transfert entre devises nécessite son taux effectif et sa provenance. Les récompenses simples de staking exigent un cours daté à réception ; ce cours forme revenu et coût d’acquisition selon le contrat approuvé.
@@ -23,6 +25,10 @@ Pour un transfert entre vos comptes, choisir la contrepartie au lieu de créer u
 Les cours d’actifs sont actuellement manuels, positifs, datés et sourcés. Les taux de référence BCE peuvent être récupérés à la demande dans Activité ; ils ne remplacent pas les taux effectivement exécutés pour une transaction. Le panneau « État de la récupération BCE » lit le diagnostic sans contacter le fournisseur ; une panne ne supprime pas les taux déjà enregistrés.
 
 Sur **Accueil**, distinguer le résultat personnel de la variation du cours du marché. Un apport n’est pas un profit ; un transfert interne n’est pas un nouvel apport. Une absence de cours ou de FX produit une valeur incomplète, pas un zéro fictif. Les dates et sources anciennes restent visibles.
+
+Dans **Actifs**, « Cours et historique de cet actif » expose les observations même sans détention. La devise du cours reste celle de la source ; les positions par compte distinguent arrondi (`≈`) et valeurs exactes. Un échec de lecture des cours ne devient pas un prix zéro.
+
+Dans **Portefeuilles**, consulter la répartition des valeurs connues et l’évolution de valeur du portefeuille sélectionné. Cours/FX manquants ou anciens restent signalés. Les transferts et apports changent cette courbe : ce n’est pas un rendement personnel. Un portefeuille sans compte a une vraie valeur zéro ; un total inconnu reste non calculable.
 
 Choisir explicitement les bornes de l’historique, au plus 366 jours par demande. Les positions de chaque date sont utilisées ; un manque de données interrompt la série. L’historique ne réécrit pas le passé avec les seules positions d’aujourd’hui.
 
