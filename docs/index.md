@@ -31,7 +31,7 @@ Les [preuves de validation](validation/C-03-C-09.md) et la [roadmap](../ROADMAP.
 
 ## Recette et langage
 
-[Glossaire métier](decisions/glossary.md), [audit de roadmap P5.9](validation/P5-9-roadmap-audit.md) et [matrice des quinze critères MVP](validation/MVP-readiness.md), [profils de rejeu](validation/P5-9-replay-benchmarks.md), [quantités exactes réutilisables](validation/P5-9-canonical-quantities.md), [historique des cours d’un actif](validation/P3-5-quote-history.md). Les phases futures restent hors du périmètre automatique.
+[Glossaire métier](decisions/glossary.md), [audit de roadmap P5.9](validation/P5-9-roadmap-audit.md) et [matrice des quinze critères MVP](validation/MVP-readiness.md), [profils de rejeu](validation/P5-9-replay-benchmarks.md), [quantités exactes réutilisables](validation/P5-9-canonical-quantities.md), [historique des cours d’un actif](validation/P3-5-quote-history.md), [récapitulatif d’achat](validation/P3-6-purchase-preview.md). Les phases futures restent hors du périmètre automatique.
 
 ## Navigation technique
 

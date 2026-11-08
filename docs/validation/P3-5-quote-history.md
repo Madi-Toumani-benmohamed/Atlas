@@ -22,4 +22,4 @@ Local : `npm run lint`, `npm run build` (TypeScript et Vite), `npm test` réussi
 - position sans cours et absence explicite d’historique ;
 - noms de source longs, absence de débordement, six analyses axe (1440/390/320 px, sombre/clair) et absence d’erreur JavaScript.
 
-Ce parcours réel n’est pas revendiqué comme exécuté localement. Son résultat est suivi dans la PR et la CI Quality ; il est requis avant fusion. Les contrôles automatiques ne remplacent pas la recette humaine avec lecteur d’écran. Le fournisseur d’actifs automatique et l’ETF S&P 500 exact restent à qualifier séparément.
+Ce parcours réel n’est pas revendiqué comme exécuté localement. Les sept jobs [Quality 42397153107](https://github.com/Madi-Toumani-benmohamed/Atlas/actions/runs/42397153107) ont réussi sur `b234f5db`, dont le marqueur du parcours réel et ses six scans axe. PR #11 fusionnée ; CI de main 42397379794 réussie également. Les contrôles automatiques ne remplacent pas la recette humaine avec lecteur d’écran. Le fournisseur d’actifs automatique et l’ETF S&P 500 exact restent à qualifier séparément.

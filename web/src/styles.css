@@ -567,3 +567,10 @@ a {
 .session-actions fieldset {
   margin: 0;
 }
+
+.purchase-preview {
+  margin: 24px 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  overflow-wrap: anywhere;
+}
