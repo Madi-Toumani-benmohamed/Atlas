@@ -60,3 +60,5 @@ Contrats : `docs/decisions/C-03-C-09.md`, `docs/decisions/financial-policy.md`. 
 `backend/internal/ledger/benchmark_test.go` mesure six profils synthétiques exacts (ordre chronologique/inversé, 201–10001 événements), sans SQL/API ni SLO. Le job backend conserve ces mesures ; protocole et valeurs locales dans `docs/validation/P5-9-replay-benchmarks.md`.
 
 `PurchasePreview.tsx` / `purchase-preview.ts` : récapitulatif d’achat non persistant, fractions BigInt selon les formules approuvées ; le backend reste seul validateur des liquidités et de l’historique. Tests numériques et E2E dédiés dans `web/test/`.
+
+`AccountHoldings.tsx` : détail dans Workspace des liquidités et positions par identifiant de compte, valeurs serveur et provenance des observations ; aucun recalcul financier client. `account-holdings.e2e.mjs` vérifie comptes multi-devises, actif commun, coût/FX inconnus et navigation entre portefeuilles.
