@@ -1,3 +1,4 @@
+import { AssetPriceHistory } from "./AssetPriceHistory";
 import type { Asset } from "./api";
 import type { Summary } from "./Finance";
 import { QuoteHistory } from "./QuoteHistory";
@@ -48,6 +49,7 @@ export function AssetMarketDetails({ asset, observations, asOf, changes }: {asse
     </dl></details>}
    </section>:<p>Variations non disponibles dans cette réponse.</p>}
   </>}
+  <AssetPriceHistory key={`chart-${asset.id}`} assetId={asset.id} assetName={asset.name} observations={observations} asOf={asOf}/>
   <QuoteHistory key={asset.id} assetId={asset.id} observations={observations}/>
  </details>;
 }

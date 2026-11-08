@@ -30,7 +30,8 @@
   "test:portfolio-allocation": "node test/portfolio-allocation.e2e.mjs",
   "test:asset-catalogue": "node test/asset-catalogue.e2e.mjs",
   "test:sale-availability": "node test/sale-availability.e2e.mjs",
-  "test:catalogue-changes": "node test/catalogue-changes.e2e.mjs"
+  "test:catalogue-changes": "node test/catalogue-changes.e2e.mjs",
+  "test:asset-price-chart": "node test/asset-price-chart.e2e.mjs"
  },
  "dependencies": {
   "react": "19.3.1",

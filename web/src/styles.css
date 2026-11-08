@@ -617,3 +617,25 @@ a {
   padding: 10px 0;
   cursor: pointer;
 }
+
+.asset-chart {
+  margin: 16px 0;
+}
+.asset-chart > summary {
+  min-height: 44px;
+  padding: 10px 0;
+  cursor: pointer;
+}
+.asset-chart form {
+  display: grid;
+  gap: 12px;
+}
+.asset-chart figcaption {
+  overflow-wrap: anywhere;
+}
+
+.asset-price-point {
+  stroke: var(--accent);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
