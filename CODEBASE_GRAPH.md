@@ -66,3 +66,5 @@ Contrats : `docs/decisions/C-03-C-09.md`, `docs/decisions/financial-policy.md`. 
 `AssetOperations.tsx` : historique source des opérations déjà chargées, filtré par actif et en ordre d’enregistrement ; statuts actif/remplacé, comptes et motifs conservés, sans recalcul ni requête supplémentaire. E2E dédié avec correction antidatée et deux comptes.
 
 `summary.go` / `timeline_test.go` : filtre optionnel propriétaire de série de valeur, après rejeu global et avec qualité limitée au portefeuille ; `PortfolioHistory.tsx` réutilise le graphique sans calcul financier client. Tests purs, API SQL et E2E transferts entre portefeuilles/absence de cotation/accès étrangers.
+
+`allocation.go` / `PortfolioAllocation.tsx` : répartition exacte par portefeuille à partir des valorisations dérivées, total absent et sous-total connu distincts, qualité limitée au périmètre ; snapshot incluant les portefeuilles propriétaires vides. Tests purs, SQL et E2E dédiés.

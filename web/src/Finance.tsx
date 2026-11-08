@@ -64,6 +64,13 @@ export type Summary = {
   operation_count: number;
   uses_prior_date_observations: boolean;
   portfolio_values_eur: Record<string, Value | null>;
+  portfolio_allocations_eur?: Record<string, {
+    total_value_eur: Value | null;
+    known_value_eur: Value;
+    missing_valuation: boolean;
+    uses_prior_date_observations: boolean;
+    by_kind_eur: Record<string, Value>;
+  }>;
   account_values_eur: Record<string, Value | null>;
   daily_market_movers: Position[];
 };

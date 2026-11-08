@@ -579,3 +579,12 @@ a {
   font-size: 1rem;
   margin: 0 0 12px;
 }
+
+.portfolio-disclosure {
+  margin: 16px 0;
+}
+.portfolio-disclosure > summary {
+  min-height: 44px;
+  padding: 10px 0;
+  cursor: pointer;
+}
