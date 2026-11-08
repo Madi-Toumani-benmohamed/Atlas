@@ -27,7 +27,8 @@
   "test:account-holdings": "node test/account-holdings.e2e.mjs",
   "test:asset-operations": "node test/asset-operations.e2e.mjs",
   "test:portfolio-history": "node test/portfolio-history.e2e.mjs",
-  "test:portfolio-allocation": "node test/portfolio-allocation.e2e.mjs"
+  "test:portfolio-allocation": "node test/portfolio-allocation.e2e.mjs",
+  "test:asset-catalogue": "node test/asset-catalogue.e2e.mjs"
  },
  "dependencies": {
   "react": "19.3.1",

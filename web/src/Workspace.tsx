@@ -3,6 +3,8 @@ import type { FormEvent, ReactNode } from "react";
 import { all, api, resourceError } from "./api";
 import type { Account, Asset, Portfolio } from "./api";
 import { ApiError } from "./auth";
+import { AssetMarketDetails, AssetPositions } from "./AssetDetails";
+import type { QuoteObservation } from "./QuoteHistory";
 import { Finance } from "./Finance";
 import { PortfolioAllocation } from "./PortfolioAllocation";
 import { PortfolioHistory } from "./PortfolioHistory";
@@ -73,6 +75,9 @@ export function Workspace({ user, logout, feedback, expired }: Props) {
   const [notice, setNotice] = useState("");
   const [archived, setArchived] = useState(false);
   const [catalogSummary, setCatalogSummary] = useState<Summary | null>(null);
+  const [catalogPrices,setCatalogPrices]=useState<QuoteObservation[]|null>(null);
+  const [pricesLoading,setPricesLoading]=useState(false),[pricesError,setPricesError]=useState("");
+  const [pricesRevision,setPricesRevision]=useState(0);
   const [kind, setKind] = useState("brokerage");
   const [assetKind, setAssetKind] = useState("stock");
   const title = useRef<HTMLHeadingElement>(null);
@@ -169,6 +174,18 @@ export function Workspace({ user, logout, feedback, expired }: Props) {
       active = false;
     };
   }, [tab, portfolios, assets, accounts]);
+  useEffect(()=>{
+    if(tab!=="assets") return;
+    let active=true;
+    setCatalogPrices(null);setPricesError("");setPricesLoading(true);
+    api<{items:QuoteObservation[]}>("prices").then(result=>{
+      if(!Array.isArray(result.items)) throw Error("Invalid price response");
+      if(active)setCatalogPrices(result.items);
+    }).catch(err=>{
+      if(active){setPricesError(resourceError(err));if(err instanceof ApiError&&err.status===401)expired();}
+    }).finally(()=>{if(active)setPricesLoading(false);});
+    return()=>{active=false;};
+  },[tab,pricesRevision]);
   function money(
     v:
       | { display: string; exact: string; approximate: boolean }
@@ -506,6 +523,9 @@ export function Workspace({ user, logout, feedback, expired }: Props) {
       ) : (
         <section className="panel" aria-labelledby="assets-title">
           <h2 id="assets-title">Mon référentiel d’actifs</h2>
+          <button className="secondary" disabled={pricesLoading} onClick={()=>setPricesRevision(n=>n+1)}>Recharger les observations enregistrées</button>
+          {pricesLoading&&<p role="status">Chargement des cours enregistrés…</p>}
+          {pricesError&&<p role="alert">{pricesError}</p>}
           <p>
             Les identifiants sont saisis manuellement. Aucun fournisseur de
             cours ni aucune détention ne sont déduits du ticker.
@@ -589,31 +609,8 @@ export function Workspace({ user, logout, feedback, expired }: Props) {
                   <p>
                     {a.namespace} · {a.reference} · {a.currency}
                   </p>
-                  {catalogSummary && (
-                    <details>
-                      <summary>Détail des positions et résultats</summary>
-                      {catalogSummary.positions
-                        .filter((p) => p.asset_id === a.id)
-                        .map((p) => (
-                          <p key={p.account_id}>
-                            {catalogSummary.cash.find(
-                              (c) => c.account_id === p.account_id,
-                            )?.name || p.account_id}{" "}
-                            · Quantité {p.quantity.display.replace(".", ",")} ·
-                            Valeur {money(p.value_eur)} · PRU{" "}
-                            {p.average_cost?.display.replace(".", ",") ||
-                              "Non calculable"}{" "}
-                            {p.currency} · Latent{" "}
-                            {p.unrealized?.display.replace(".", ",") ||
-                              "Non calculable"}{" "}
-                            {p.currency} · Réalisé{" "}
-                            {p.realized?.display.replace(".", ",") ||
-                              "Non calculable"}{" "}
-                            {p.currency}
-                          </p>
-                        ))}
-                    </details>
-                  )}
+                  {catalogSummary && <AssetPositions assetId={a.id} summary={catalogSummary}/>}
+                  {catalogPrices!==null && <AssetMarketDetails asset={a} observations={catalogPrices} asOf={catalogSummary?.at}/>}
                   <NameEditor
                     item={a}
                     disabled={busy}

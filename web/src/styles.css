@@ -588,3 +588,16 @@ a {
   padding: 10px 0;
   cursor: pointer;
 }
+
+.asset-disclosure {
+  margin: 16px 0;
+}
+.asset-disclosure > summary {
+  min-height: 44px;
+  padding: 10px 0;
+  cursor: pointer;
+}
+.asset-disclosure dd {
+  margin: 4px 0 16px;
+  overflow-wrap: anywhere;
+}

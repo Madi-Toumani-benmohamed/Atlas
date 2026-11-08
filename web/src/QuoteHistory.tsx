@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-type Observation = {
+export type QuoteObservation = {
   id: string;
   asset_id?: string;
   value: string;
@@ -13,7 +13,7 @@ type Observation = {
 // Reverse a copy to preserve that order, including equal-date observations.
 export function QuoteHistory({ assetId, observations }: {
   assetId: string;
-  observations: Observation[];
+  observations: QuoteObservation[];
 }) {
   const [limit, setLimit] = useState(5);
   const history = observations.filter(p => p.asset_id === assetId).reverse();
