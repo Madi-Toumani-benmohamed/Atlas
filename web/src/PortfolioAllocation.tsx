@@ -2,7 +2,7 @@ import type { Summary } from "./Finance";
 const labels: Record<string,string> = {stock:"Actions",etf:"ETF",crypto:"Crypto",stablecoin:"Stablecoins",savings:"Épargne",cash:"Liquidités"};
 export function PortfolioAllocation({ portfolioId, summary }: { portfolioId: string; summary: Summary }) {
   const allocation = summary.portfolio_allocations_eur?.[portfolioId];
-  return <details>
+  return <details className="portfolio-disclosure">
     <summary>Répartition de ce portefeuille</summary>
     {!allocation ? <p>Aucune répartition disponible dans cette synthèse.</p> : <section aria-label="Répartition du portefeuille sélectionné">
       <p>Valeurs en EUR au <time dateTime={summary.at}>{new Date(summary.at).toLocaleString("fr-FR")}</time>.</p>

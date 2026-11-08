@@ -62,8 +62,16 @@ try {
   for(const width of [1440,390,320]){
    await page.setViewportSize({width,height:900});
    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
-   const result=await new AxeBuilder({page}).withTags(["wcag2a","wcag2aa","wcag21a","wcag21aa","wcag22aa"]).analyze();
-   assert.deepEqual(result.violations.map(v=>({id:v.id,targets:v.nodes.map(n=>n.target)})),[],`${theme}/${width}`);
+   const allocationSummary=page.getByText("Répartition de ce portefeuille",{exact:true});
+   await allocationSummary.click();
+   for(const disclosure of await page.locator(".portfolio-disclosure > summary").all()) {
+    const size=await disclosure.boundingBox(); assert.ok(size.height>=44,"Disclosure target must remain comfortable on touch screens");
+   }
+   for(const state of ["closed","open"]) {
+    if(state==="open") await allocationSummary.click();
+    const result=await new AxeBuilder({page}).withTags(["wcag2a","wcag2aa","wcag21a","wcag21aa","wcag22aa"]).analyze();
+    assert.deepEqual(result.violations.map(v=>({id:v.id,targets:v.nodes.map(n=>n.target)})),[],`${theme}/${width}/${state}`);
+   }
   }
  }
  await price(unknown.id,"EUR","7");await price(etf.id,"EUR","8");await price("","USD","0.5");
@@ -82,5 +90,5 @@ try {
  const foreign=await stranger.request.get(`${origin}/api/v1/summary`);assert.equal(foreign.status(),200);
  assert.deepEqual((await foreign.json()).portfolio_allocations_eur,{});await stranger.close();
  assert.deepEqual(errors,[]);await context.close();
- console.log("PASS: exact portfolio allocation, brokerage/savings separation, missing quote and FX stay partial, scoped categories, known/empty zero, cross-user isolation and 6 axe/responsive scans. Real PostgreSQL.");
+ console.log("PASS: exact portfolio allocation, brokerage/savings separation, missing quote and FX stay partial, scoped categories, known/empty zero, cross-user isolation and 12 open/closed axe/responsive scans. Real PostgreSQL.");
 } finally {await browser.close();}

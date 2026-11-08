@@ -28,7 +28,7 @@ export function PortfolioHistory({ portfolioId, expired }: { portfolioId: string
       if (mounted.current && err instanceof ApiError && err.status === 401) expired();
     } finally { if (mounted.current) setBusy(false); }
   }
-  return <details>
+  return <details className="portfolio-disclosure">
     <summary>Évolution de la valeur du portefeuille</summary>
     <p>Valeur en EUR aux dates demandées, flux et transferts inclus. Une hausse de valeur ne représente pas nécessairement un gain. Ce graphique ne mesure pas un rendement personnel.</p>
     <p>Choisissez une période d’au plus 366 jours. Saisie dans le fuseau du navigateur, points quotidiens en UTC. Les données manquantes interrompent le tracé.</p>

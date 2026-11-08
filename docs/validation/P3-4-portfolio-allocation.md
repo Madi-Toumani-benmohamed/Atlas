@@ -20,8 +20,10 @@ Champ JSON additif, sans nouveau fournisseur/dépendance ni modification de l’
 
 ## Vérifications
 
-Local : tests Go d’allocation et scénarios financiers sélectionnés, vet, gofmt, lint, TypeScript/Vite, tests npm et liens contrôlés. Navigateur à API simulée : allocation partielle et datée, six analyses axe et absence de débordement à 1440/390/320 px, sombre/clair ; capture mobile inspectée. Aucune exécution SQL locale revendiquée.
+Local : tests Go d’allocation et scénarios financiers sélectionnés, vet, gofmt, lint, TypeScript/Vite, tests npm et liens contrôlés. Navigateur à API simulée : allocation partielle et datée, douze analyses axe (panneaux ouverts et repliés) et absence de débordement à 1440/390/320 px, sombre/clair ; capture mobile inspectée. Aucune exécution SQL locale revendiquée.
 
 Tests purs : cash 79 + actions 24 + épargne créditée 52 = 155 ; cotation inconnue sans suppression des 155 connus ; FX USD et ETF datés complètent le second portefeuille à 13 ; transfert EUR 20 vers USD 40 au taux explicite 2 déplace la répartition sans double compte ; ETF clôturé exclu ; qualité limitée au périmètre ; portefeuille vide zéro ; fractions `1/3 + 1/3` sommées avant arrondi.
 
-SQL/API : allocation du seul propriétaire et cohérence avec les totaux complets/absents. `npm run test:portfolio-allocation` utilise API/PostgreSQL réels : épargne/cash distincts, cotation et FX manquants, sous-total partiel, résolution datée, portefeuille vide zéro sans catégorie, autre utilisateur sans accès aux allocations et six analyses axe/responsive. Ce parcours doit réussir dans Quality avant fusion.
+SQL/API : allocation du seul propriétaire et cohérence avec les totaux complets/absents. `npm run test:portfolio-allocation` utilise API/PostgreSQL réels : épargne/cash distincts, cotation et FX manquants, sous-total partiel, résolution datée, portefeuille vide zéro sans catégorie, autre utilisateur sans accès aux allocations et douze analyses axe (panneaux ouverts et repliés)/responsive. Ce parcours doit réussir dans Quality avant fusion.
+
+Premier run Quality 42475514348 : six jobs réussis ; le parcours existant a détecté des cibles trop proches lorsque répartition et historique étaient tous deux repliés. Le correctif donne aux deux résumés une cible de 44 px et un espacement de 16 px, sans exclusion axe. Contrôle local des deux états sur trois largeurs/deux thèmes : douze scans sans violation. Nouvelle CI requise avant fusion.
