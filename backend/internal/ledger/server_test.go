@@ -474,4 +474,39 @@ func TestJournalIntegration(t *testing.T) {
 		}
 	})
 
+	t.Run("portfolio history checks owner including empty archived portfolios", func(t *testing.T) {
+		portfolio := token()
+		if _, err := db.Exec("INSERT INTO portfolios(id,user_id,name,archived) VALUES($1,$2,'Synthetic empty historical portfolio',true)", portfolio, owners[0]); err != nil {
+			t.Fatal(err)
+		}
+		path := "/api/v1/history?from=2020-01-01T12:00:00Z&to=2020-01-02T12:00:00Z&portfolio_id="
+		for _, tc := range []struct {
+			id          string
+			who, status int
+		}{{portfolio, 0, 200}, {portfolio, 1, 404}, {portfolio, -1, 401}, {token(), 0, 404}} {
+			response := req("GET", path+tc.id, nil, tc.who, "")
+			if response.Code != tc.status || response.Header().Get("Cache-Control") != "no-store" {
+				t.Fatalf("private scoped history: %d", response.Code)
+			}
+			if tc.status == 200 {
+				var body struct {
+					Items     []TimelinePoint `json:"items"`
+					Portfolio string          `json:"portfolio_id"`
+					Metric    string          `json:"metric"`
+				}
+				if err := json.Unmarshal(response.Body.Bytes(), &body); err != nil {
+					t.Fatal(err)
+				}
+				if body.Portfolio != portfolio || body.Metric != "valuation" || len(body.Items) != 2 {
+					t.Fatal("incorrect scoped history metadata")
+				}
+				for _, p := range body.Items {
+					if p.Value == nil || p.Value.Exact != "0" || p.Missing || p.OldObservations {
+						t.Fatal("empty owned portfolio was contaminated by other accounts")
+					}
+				}
+			}
+		}
+	})
+
 }

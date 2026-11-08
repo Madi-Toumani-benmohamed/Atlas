@@ -4,6 +4,7 @@ import { all, api, resourceError } from "./api";
 import type { Account, Asset, Portfolio } from "./api";
 import { ApiError } from "./auth";
 import { Finance } from "./Finance";
+import { PortfolioHistory } from "./PortfolioHistory";
 import { AccountHoldings } from "./AccountHoldings";
 import type { Summary } from "./Finance";
 import type { User } from "./auth";
@@ -361,6 +362,7 @@ export function Workspace({ user, logout, feedback, expired }: Props) {
               <p>Sélectionnez un portefeuille pour gérer ses comptes.</p>
             ) : (
               <>
+                <PortfolioHistory key={current.id} portfolioId={current.id} expired={expired} />
                 {current.archived ? (
                   <p>
                     Ce portefeuille est archivé. Restaurez-le pour ajouter un

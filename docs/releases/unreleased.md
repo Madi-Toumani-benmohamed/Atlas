@@ -8,6 +8,7 @@ P5.10. Ces notes décrivent le code actuel et les changements candidats à la pr
 - Journal exact, ouvertures déclarées, cash, achats/ventes/frais/transferts, intérêts crédités et staking simple selon le contrat approuvé ; corrections auditées.
 - Valorisation manuelle datée, FX BCE, synthèse et historique sans valeur fictive, consolidation d’instruments entre comptes.
 - Récapitulatif exact d’achat avant confirmation ; détail des liquidités/coûts/résultats par compte ; historique des cours et des opérations d’un actif avec audit conservé.
+- Série de valeur historique par portefeuille, période explicite et transferts inclus ; aucune assimilation de cette variation à un rendement.
 - CSV nommés avec aperçu/contrôle de doublons et rapport ; rapprochement readonly ; export JSON et lecteur externe indépendant.
 - Image Linux AMD64/ARM64, HTTPS optionnel, sondes de vitalité/readiness et diagnostic BCE ; sources privées non envoyées au fournisseur.
 

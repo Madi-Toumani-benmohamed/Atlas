@@ -135,6 +135,8 @@ Les ressources API ne doivent être créées que dans des lots approuvés. Conve
 
 Les structures exactes, codes d'erreur, pagination, dates et précision doivent être établis dans un contrat OpenAPI pendant la phase adéquate. Toutes les écritures critiques répondent seulement après confirmation serveur. Pas de faux succès frontend.
 
+Contrat implémenté au 8 novembre 2026 : les séries privées utilisent `GET /api/v1/history?from=…&to=…`, avec filtre propriétaire facultatif `portfolio_id`. Le rejeu reste global au propriétaire puis la valeur datée du portefeuille est sélectionnée ; aucune performance de périmètre n’est déduite des transferts. [Contrat et preuves](docs/validation/P3-4-portfolio-history.md). La table candidate ci-dessus reste une cible indicative.
+
 ## 7. Flux structurants
 
 ### 7.1 Achat manuel

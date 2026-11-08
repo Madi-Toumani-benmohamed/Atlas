@@ -157,6 +157,7 @@ jobs:
           npm run test:purchase-preview
           npm run test:account-holdings
           npm run test:asset-operations
+          npm run test:portfolio-history
           npm run test:a11y
           npm run test:readiness
 
