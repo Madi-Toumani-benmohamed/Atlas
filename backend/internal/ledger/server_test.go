@@ -523,4 +523,32 @@ func TestJournalIntegration(t *testing.T) {
 		}
 	})
 
+	t.Run("portfolio allocation is private and agrees with scoped totals", func(t *testing.T) {
+		for owner := 0; owner < 2; owner++ {
+			response := req("GET", "/api/v1/summary", nil, owner, "")
+			if response.Code != 200 || response.Header().Get("Cache-Control") != "no-store" {
+				t.Fatalf("private allocation status %d", response.Code)
+			}
+			var body Summary
+			if err := json.Unmarshal(response.Body.Bytes(), &body); err != nil {
+				t.Fatal(err)
+			}
+			if _, exists := body.PortfolioAllocations[accountIDs[owner]]; !exists {
+				t.Fatal("owned allocation missing")
+			}
+			if _, exists := body.PortfolioAllocations[accountIDs[1-owner]]; exists {
+				t.Fatal("foreign portfolio allocation exposed")
+			}
+			for id, allocation := range body.PortfolioAllocations {
+				total := body.PortfolioValues[id]
+				if (total == nil) != allocation.Missing || (allocation.Total == nil) != allocation.Missing {
+					t.Fatal("missing value concealed")
+				}
+				if total != nil && (allocation.Total.Exact != total.Exact || allocation.Known.Exact != total.Exact) {
+					t.Fatal("complete allocation disagrees with portfolio value")
+				}
+			}
+		}
+	})
+
 }

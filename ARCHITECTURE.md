@@ -137,6 +137,8 @@ Les structures exactes, codes d'erreur, pagination, dates et précision doivent 
 
 Contrat implémenté au 8 novembre 2026 : les séries privées utilisent `GET /api/v1/history?from=…&to=…`, avec filtre propriétaire facultatif `portfolio_id`. Le rejeu reste global au propriétaire puis la valeur datée du portefeuille est sélectionnée ; aucune performance de périmètre n’est déduite des transferts. [Contrat et preuves](docs/validation/P3-4-portfolio-history.md). La table candidate ci-dessus reste une cible indicative.
 
+La synthèse ajoute `portfolio_allocations_eur` : catégories de valeurs connues, total éventuellement absent et qualité propre au portefeuille. Les portefeuilles propriétaires sans compte sont inclus dans le snapshot et valorisés à zéro. [Contrat de répartition](docs/validation/P3-4-portfolio-allocation.md).
+
 ## 7. Flux structurants
 
 ### 7.1 Achat manuel

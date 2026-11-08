@@ -27,11 +27,12 @@ type Price struct {
 type AccountInfo struct{ ID, PortfolioID, Name, Kind, Currency string }
 type AssetInfo struct{ ID, Name, Kind, Symbol string }
 type Data struct {
-	Operations  []Operation
-	Accounts    map[string]Account
-	AccountInfo map[string]AccountInfo
-	Assets      map[string]AssetInfo
-	Prices      []Price
+	PortfolioIDs []string
+	Operations   []Operation
+	Accounts     map[string]Account
+	AccountInfo  map[string]AccountInfo
+	Assets       map[string]AssetInfo
+	Prices       []Price
 }
 
 func loadPrices(ctx context.Context, q queryer, owner string) ([]Price, error) {
@@ -157,6 +158,23 @@ func (s *Server) data(ctx context.Context, owner string) (*Data, error) {
 	if err != nil {
 		return nil, err
 	}
+	rows, err = tx.QueryContext(ctx, "SELECT id FROM portfolios WHERE user_id=$1 ORDER BY id", owner)
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		var id string
+		if err = rows.Scan(&id); err != nil {
+			rows.Close()
+			return nil, err
+		}
+		d.PortfolioIDs = append(d.PortfolioIDs, id)
+	}
+	err = rows.Err()
+	rows.Close()
+	if err != nil {
+		return nil, err
+	}
 	return d, tx.Commit()
 }
 func (d *Data) quote(asset, currency string, at time.Time) *Price {
@@ -209,24 +227,25 @@ type CashView struct {
 	FX          *Price `json:"fx_observation"`
 }
 type Summary struct {
-	Consolidated    []PositionView    `json:"consolidated_assets"`
-	Income          *Value            `json:"recorded_income_eur"`
-	Fees            *Value            `json:"recorded_fees_eur"`
-	OldObservations bool              `json:"uses_prior_date_observations"`
-	PortfolioValues map[string]*Value `json:"portfolio_values_eur"`
-	AccountValues   map[string]*Value `json:"account_values_eur"`
-	Movers          []PositionView    `json:"daily_market_movers"`
-	At              time.Time         `json:"at"`
-	Total           *Value            `json:"total_value_eur"`
-	Known           Value             `json:"known_value_eur"`
-	Result          *Value            `json:"result_eur"`
-	External        *Value            `json:"external_flows_eur"`
-	PartialHistory  bool              `json:"partial_history"`
-	Missing         bool              `json:"missing_valuation"`
-	Positions       []PositionView    `json:"positions"`
-	Cash            []CashView        `json:"cash"`
-	Allocation      map[string]Value  `json:"allocation_eur"`
-	Operations      int               `json:"operation_count"`
+	PortfolioAllocations map[string]PortfolioAllocation `json:"portfolio_allocations_eur"`
+	Consolidated         []PositionView                 `json:"consolidated_assets"`
+	Income               *Value                         `json:"recorded_income_eur"`
+	Fees                 *Value                         `json:"recorded_fees_eur"`
+	OldObservations      bool                           `json:"uses_prior_date_observations"`
+	PortfolioValues      map[string]*Value              `json:"portfolio_values_eur"`
+	AccountValues        map[string]*Value              `json:"account_values_eur"`
+	Movers               []PositionView                 `json:"daily_market_movers"`
+	At                   time.Time                      `json:"at"`
+	Total                *Value                         `json:"total_value_eur"`
+	Known                Value                          `json:"known_value_eur"`
+	Result               *Value                         `json:"result_eur"`
+	External             *Value                         `json:"external_flows_eur"`
+	PartialHistory       bool                           `json:"partial_history"`
+	Missing              bool                           `json:"missing_valuation"`
+	Positions            []PositionView                 `json:"positions"`
+	Cash                 []CashView                     `json:"cash"`
+	Allocation           map[string]Value               `json:"allocation_eur"`
+	Operations           int                            `json:"operation_count"`
 }
 
 func valptr(n *big.Rat, scale int) *Value { v := value(n, scale); return &v }
@@ -348,6 +367,9 @@ func (d *Data) calculate(at time.Time) (Summary, error) {
 	accountMissing := map[string]bool{}
 	portfolioTotals := map[string]*big.Rat{}
 	portfolioMissing := map[string]bool{}
+	for _, id := range d.PortfolioIDs {
+		portfolioTotals[id] = zero()
+	}
 	for id, info := range d.AccountInfo {
 		accountTotals[id] = zero()
 		if portfolioTotals[info.PortfolioID] == nil {
@@ -385,6 +407,7 @@ func (d *Data) calculate(at time.Time) (Summary, error) {
 			out.PortfolioValues[id] = valptr(n, 2)
 		}
 	}
+	out.PortfolioAllocations = allocatePortfolios(out, d.AccountInfo)
 	d.consolidateAssets(&out, b, at)
 	out.Movers = []PositionView{}
 	for _, p := range out.Consolidated {

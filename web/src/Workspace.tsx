@@ -4,6 +4,7 @@ import { all, api, resourceError } from "./api";
 import type { Account, Asset, Portfolio } from "./api";
 import { ApiError } from "./auth";
 import { Finance } from "./Finance";
+import { PortfolioAllocation } from "./PortfolioAllocation";
 import { PortfolioHistory } from "./PortfolioHistory";
 import { AccountHoldings } from "./AccountHoldings";
 import type { Summary } from "./Finance";
@@ -362,6 +363,7 @@ export function Workspace({ user, logout, feedback, expired }: Props) {
               <p>Sélectionnez un portefeuille pour gérer ses comptes.</p>
             ) : (
               <>
+                {catalogSummary && <PortfolioAllocation portfolioId={current.id} summary={catalogSummary} />}
                 <PortfolioHistory key={current.id} portfolioId={current.id} expired={expired} />
                 {current.archived ? (
                   <p>
