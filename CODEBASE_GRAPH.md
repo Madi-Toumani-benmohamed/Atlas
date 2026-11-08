@@ -62,3 +62,5 @@ Contrats : `docs/decisions/C-03-C-09.md`, `docs/decisions/financial-policy.md`. 
 `PurchasePreview.tsx` / `purchase-preview.ts` : récapitulatif d’achat non persistant, fractions BigInt selon les formules approuvées ; le backend reste seul validateur des liquidités et de l’historique. Tests numériques et E2E dédiés dans `web/test/`.
 
 `AccountHoldings.tsx` : détail dans Workspace des liquidités et positions par identifiant de compte, valeurs serveur et provenance des observations ; aucun recalcul financier client. `account-holdings.e2e.mjs` vérifie comptes multi-devises, actif commun, coût/FX inconnus et navigation entre portefeuilles.
+
+`AssetOperations.tsx` : historique source des opérations déjà chargées, filtré par actif et en ordre d’enregistrement ; statuts actif/remplacé, comptes et motifs conservés, sans recalcul ni requête supplémentaire. E2E dédié avec correction antidatée et deux comptes.

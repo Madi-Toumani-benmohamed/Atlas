@@ -1,12 +1,12 @@
-# État de recette MVP — 7 novembre 2026
+# État de recette MVP — 8 novembre 2026
 
 L’[audit de roadmap P5.9](P5-9-roadmap-audit.md) détaille les écarts et la preuve de chaque lot. Cette matrice prépare P5.9 ; elle ne déclare ni la recette globale ni une publication MVP. Les preuves historiques restent datées dans les rapports [C-03–C-09](C-03-C-09.md), [rapprochement](P4-5-reconciliation.md) et [observabilité](P5-5-observability.md). « Vérifié en laboratoire » ne signifie pas vérifié chez l’exploitant.
 
 | PRD §12 | État et preuves / réserves |
 | --- | --- |
 | 1 — Connexion et isolation | Vérifié en laboratoire : tests SQL et parcours HTTPS à deux utilisateurs ; rapport C-03–C-09. |
-| 2 — Portefeuilles, comptes, consolidation | Vérifié en laboratoire : transfert entre comptes et instrument consolidé sans doublon. |
-| 3 — Achats, ventes, frais, dates, devises | Vérifié en laboratoire : moteur exact, validation API/UI et vente excessive refusée. |
+| 2 — Portefeuilles, comptes, consolidation | Vérifié en laboratoire : transfert entre comptes et instrument consolidé sans doublon ; [détail des liquidités et positions par compte](P3-4-account-holdings.md), coûts/FX inconnus et compte vide vérifiés sur API/PostgreSQL. |
+| 3 — Achats, ventes, frais, dates, devises | Vérifié en laboratoire : moteur exact, validation API/UI, [récapitulatif exact d’achat avant confirmation](P3-6-purchase-preview.md) et vente excessive refusée. |
 | 4 — Flux et staking | Vérifié selon la politique approuvée ; ouvertures explicites, pas de découvert/short, swaps non pris en charge. |
 | 5 — PRU, quantités, P&L | Scénarios T-01–T-12 couverts par suites métier/SQL ; [round-trip des quantités dérivées](P5-9-canonical-quantities.md) ajouté ; historique incomplet signalé, performance globale masquée. |
 | 6 — Valeur et affichages desktop/mobile | Parcours financiers et consolidation vérifiés à 1440/390/320 px ; ne vaut pas revue produit exhaustive de tous les classements. |

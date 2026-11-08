@@ -6,6 +6,7 @@ import { ApiError } from "./auth";
 import { MarketStatus } from "./MarketStatus";
 import { Reconciliation } from "./Reconciliation";
 import { HistoryChart } from "./HistoryChart";
+import { AssetOperations } from "./AssetOperations";
 import { PurchasePreview } from "./PurchasePreview";
 import { QuoteHistory } from "./QuoteHistory";
 import type { HistoryPoint } from "./HistoryChart";
@@ -66,7 +67,7 @@ export type Summary = {
   account_values_eur: Record<string, Value | null>;
   daily_market_movers: Position[];
 };
-type Operation = Record<string, string | boolean> & {
+export type Operation = Record<string, string | boolean> & {
   id: string;
   kind: string;
   account_id: string;
@@ -602,6 +603,7 @@ export function Finance({
                     </p>
                   </details>
                   <QuoteHistory key={p.asset_id} assetId={p.asset_id} observations={prices} />
+                  <AssetOperations assetId={p.asset_id} operations={operations} accounts={accounts} labels={kinds} />
                 </li>
               ))}
             </ul>
